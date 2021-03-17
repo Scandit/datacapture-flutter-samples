@@ -1,0 +1,29 @@
+name: MatrixScanBubblesSample
+description: Demonstrates the use of more advanced augmented reality use cases with the Scandit Data Capture SDK.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_barcode:
+    ^6.7.0
+  permission_handler: ^5.1.0+2
+  flutter_platform_widgets: 0.70.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/freeze_disabled.png
+    - assets/images/freeze_enabled.png
+    - assets/images/stock_count.png
