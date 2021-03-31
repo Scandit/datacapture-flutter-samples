@@ -41,13 +41,15 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   bool _isPermissionMessageVisible = false;
 
+  bool _isFrozen = false;
+
   _MatrixScanScreenState(this._context);
 
   void _checkPermission() {
     Permission.camera.request().isGranted.then((value) => setState(() {
           _isPermissionMessageVisible = !value;
           if (value) {
-            _camera.switchToDesiredState(FrameSourceState.on);
+            _camera.switchToDesiredState(_isFrozen ? FrameSourceState.off : FrameSourceState.on);
           }
         }));
   }
@@ -135,7 +137,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     if (state == AppLifecycleState.resumed) {
       _checkPermission();
     } else if (state == AppLifecycleState.paused) {
-      _camera.switchToDesiredState(FrameSourceState.off);
+      if (!_isFrozen) _camera.switchToDesiredState(FrameSourceState.off);
     }
   }
 
@@ -223,5 +225,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     _barcodeTracking.isEnabled = !isFrozen;
     // Switch the camera on or off to toggle streaming frames. The camera is stopped asynchronously.
     _camera.switchToDesiredState(isFrozen ? FrameSourceState.off : FrameSourceState.on);
+
+    _isFrozen = isFrozen;
   }
 }
