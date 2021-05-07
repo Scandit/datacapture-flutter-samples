@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    ^6.7.2
+    ^6.7.3
   permission_handler: ^5.1.0+2
-  flutter_platform_widgets: 0.70.2
+  flutter_platform_widgets: 0.80.1
 
 dev_dependencies:
   flutter_test:
