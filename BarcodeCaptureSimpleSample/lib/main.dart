@@ -43,8 +43,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
 
   // Use the world-facing (back) camera.
   Camera _camera = Camera.defaultCamera;
-  BarcodeCapture _barcodeCapture;
-  DataCaptureView _captureView;
+  late BarcodeCapture _barcodeCapture;
+  late DataCaptureView _captureView;
 
   bool _isPermissionMessageVisible = false;
 
@@ -62,7 +62,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeCapture mode.
     _camera.applySettings(BarcodeCapture.recommendedCameraSettings);
@@ -109,7 +109,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
     _captureView.addOverlay(BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
-      ..viewfinder = RectangularViewfinder());
+      ..viewfinder = RectangularViewfinder.withStyleAndLineStyle(
+          RectangularViewfinderStyle.square, RectangularViewfinderLineStyle.light));
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
@@ -140,12 +141,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   }
 
   @override
-  void didScan(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {
+  void didScan(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) async {
     _barcodeCapture.isEnabled = false;
     var code = session.newlyRecognizedBarcodes.first;
-    var data = (code.data == null || code.data.isEmpty) ? code.rawData : code.data;
+    var data = (code.data == null || code.data?.isEmpty == true) ? code.rawData : code.data;
     var humanReadableSymbology = SymbologyDescription.forSymbology(code.symbology);
-    showPlatformDialog(
+    await showPlatformDialog(
         context: context,
         builder: (_) => PlatformAlertDialog(
               content: PlatformText(
@@ -156,11 +157,11 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
                 PlatformDialogAction(
                     child: PlatformText('OK'),
                     onPressed: () {
-                      _barcodeCapture.isEnabled = true;
                       Navigator.of(context, rootNavigator: true).pop();
                     })
               ],
             ));
+    _barcodeCapture.isEnabled = true;
   }
 
   @override
@@ -168,7 +169,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     _barcodeCapture.removeListener(this);
     _barcodeCapture.isEnabled = false;
     _camera.switchToDesiredState(FrameSourceState.off);

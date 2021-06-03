@@ -12,16 +12,16 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
-  DataCaptureContext _captureContext;
+  final DataCaptureContext _captureContext;
 
-  BarcodeCapture _barcodeCapture;
+  late BarcodeCapture _barcodeCapture;
 
   // Use the world-facing (back) camera.
   Camera _camera = Camera.defaultCamera;
 
-  DataCaptureView _captureView;
+  late DataCaptureView _captureView;
 
-  Timer _timer;
+  Timer? _timer;
 
   StreamController<List<Barcode>> _capturedBarcodesStreamController = StreamController();
 
@@ -53,7 +53,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
     _captureView.addOverlay(BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
-      ..viewfinder = LaserlineViewfinder());
+      ..viewfinder = LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated));
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
@@ -129,7 +129,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
   void dispose() {
     switchCameraOff();
     _barcodeCapture.removeListener(this);
-    _timer.cancel();
+    _timer?.cancel();
     _capturedBarcodesStreamController.close();
     _isCapturingStreamController.close();
   }
@@ -141,7 +141,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   void _resetPauseCameraTimer() {
-    if (_timer != null) _timer.cancel();
+    _timer?.cancel();
     _timer = Timer(Duration(seconds: 10), () {
       _camera.switchToDesiredState(FrameSourceState.off);
       _isCapturingStreamController.sink.add(false);

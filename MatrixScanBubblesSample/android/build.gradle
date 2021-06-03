@@ -1,8 +1,9 @@
 buildscript {
     ext.kotlin_version = '1.4.10'
     repositories {
+        mavenLocal()
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -11,10 +12,13 @@ buildscript {
     }
 }
 
+def parentFile = project.projectDir.parentFile
 allprojects {
     repositories {
+        maven { url "file://${parentFile}/../../.m2/repository" }
+        mavenLocal()
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 

@@ -19,7 +19,7 @@ import 'bubble_view_state.dart';
 class MatrixScanScreen extends StatefulWidget {
   final String licenseKey;
 
-  MatrixScanScreen(this.licenseKey, {Key key}) : super(key: key);
+  MatrixScanScreen(this.licenseKey, {Key? key}) : super(key: key);
 
   // Create data capture context using your license key.
   @override
@@ -33,11 +33,11 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   // Use the world-facing (back) camera.
   Camera _camera = Camera.defaultCamera;
-  BarcodeTracking _barcodeTracking;
-  DataCaptureView _captureView;
-  BarcodeTrackingAdvancedOverlay _advancedOverlay;
+  late BarcodeTracking _barcodeTracking;
+  late DataCaptureView _captureView;
+  late BarcodeTrackingAdvancedOverlay _advancedOverlay;
 
-  Map<int, ProductBubble> _trackedBarcodes = {};
+  Map<int, ProductBubble?> _trackedBarcodes = {};
 
   bool _isPermissionMessageVisible = false;
 
@@ -57,7 +57,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeTracking mode.
     var cameraSettings = BarcodeTracking.recommendedCameraSettings;
@@ -160,7 +160,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     _barcodeTracking.removeListener(this);
     _barcodeTracking.isEnabled = false;
     _camera.switchToDesiredState(FrameSourceState.off);
@@ -196,7 +196,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   }
 
   @override
-  Widget widgetForTrackedBarcode(BarcodeTrackingAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
+  Widget? widgetForTrackedBarcode(BarcodeTrackingAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
     return null;
   }
 
@@ -214,7 +214,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     }
 
     if (_trackedBarcodes[trackedBarcode.identifier] == null) {
-      var bubble = ProductBubble(trackedBarcode.barcode.data, BubbleViewState(BubbleType.StockInfo));
+      var bubble = ProductBubble(trackedBarcode.barcode.data ?? '', BubbleViewState(BubbleType.StockInfo));
       _trackedBarcodes[trackedBarcode.identifier] = bubble;
       _advancedOverlay.setWidgetForTrackedBarcode(bubble, trackedBarcode);
     }

@@ -12,7 +12,7 @@ typedef void FreezeCallback(bool isFrozen);
 class FreezeButton extends StatefulWidget {
   final FreezeCallback onPressed;
 
-  const FreezeButton({Key key, @required this.onPressed}) : super(key: key);
+  const FreezeButton({Key? key, required this.onPressed}) : super(key: key);
 
   @override
   _FreezeButtonState createState() => _FreezeButtonState();
@@ -22,7 +22,7 @@ class _FreezeButtonState extends State<FreezeButton> {
   final AssetImage _freezeButtonAsset = AssetImage("assets/images/freeze_enabled.png");
   final AssetImage _unfreezeButtonAsset = AssetImage("assets/images/freeze_disabled.png");
 
-  AssetImage _buttonAsset;
+  late AssetImage _buttonAsset;
   var _capturingFrozen = false;
 
   @override
@@ -36,11 +36,11 @@ class _FreezeButtonState extends State<FreezeButton> {
     return SizedBox(
         height: 120,
         width: 120,
-        child: FlatButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () => _onPressed(context),
-            child: Image(image: _buttonAsset)));
+        child: TextButton(
+          onPressed: () => _onPressed(context),
+          child: Image(image: _buttonAsset),
+          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+        ));
   }
 
   _onPressed(BuildContext context) {

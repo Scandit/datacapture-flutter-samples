@@ -13,7 +13,7 @@ class ProductBubble extends StatefulWidget {
   final String barcodeData;
   final BubbleViewState viewState;
 
-  const ProductBubble(this.barcodeData, this.viewState, {Key key}) : super(key: key);
+  const ProductBubble(this.barcodeData, this.viewState, {Key? key}) : super(key: key);
 
   @override
   ProductBubbleState createState() => ProductBubbleState();
@@ -24,8 +24,8 @@ class ProductBubble extends StatefulWidget {
 }
 
 class ProductBubbleState extends State<ProductBubble> {
-  Widget _stockInfo;
-  Widget _barcodeData;
+  Widget? _stockInfo;
+  Widget? _barcodeData;
 
   @override
   void initState() {

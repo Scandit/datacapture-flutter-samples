@@ -14,11 +14,11 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 class ScanResultsScreen extends StatelessWidget {
   final String title;
 
-  ScanResultsScreen(this.title, {Key key}) : super(key: key);
+  ScanResultsScreen(this.title, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final List<ScanResult> results = ModalRoute.of(context).settings.arguments;
+    final List<ScanResult> results = ModalRoute.of(context)?.settings.arguments as List<ScanResult>? ?? [];
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
@@ -51,6 +51,8 @@ class ScanResultsScreen extends StatelessWidget {
               child: PlatformButton(
                   onPressed: () => _scanAgain(context),
                   material: (_, __) => MaterialRaisedButtonData(textColor: Colors.white),
+                  cupertino: (_, __) => CupertinoButtonData(
+                      color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
                   child: PlatformText(
                     'Scan Again',
                     style: TextStyle(fontSize: 16),

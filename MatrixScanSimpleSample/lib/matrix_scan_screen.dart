@@ -4,7 +4,9 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
+import 'package:MatrixScanSimpleSample/main.dart';
 import 'package:MatrixScanSimpleSample/scan_result.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -17,7 +19,7 @@ class MatrixScanScreen extends StatefulWidget {
   final String title;
   final String licenseKey;
 
-  MatrixScanScreen(this.title, this.licenseKey, {Key key}) : super(key: key);
+  MatrixScanScreen(this.title, this.licenseKey, {Key? key}) : super(key: key);
 
   // Create data capture context using your license key.
   @override
@@ -31,8 +33,8 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   // Use the world-facing (back) camera.
   Camera _camera = Camera.defaultCamera;
-  BarcodeTracking _barcodeTracking;
-  DataCaptureView _captureView;
+  late BarcodeTracking _barcodeTracking;
+  late DataCaptureView _captureView;
 
   bool _isPermissionMessageVisible = false;
 
@@ -52,7 +54,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeTracking mode.
     var cameraSettings = BarcodeTracking.recommendedCameraSettings;
@@ -107,15 +109,21 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
       child = PlatformText('No permission to access the camera!',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
     } else {
+      var bottomPadding = 48 + MediaQuery.of(context).padding.bottom;
+      var containerPadding = defaultTargetPlatform == TargetPlatform.iOS
+          ? EdgeInsets.fromLTRB(48, 48, 48, bottomPadding)
+          : EdgeInsets.all(48);
       child = Stack(children: [
         _captureView,
         Container(
           alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.all(48.0),
+          padding: containerPadding,
           child: SizedBox(
               width: double.infinity,
               child: PlatformButton(
                   onPressed: () => _showScanResults(context),
+                  cupertino: (_, __) => CupertinoButtonData(
+                      color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
                   child: PlatformText(
                     'Done',
                     style: TextStyle(fontSize: 16, color: Colors.white),
@@ -140,13 +148,13 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   @override
   void didUpdateSession(BarcodeTracking barcodeTracking, BarcodeTrackingSession session) {
     for (final trackedBarcode in session.addedTrackedBarcodes) {
-      scanResults.add(ScanResult(trackedBarcode.barcode.symbology, trackedBarcode.barcode.data));
+      scanResults.add(ScanResult(trackedBarcode.barcode.symbology, trackedBarcode.barcode.data ?? ''));
     }
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     _barcodeTracking.removeListener(this);
     _barcodeTracking.isEnabled = false;
     _camera.switchToDesiredState(FrameSourceState.off);

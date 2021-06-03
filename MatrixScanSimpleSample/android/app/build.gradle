@@ -26,6 +26,9 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    // use same NDK version as the main android project
+    // this version is included in the docker image used for flutter build
+    ndkVersion "21.4.7075529"
     compileSdkVersion 29
 
     sourceSets {

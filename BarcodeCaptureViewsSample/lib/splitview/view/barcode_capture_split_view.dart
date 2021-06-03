@@ -20,7 +20,7 @@ class BarcodeCaptureSplitView extends StatefulWidget {
   final DataCaptureContext dataCaptureContext;
   final String title;
 
-  BarcodeCaptureSplitView(this.dataCaptureContext, this.title, {Key key}) : super(key: key);
+  BarcodeCaptureSplitView(this.dataCaptureContext, this.title, {Key? key}) : super(key: key);
 
   @override
   _BarcodeCaptureSplitViewState createState() =>
@@ -38,7 +38,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
 
     _checkPermission();
 
@@ -99,7 +99,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
               child: StreamBuilder(
                 stream: _bloc.capturedBarcodes,
                 builder: (BuildContext context, AsyncSnapshot<List<Barcode>> snapshot) {
-                  if (snapshot.hasData) return _getScannedBarcodesWidget(snapshot.data);
+                  if (snapshot.hasData) return _getScannedBarcodesWidget(snapshot.data ?? List.empty());
                   if (snapshot.hasError) return Center(child: Text('${snapshot.error}'));
                   return Center(child: Text('Empty'));
                 },
@@ -169,7 +169,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(barcode.data),
+          Text(barcode.data ?? ''),
           Text(
             barcode.symbology.jsonValue,
             style: TextStyle(color: Colors.cyan),
