@@ -92,7 +92,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
                   ),
                 ],
               ),
-              size: widgets.Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.2),
+              size: widgets.Size(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height * 0.5),
             ),
             // Observing the tracked barcodes
             Expanded(
