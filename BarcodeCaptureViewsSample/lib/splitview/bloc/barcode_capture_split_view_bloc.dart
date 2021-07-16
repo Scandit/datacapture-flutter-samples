@@ -5,6 +5,7 @@
  */
 
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:BarcodeCaptureViewsSample/bloc/bloc_base.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
@@ -17,7 +18,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
   late BarcodeCapture _barcodeCapture;
 
   // Use the world-facing (back) camera.
-  Camera _camera = Camera.defaultCamera;
+  Camera? _camera = Camera.defaultCamera;
 
   late DataCaptureView _captureView;
 
@@ -39,7 +40,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
 
   void _init() {
     // Use the recommended camera settings for the BarcodeCapture mode.
-    _camera.applySettings(BarcodeCapture.recommendedCameraSettings);
+    _camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
 
     // To visualize the on-going barcode capturing process on screen, setup a data capture view that renders the
     // camera preview. The view must be connected to the data capture context.
@@ -52,12 +53,20 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
 
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    _captureView.addOverlay(BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
-      ..viewfinder = LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated));
+    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
+      ..viewfinder = LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated);
+
+    // Adjust the overlay's barcode highlighting to match the new viewfinder styles and improve the visibility of feedback.
+    // With 6.10 we will introduce this visual treatment as a new style for the overlay.
+    overlay.brush = Brush(Color.fromARGB(0, 0, 0, 0), Color.fromARGB(255, 255, 255, 255), 3);
+
+    _captureView.addOverlay(overlay);
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
-    _captureContext.setFrameSource(_camera);
+    if (_camera != null) {
+      _captureContext.setFrameSource(_camera!);
+    }
     switchCameraOn();
     _barcodeCapture.isEnabled = true;
   }
@@ -105,12 +114,12 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   void switchCameraOff() {
-    _camera.switchToDesiredState(FrameSourceState.off);
+    _camera?.switchToDesiredState(FrameSourceState.off);
   }
 
   void switchCameraOn() {
     _resetPauseCameraTimer();
-    _camera.switchToDesiredState(FrameSourceState.on);
+    _camera?.switchToDesiredState(FrameSourceState.on);
   }
 
   @override
@@ -143,7 +152,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
   void _resetPauseCameraTimer() {
     _timer?.cancel();
     _timer = Timer(Duration(seconds: 10), () {
-      _camera.switchToDesiredState(FrameSourceState.off);
+      _camera?.switchToDesiredState(FrameSourceState.off);
       _isCapturingStreamController.sink.add(false);
     });
   }

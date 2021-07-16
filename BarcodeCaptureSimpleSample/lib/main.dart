@@ -42,7 +42,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   final DataCaptureContext _context;
 
   // Use the world-facing (back) camera.
-  Camera _camera = Camera.defaultCamera;
+  Camera? _camera = Camera.defaultCamera;
   late BarcodeCapture _barcodeCapture;
   late DataCaptureView _captureView;
 
@@ -54,7 +54,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     Permission.camera.request().isGranted.then((value) => setState(() {
           _isPermissionMessageVisible = !value;
           if (value) {
-            _camera.switchToDesiredState(FrameSourceState.on);
+            _camera?.switchToDesiredState(FrameSourceState.on);
           }
         }));
   }
@@ -65,7 +65,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     WidgetsBinding.instance?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeCapture mode.
-    _camera.applySettings(BarcodeCapture.recommendedCameraSettings);
+    _camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
 
     // Switch camera on to start streaming frames and enable the barcode tracking mode.
     // The camera is started asynchronously and will take some time to completely turn on.
@@ -108,14 +108,22 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
 
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    _captureView.addOverlay(BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
+    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
       ..viewfinder = RectangularViewfinder.withStyleAndLineStyle(
-          RectangularViewfinderStyle.square, RectangularViewfinderLineStyle.light));
+          RectangularViewfinderStyle.square, RectangularViewfinderLineStyle.light);
+
+    // Adjust the overlay's barcode highlighting to match the new viewfinder styles and improve the visibility of feedback.
+    // With 6.10 we will introduce this visual treatment as a new style for the overlay.
+    overlay.brush = Brush(Color.fromARGB(0, 0, 0, 0), Color.fromARGB(255, 255, 255, 255), 3);
+
+    _captureView.addOverlay(overlay);
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
-    _context.setFrameSource(_camera);
-    _camera.switchToDesiredState(FrameSourceState.on);
+    if (_camera != null) {
+      _context.setFrameSource(_camera!);
+    }
+    _camera?.switchToDesiredState(FrameSourceState.on);
     _barcodeCapture.isEnabled = true;
   }
 
@@ -136,7 +144,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     if (state == AppLifecycleState.resumed) {
       _checkPermission();
     } else if (state == AppLifecycleState.paused) {
-      _camera.switchToDesiredState(FrameSourceState.off);
+      _camera?.switchToDesiredState(FrameSourceState.off);
     }
   }
 
@@ -172,7 +180,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     WidgetsBinding.instance?.removeObserver(this);
     _barcodeCapture.removeListener(this);
     _barcodeCapture.isEnabled = false;
-    _camera.switchToDesiredState(FrameSourceState.off);
+    _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
     super.dispose();
   }

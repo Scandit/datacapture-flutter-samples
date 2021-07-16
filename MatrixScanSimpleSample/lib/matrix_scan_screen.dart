@@ -32,7 +32,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   final DataCaptureContext _context;
 
   // Use the world-facing (back) camera.
-  Camera _camera = Camera.defaultCamera;
+  Camera? _camera = Camera.defaultCamera;
   late BarcodeTracking _barcodeTracking;
   late DataCaptureView _captureView;
 
@@ -46,7 +46,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     Permission.camera.request().isGranted.then((value) => setState(() {
           _isPermissionMessageVisible = !value;
           if (value) {
-            _camera.switchToDesiredState(FrameSourceState.on);
+            _camera?.switchToDesiredState(FrameSourceState.on);
           }
         }));
   }
@@ -61,7 +61,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     // Adjust camera settings - set Full HD resolution.
     cameraSettings.preferredResolution = VideoResolution.fullHd;
 
-    _camera.applySettings(cameraSettings);
+    _camera?.applySettings(cameraSettings);
 
     // Switch camera on to start streaming frames and enable the barcode tracking mode.
     // The camera is started asynchronously and will take some time to completely turn on.
@@ -97,8 +97,10 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
-    _context.setFrameSource(_camera);
-    _camera.switchToDesiredState(FrameSourceState.on);
+    if (_camera != null) {
+      _context.setFrameSource(_camera!);
+    }
+    _camera?.switchToDesiredState(FrameSourceState.on);
     _barcodeTracking.isEnabled = true;
   }
 
@@ -139,7 +141,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     if (state == AppLifecycleState.resumed) {
       _checkPermission();
     } else if (state == AppLifecycleState.paused) {
-      _camera.switchToDesiredState(FrameSourceState.off);
+      _camera?.switchToDesiredState(FrameSourceState.off);
     }
   }
 
@@ -157,7 +159,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     WidgetsBinding.instance?.removeObserver(this);
     _barcodeTracking.removeListener(this);
     _barcodeTracking.isEnabled = false;
-    _camera.switchToDesiredState(FrameSourceState.off);
+    _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
     super.dispose();
   }
