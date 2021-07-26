@@ -65,7 +65,7 @@ class _DoubleWithUnitViewState extends State<DoubleWithUnitView> with WidgetsBin
                     width: 100,
                     height: 60,
                     child: TextField(
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
                       controller: _valueEditingController,
                       autofocus: true,
                     ),

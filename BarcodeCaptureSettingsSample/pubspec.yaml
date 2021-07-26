@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    ^6.9.0-beta.1
+    ^6.9.0-beta.2
   permission_handler: ^8.0.1
 
 

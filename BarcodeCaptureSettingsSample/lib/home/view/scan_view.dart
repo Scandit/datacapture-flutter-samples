@@ -4,8 +4,6 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
-import 'dart:io';
-
 import 'package:BarcodeCaptureSettingsSample/home/bloc/scan_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/route/routes.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +22,7 @@ class ScanView extends StatefulWidget {
 
 class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
   final ScanBloc _bloc;
+  int _snackbarCounter = 0;
 
   _ScanViewState(this._bloc);
 
@@ -36,10 +35,14 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
     _checkPermission();
 
     _bloc.continuousScanResult.listen((scannedData) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(scannedData),
-        duration: Duration(milliseconds: 500),
-      ));
+      _snackbarCounter += 1;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(
+            content: Text(scannedData),
+            duration: Duration(milliseconds: 500),
+          ))
+          .closed
+          .then((value) => _snackbarCounter -= 1);
     });
 
     _bloc.singleScanResult.listen((scannedData) {
@@ -93,6 +96,9 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
             icon: new Icon(Icons.settings),
             onPressed: () {
               _bloc.switchCameraOff();
+              for (int snackbarsLeft = _snackbarCounter; snackbarsLeft > 0; snackbarsLeft = snackbarsLeft - 1) {
+                ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              }
               Navigator.pushNamed(context, BCRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
             },
           )

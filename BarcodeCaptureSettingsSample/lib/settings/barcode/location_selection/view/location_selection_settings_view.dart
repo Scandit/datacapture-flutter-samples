@@ -267,7 +267,7 @@ class _LocationSelectionSettingsViewState extends State<LocationSelectionSetting
             width: 70,
             height: 60,
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _heightAspectEditingController,
               textAlign: TextAlign.right,
             ),
@@ -309,7 +309,7 @@ class _LocationSelectionSettingsViewState extends State<LocationSelectionSetting
             width: 70,
             height: 60,
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _widthAspectEditingController,
               textAlign: TextAlign.right,
             ),

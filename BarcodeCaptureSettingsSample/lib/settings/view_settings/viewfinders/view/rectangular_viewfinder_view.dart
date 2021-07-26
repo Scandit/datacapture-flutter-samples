@@ -58,7 +58,7 @@ class RectangularViewfinderSettingsView {
           width: 100,
           height: 60,
           child: TextField(
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _dimmingValueController,
           ),
         ),
@@ -207,7 +207,7 @@ class RectangularViewfinderSettingsView {
             width: 100,
             height: 60,
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _heightAspectValueController,
             ),
           ),
@@ -242,7 +242,7 @@ class RectangularViewfinderSettingsView {
             width: 100,
             height: 60,
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _widthAspectValueController,
             ),
           ),
@@ -264,7 +264,7 @@ class RectangularViewfinderSettingsView {
             width: 100,
             height: 60,
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _shorterDimensionValueController,
             ),
           ),
@@ -277,7 +277,7 @@ class RectangularViewfinderSettingsView {
             width: 100,
             height: 60,
             child: TextField(
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: _longerDimensionAspectValueController,
             ),
           ),

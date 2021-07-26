@@ -742,6 +742,7 @@ class SettingsRepository {
     // camera preview. The view must be connected to the data capture context.
     _dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
 
-    _overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _dataCaptureView);
+    _overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _dataCaptureView)
+      ..brush = this.defaultBrush;
   }
 }

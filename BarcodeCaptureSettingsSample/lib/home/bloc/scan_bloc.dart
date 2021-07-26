@@ -57,6 +57,29 @@ class ScanBloc extends Bloc implements BarcodeCaptureListener {
     var symbology = SymbologyDescription.forSymbology(barcode.symbology);
 
     var scannedMessage = 'Scanned: ${barcode.data} (${symbology.readableName})';
+    if (barcode.compositeFlag != CompositeFlag.none && barcode.compositeFlag != CompositeFlag.unknown) {
+      var compositeCodeType = '';
+
+      switch (barcode.compositeFlag) {
+        case CompositeFlag.gs1TypeA:
+          compositeCodeType = 'CC Type A';
+          break;
+        case CompositeFlag.gs1TypeB:
+          compositeCodeType = 'CC Type B';
+          break;
+        case CompositeFlag.gs1TypeC:
+          compositeCodeType = 'CC Type C';
+          break;
+        default:
+          break;
+      }
+      scannedMessage = '$compositeCodeType\n${symbology.readableName}:\n${barcode.data}\n${barcode.compositeData}\n';
+      scannedMessage += 'Symbol Count: ${barcode.symbolCount}';
+    }
+    if (barcode.addOnData != null) {
+      scannedMessage = '${symbology.readableName}:\n${barcode.data} ${barcode.addOnData}\n';
+      scannedMessage += 'Symbol Count: ${barcode.symbolCount}';
+    }
 
     if (_settings.continuousScan) {
       _continuousScanResultController.sink.add(scannedMessage);
@@ -71,6 +94,8 @@ class ScanBloc extends Bloc implements BarcodeCaptureListener {
   @override
   void dispose() {
     _settings.barcodeCapture.removeListener(this);
+    _continuousScanResultController.close();
+    _singleScanResultController.close();
     super.dispose();
   }
 }
