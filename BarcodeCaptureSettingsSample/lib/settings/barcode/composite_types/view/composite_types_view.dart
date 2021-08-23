@@ -35,7 +35,6 @@ class _CompositeTypesSettingsViewState extends State<CompositeTypesSettingsView>
         ),
       ),
       body: SafeArea(
-          child: Expanded(
         child: ListView.separated(
           padding: const EdgeInsets.all(5),
           separatorBuilder: (context, index) {
@@ -54,7 +53,7 @@ class _CompositeTypesSettingsViewState extends State<CompositeTypesSettingsView>
             return _getCompositeTypeListItem(_bloc.compositeTypes.elementAt(index));
           },
         ),
-      )),
+      ),
     );
   }
 
