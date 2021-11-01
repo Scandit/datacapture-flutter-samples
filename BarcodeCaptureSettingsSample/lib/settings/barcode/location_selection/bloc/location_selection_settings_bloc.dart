@@ -43,6 +43,9 @@ class LocationSelectionSettingsBloc extends Bloc {
               _settings.rectangularLocationSelectionHeight, _settings.rectangularLocationSelectionWidthAspect);
         }
         break;
+      case LocationSelectionType.none:
+        _settings.currentLocationSelection = null;
+        break;
       default:
     }
   }

@@ -108,7 +108,8 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
 
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
+    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(
+        _barcodeCapture, _captureView, BarcodeCaptureOverlayStyle.frame)
       ..viewfinder = RectangularViewfinder.withStyleAndLineStyle(
           RectangularViewfinderStyle.square, RectangularViewfinderLineStyle.light);
 

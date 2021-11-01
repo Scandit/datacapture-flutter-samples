@@ -308,6 +308,19 @@ class SettingsRepository {
     _overlay.brush = newBrush;
   }
 
+  BarcodeCaptureOverlayStyle get overlayStyle {
+    return _overlay.style;
+  }
+
+  set overlayStyle(BarcodeCaptureOverlayStyle overlayStyle) {
+    dataCaptureView.removeOverlay(_overlay);
+    var shouldShowScanAreaGuides = _overlay.shouldShowScanAreaGuides;
+    var viewfinder = _overlay.viewfinder;
+    _overlay = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(barcodeCapture, dataCaptureView, overlayStyle);
+    _overlay.shouldShowScanAreaGuides = shouldShowScanAreaGuides;
+    _overlay.viewfinder = viewfinder;
+  }
+
   // OVERLAY - END
 
   // RESULT - START
@@ -470,7 +483,11 @@ class SettingsRepository {
     _laserlineViewfinder.width = newValue;
   }
 
-  final Color laserlineDefaultEnabledColor = LaserlineViewfinder().enabledColor;
+  final Color laserLineLegacyDefaultEnabledColor =
+      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.legacy).enabledColor;
+
+  final Color laserLineAnimatedDefaultEnabledColor =
+      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated).enabledColor;
 
   Color get laserlineEnabledColor {
     return _laserlineViewfinder.enabledColor;
@@ -480,7 +497,11 @@ class SettingsRepository {
     _laserlineViewfinder.enabledColor = newColor;
   }
 
-  final Color laserlineDefaultDisabledColor = LaserlineViewfinder().disabledColor;
+  final Color laserLineLegacyDefaultDisabledColor =
+      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.legacy).disabledColor;
+
+  final Color laserLineAnimatedDefaultDisabledColor =
+      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated).disabledColor;
 
   Color get laserlineDisabledColor {
     return _laserlineViewfinder.disabledColor;
@@ -714,6 +735,25 @@ class SettingsRepository {
     }
   }
 
+  ZoomSwitchControl? _zoomSwitchControl = null;
+
+  bool get zoomSwitchControlEnabled {
+    return _zoomSwitchControl != null;
+  }
+
+  set zoomSwitchControlEnabled(bool newValue) {
+    if (newValue) {
+      var control = ZoomSwitchControl();
+      _dataCaptureView.addControl(control);
+      _zoomSwitchControl = control;
+    } else {
+      if (_zoomSwitchControl != null) {
+        _dataCaptureView.removeControl(_zoomSwitchControl!);
+        _zoomSwitchControl = null;
+      }
+    }
+  }
+
   // CONTROLS - END
 
   SymbologySettings getSymbologySettings(Symbology symbology) {
@@ -742,7 +782,7 @@ class SettingsRepository {
     // camera preview. The view must be connected to the data capture context.
     _dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
 
-    _overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _dataCaptureView)
-      ..brush = this.defaultBrush;
+    _overlay = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(
+        _barcodeCapture, _dataCaptureView, BarcodeCaptureOverlayStyle.frame);
   }
 }

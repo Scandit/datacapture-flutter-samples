@@ -11,12 +11,13 @@ import 'package:BarcodeCaptureSettingsSample/repository/settings_repository.dart
 import 'package:BarcodeCaptureSettingsSample/settings/double_with_unit/bloc/double_with_unit_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/model/color_item.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/model/laserline_style_item.dart';
+import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/common/common_settings.dart';
 
 class LaserlineViewfinderBloc extends Bloc {
   SettingsRepository _settings = SettingsRepository();
-  final Color blueColor = Color(0xff2ec1ce);
+  final Color blueColor = Colors.blue;
   final Color redColor = Color(0xffff0000);
   final Color whiteColor = Color(0xffffffff);
 
@@ -37,12 +38,21 @@ class LaserlineViewfinderBloc extends Bloc {
   }
 
   List<ColorItem> get availableEnabledColors {
-    return [
-      ColorItem('Default', _settings.laserlineEnabledColor,
-          _settings.laserlineEnabledColor.value == _settings.laserlineDefaultDisabledColor.value),
-      ColorItem('Red', redColor, _settings.laserlineEnabledColor.value == redColor.value),
-      ColorItem('White', whiteColor, _settings.laserlineEnabledColor.value == whiteColor.value),
-    ];
+    if (_settings.laserlineStyle == LaserlineViewfinderStyle.animated) {
+      return [
+        ColorItem('Default', _settings.laserLineAnimatedDefaultEnabledColor,
+            _settings.laserlineEnabledColor.value == _settings.laserLineAnimatedDefaultEnabledColor.value),
+        ColorItem('Blue', blueColor, _settings.laserlineEnabledColor.value == blueColor.value),
+        ColorItem('Red', redColor, _settings.laserlineEnabledColor.value == redColor.value),
+      ];
+    } else {
+      return [
+        ColorItem('Default', _settings.laserLineLegacyDefaultEnabledColor,
+            _settings.laserlineEnabledColor.value == _settings.laserLineLegacyDefaultEnabledColor.value),
+        ColorItem('Red', redColor, _settings.laserlineEnabledColor.value == redColor.value),
+        ColorItem('White', whiteColor, _settings.laserlineEnabledColor.value == whiteColor.value),
+      ];
+    }
   }
 
   ColorItem get currentEnabledColor {
@@ -54,12 +64,21 @@ class LaserlineViewfinderBloc extends Bloc {
   }
 
   List<ColorItem> get availableDisabledColors {
-    return [
-      ColorItem('Default', _settings.laserlineDisabledColor,
-          _settings.laserlineDisabledColor.value == _settings.laserlineDefaultDisabledColor.value),
-      ColorItem('Blue', blueColor, _settings.laserlineDisabledColor.value == blueColor.value),
-      ColorItem('Red', redColor, _settings.laserlineDisabledColor.value == redColor.value),
-    ];
+    if (_settings.laserlineStyle == LaserlineViewfinderStyle.animated) {
+      return [
+        ColorItem('Default', _settings.laserLineAnimatedDefaultDisabledColor,
+            _settings.laserlineDisabledColor.value == _settings.laserLineAnimatedDefaultDisabledColor.value),
+        ColorItem('Blue', blueColor, _settings.laserlineDisabledColor.value == blueColor.value),
+        ColorItem('Red', redColor, _settings.laserlineDisabledColor.value == redColor.value),
+      ];
+    } else {
+      return [
+        ColorItem('Default', _settings.laserLineLegacyDefaultDisabledColor,
+            _settings.laserlineDisabledColor.value == _settings.laserLineLegacyDefaultDisabledColor.value),
+        ColorItem('Blue', blueColor, _settings.laserlineDisabledColor.value == blueColor.value),
+        ColorItem('Red', redColor, _settings.laserlineDisabledColor.value == redColor.value),
+      ];
+    }
   }
 
   ColorItem get currentDisabledColor {

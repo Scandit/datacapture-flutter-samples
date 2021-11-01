@@ -17,4 +17,12 @@ class ControlsBloc extends Bloc {
   set isTorchControlEnabled(bool newValue) {
     _settings.torchControlEnabled = newValue;
   }
+
+  bool get isZoomSwitchControlEnabled {
+    return _settings.zoomSwitchControlEnabled;
+  }
+
+  set isZoomSwitchControlEnabled(bool newValue) {
+    _settings.zoomSwitchControlEnabled = newValue;
+  }
 }

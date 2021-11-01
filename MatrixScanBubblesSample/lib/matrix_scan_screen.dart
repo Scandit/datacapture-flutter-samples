@@ -96,7 +96,8 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
     // Add a barcode tracking overlay to the data capture view to render the tracked barcodes on top of the video
     // preview. This is optional, but recommended for better visual feedback.
-    var _basicOverlay = BarcodeTrackingBasicOverlay.withBarcodeTrackingForView(_barcodeTracking, _captureView)
+    var _basicOverlay = BarcodeTrackingBasicOverlay.withBarcodeTrackingForViewWithStyle(
+        _barcodeTracking, _captureView, BarcodeTrackingBasicOverlayStyle.dot)
       ..brush = Brush(Color(0x00FFFFFF), Color(0xFFFFFFFF), 2);
     _captureView.addOverlay(_basicOverlay);
 

@@ -33,30 +33,48 @@ class _ControlsSettingsViewState extends State<ControlsSettingsView> with Widget
         ),
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Card(
-              elevation: 4.0,
-              margin: const EdgeInsets.fromLTRB(0, 4.0, 4.0, 0),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-              child: Column(children: <Widget>[
-                SwitchListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
-                  value: _bloc.isTorchControlEnabled,
-                  title: Text("Torch Button"),
-                  onChanged: (value) {
-                    setState(() {
-                      _bloc.isTorchControlEnabled = value;
-                    });
-                  },
-                ),
+        child: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _createSwitchCard(
+                    'Torch Button',
+                    _bloc.isTorchControlEnabled,
+                    (value) => {
+                          setState(() {
+                            _bloc.isTorchControlEnabled = value;
+                          })
+                        }),
+                _createSwitchCard(
+                    'Zoom Switch Control',
+                    _bloc.isZoomSwitchControlEnabled,
+                    (value) => {
+                          setState(() {
+                            _bloc.isZoomSwitchControlEnabled = value;
+                          })
+                        })
               ]),
-            ),
-          ],
         ),
       ),
+    );
+  }
+
+  Widget _createSwitchCard(String text, bool value, Function(bool) onChange) {
+    return Card(
+      elevation: 4.0,
+      margin: const EdgeInsets.all(4.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      child: Column(children: <Widget>[
+        SwitchListTile(
+          contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
+          value: value,
+          title: Text(text),
+          onChanged: (value) {
+            onChange(value);
+          },
+        ),
+      ]),
     );
   }
 }

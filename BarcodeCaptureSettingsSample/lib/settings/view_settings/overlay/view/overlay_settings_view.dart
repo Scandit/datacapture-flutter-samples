@@ -6,6 +6,7 @@
 
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/overlay/bloc/overlay_settings_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/overlay/model/brush_item.dart';
+import 'package:BarcodeCaptureSettingsSample/settings/view_settings/overlay/model/overlay_style_item.dart';
 import 'package:flutter/material.dart';
 
 class OverlaySettingsView extends StatefulWidget {
@@ -54,6 +55,14 @@ class _OverlaySettingsViewState extends State<OverlaySettingsView> with WidgetsB
                     color: Colors.blue,
                   ),
                 ),
+                ListTile(
+                  contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 4.0, 0),
+                  title: Text("Type"),
+                  subtitle: Text(_bloc.selectedStyle.displayName),
+                  dense: false,
+                  onTap: () => _showStylesPicker(),
+                  trailing: Icon(Icons.keyboard_arrow_down, color: Colors.blue),
+                )
               ]),
             )
           ],
@@ -84,6 +93,34 @@ class _OverlaySettingsViewState extends State<OverlaySettingsView> with WidgetsB
                 child: Text(position.displayName),
                 onPressed: () {
                   Navigator.pop(context, position);
+                },
+              ))
+          .toList(),
+    );
+  }
+
+  Future<void> _showStylesPicker() async {
+    var newStyle = await showDialog<OverlayStyleItem>(
+        context: context,
+        builder: (context) {
+          return _getStylesDialog(context);
+        });
+    if (newStyle != null) {
+      setState(() {
+        _bloc.selectedStyle = newStyle;
+      });
+    }
+  }
+
+  SimpleDialog _getStylesDialog(BuildContext context) {
+    return SimpleDialog(
+      title: const Text('Overlay style'),
+      children: _bloc.availableStyles
+          .map((styleItem) => SimpleDialogOption(
+                padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
+                child: Text(styleItem.displayName),
+                onPressed: () {
+                  Navigator.pop(context, styleItem);
                 },
               ))
           .toList(),

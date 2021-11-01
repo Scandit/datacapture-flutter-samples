@@ -93,7 +93,8 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
     // Add a barcode tracking overlay to the data capture view to render the tracked barcodes on
     // top of the video preview. This is optional, but recommended for better visual feedback.
-    _captureView.addOverlay(BarcodeTrackingBasicOverlay.withBarcodeTrackingForView(_barcodeTracking, _captureView));
+    _captureView.addOverlay(BarcodeTrackingBasicOverlay.withBarcodeTrackingForViewWithStyle(
+        _barcodeTracking, _captureView, BarcodeTrackingBasicOverlayStyle.frame));
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
