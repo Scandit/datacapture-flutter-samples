@@ -1,0 +1,31 @@
+name: IdCaptureExtendedSample
+description: A more advanced ID Capture setup.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_id:
+    '>=6.11.0 <6.11.1'
+  scandit_flutter_datacapture_text:
+    '>=6.11.0 <6.11.1'
+  permission_handler: ^8.0.1
+  flutter_platform_widgets: ^1.1.0
+  intl: ^0.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/ic_barcode.png
+    - assets/images/ic_mrz.png
+    - assets/images/ic_viz.png

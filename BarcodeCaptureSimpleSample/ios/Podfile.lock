@@ -2,10 +2,10 @@ PODS:
   - Flutter (1.0.0)
   - "permission_handler (5.1.0+2)":
     - Flutter
-  - scandit_flutter_datacapture_barcode (6.9.0-beta.1.snapshot):
+  - scandit_flutter_datacapture_barcode (6.11.0-beta.1.snapshot):
     - Flutter
     - scandit_flutter_datacapture_core
-  - scandit_flutter_datacapture_core (6.9.0-beta.1.snapshot):
+  - scandit_flutter_datacapture_core (6.11.0-beta.1.snapshot):
     - Flutter
 
 DEPENDENCIES:
@@ -25,10 +25,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/scandit_flutter_datacapture_core/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  scandit_flutter_datacapture_barcode: 4f218afd3f4bdd7115d8da80b7d1b69a114d0145
-  scandit_flutter_datacapture_core: d165bd2c39fc547fdfbdfefed0b55a679af13b9c
+  scandit_flutter_datacapture_barcode: adf1621aeea647bab5899598cfe5d035f9ea994e
+  scandit_flutter_datacapture_core: 13995458976dbc145d9b60a15324312b730c4dc3
 
 PODFILE CHECKSUM: c501a8a084033a2636bd411fca991c86c09e4572
 

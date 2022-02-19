@@ -28,7 +28,10 @@ class OverlaySettingsBloc extends Bloc {
     } else if (_settings.currentBrush.strokeColor.jsonValue == _greenBrush.strokeColor.jsonValue) {
       _selectedBrush = BrushItem('Green', _greenBrush);
     } else {
-      _selectedBrush = BrushItem('Default', _settings.defaultBrush);
+      var defaultBrush = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(
+              _settings.barcodeCapture, null, _settings.overlayStyle)
+          .brush;
+      _selectedBrush = BrushItem('Default', defaultBrush);
     }
 
     if (_settings.overlayStyle == BarcodeCaptureOverlayStyle.legacy) {
@@ -39,8 +42,11 @@ class OverlaySettingsBloc extends Bloc {
   }
 
   List<BrushItem> get availableBrushes {
+    var defaultBrush =
+        BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(_settings.barcodeCapture, null, _settings.overlayStyle)
+            .brush;
     return [
-      BrushItem('Default', _settings.defaultBrush),
+      BrushItem('Default', defaultBrush),
       BrushItem('Red', _redBrush),
       BrushItem('Green', _greenBrush),
     ];

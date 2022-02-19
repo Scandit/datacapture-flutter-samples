@@ -122,7 +122,7 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
       child = _captureView;
     }
     return Scaffold(
-      body: SafeArea(child: child),
+      body: child,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: [
@@ -165,7 +165,7 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   }
 
   @override
-  void didUpdateSelection(BarcodeSelection barcodeSelection, BarcodeSelectionSession session) async {
+  void didUpdateSelection(BarcodeSelection barcodeSelection, BarcodeSelectionSession session) {
     // Check if we have selected a barcode, if that's the case, show a snackbar with its info.
     var newlySelectedBarcodes = session.newlySelectedBarcodes;
     if (newlySelectedBarcodes.isEmpty) return;
@@ -174,14 +174,15 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
     var barcode = newlySelectedBarcodes.first;
     var symbologyReadableName = SymbologyDescription.forSymbology(barcode.symbology).readableName;
 
-    var selectionCount = await session.getCount(barcode);
+    session.getCount(barcode).then((value) {
+      final result = '${symbologyReadableName}: ${barcode.data} \nTimes: ${value}';
 
-    final result = '${symbologyReadableName}: ${barcode.data} \nTimes: ${selectionCount}';
-
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(result),
-      duration: Duration(milliseconds: 500),
-    ));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(result),
+        duration: Duration(milliseconds: 500),
+        behavior: SnackBarBehavior.floating,
+      ));
+    });
   }
 
   @override

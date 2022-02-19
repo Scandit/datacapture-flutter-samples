@@ -296,10 +296,6 @@ class SettingsRepository {
 
   // OVERLAY - START
 
-  Brush get defaultBrush {
-    return BarcodeCaptureOverlay.defaultBrush;
-  }
-
   Brush get currentBrush {
     return _overlay.brush;
   }

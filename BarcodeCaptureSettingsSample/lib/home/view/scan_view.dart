@@ -4,6 +4,8 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
+import 'dart:async';
+
 import 'package:BarcodeCaptureSettingsSample/home/bloc/scan_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/route/routes.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,10 @@ class ScanView extends StatefulWidget {
 
 class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
   final ScanBloc _bloc;
-  int _snackbarCounter = 0;
+  GlobalKey key = new GlobalKey<_ScanViewState>();
+  late OverlayState _overlay;
+  OverlayEntry? _entry;
+  Timer? _dismissOverlay;
 
   _ScanViewState(this._bloc);
 
@@ -35,14 +40,7 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
     _checkPermission();
 
     _bloc.continuousScanResult.listen((scannedData) {
-      _snackbarCounter += 1;
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(
-            content: Text(scannedData),
-            duration: Duration(milliseconds: 500),
-          ))
-          .closed
-          .then((value) => _snackbarCounter -= 1);
+      _showPopup(scannedData);
     });
 
     _bloc.singleScanResult.listen((scannedData) {
@@ -88,7 +86,9 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    this._overlay = Overlay.of(context)!;
     return Scaffold(
+      key: key,
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
@@ -96,9 +96,6 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
             icon: new Icon(Icons.settings),
             onPressed: () {
               _bloc.switchCameraOff();
-              for (int snackbarsLeft = _snackbarCounter; snackbarsLeft > 0; snackbarsLeft = snackbarsLeft - 1) {
-                ScaffoldMessenger.of(context).removeCurrentSnackBar();
-              }
               Navigator.pushNamed(context, BCRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
             },
           )
@@ -117,5 +114,32 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
       _bloc.switchCameraOn();
       _bloc.enableBarcodeCapture();
     }
+  }
+
+  void _showPopup(String scannedData) {
+    _removeOverlay();
+    _entry = OverlayEntry(builder: (context) {
+      return Positioned(
+          left: 0,
+          top: MediaQuery.of(context).size.height * 0.1,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: Material(
+              color: Colors.white,
+              child: Center(
+                child: Text(scannedData),
+              ),
+            ),
+          ));
+    });
+    _overlay.insert(_entry!);
+    _dismissOverlay?.cancel();
+    _dismissOverlay = Timer(Duration(milliseconds: 500), _removeOverlay);
+  }
+
+  void _removeOverlay() {
+    _entry?.remove();
+    _entry = null;
   }
 }
