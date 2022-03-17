@@ -8,15 +8,17 @@ import 'dart:ui';
 
 import 'package:BarcodeCaptureSettingsSample/bloc/bloc_base.dart';
 import 'package:BarcodeCaptureSettingsSample/repository/settings_repository.dart';
+import 'package:BarcodeCaptureSettingsSample/settings/common/common_settings.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/double_with_unit/bloc/double_with_unit_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/model/color_item.dart';
+import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
-import 'package:BarcodeCaptureSettingsSample/settings/common/common_settings.dart';
 
 class RectangularViewfinderBloc extends Bloc {
   final SettingsRepository _settings = SettingsRepository();
   final Color blueColor = Color(0xff2ec1ce);
   final Color blackColor = Color(0xff000000);
+  final Color whiteColor = Colors.white;
 
   RectangularViewfinderStyle get currentStyle {
     return _settings.rectangularViewfinderStyle;
@@ -67,6 +69,26 @@ class RectangularViewfinderBloc extends Bloc {
 
   set currentColor(ColorItem newColor) {
     _settings.rectangularViewfinderColor = newColor.color;
+  }
+
+  List<ColorItem> get availableDisabledColors {
+    return [
+      ColorItem(
+          'Default',
+          _settings.rectangularViewfinderDisabledColor,
+          _settings.rectangularViewfinderDisabledColor.value ==
+              _settings.rectangularViewfinderDefaultDisabledColor.value),
+      ColorItem('Black', blackColor, _settings.rectangularViewfinderDisabledColor.value == blackColor.value),
+      ColorItem('White', whiteColor, _settings.rectangularViewfinderDisabledColor.value == whiteColor.value),
+    ];
+  }
+
+  ColorItem get currentDisabledColor {
+    return availableDisabledColors.firstWhere((element) => element.isSelected);
+  }
+
+  set currentDisabledColor(ColorItem newColor) {
+    _settings.rectangularViewfinderDisabledColor = newColor.color;
   }
 
   bool get isAnimationEnabled {

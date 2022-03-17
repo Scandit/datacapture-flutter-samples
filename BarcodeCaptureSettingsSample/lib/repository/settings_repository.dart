@@ -539,6 +539,14 @@ class SettingsRepository {
     _rectangularViewfinder.color = newColor;
   }
 
+  Color get rectangularViewfinderDisabledColor {
+    return _rectangularViewfinder.disabledColor;
+  }
+
+  set rectangularViewfinderDisabledColor(Color newColor) {
+    _rectangularViewfinder.disabledColor = newColor;
+  }
+
   bool get rectangularViewfinderAnimationEnabled {
     return _rectangularViewfinder.animation != null;
   }
@@ -647,6 +655,8 @@ class SettingsRepository {
   }
 
   final Color rectangularViewfinderDefaultColor = RectangularViewfinder().color;
+
+  final Color rectangularViewfinderDefaultDisabledColor = RectangularViewfinder().disabledColor;
 
   AimerViewfinder get _aimerViewfinder {
     return _overlay.viewfinder as AimerViewfinder;

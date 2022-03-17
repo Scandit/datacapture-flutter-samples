@@ -74,6 +74,17 @@ class RectangularViewfinderSettingsView {
           color: Colors.blue,
         ),
       ),
+      ListTile(
+        contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 4.0, 0),
+        title: Text("Disabled Color"),
+        subtitle: Text(_bloc.currentDisabledColor.name),
+        dense: false,
+        onTap: () => _showDisabledColorPicker(context),
+        trailing: Icon(
+          Icons.keyboard_arrow_down,
+          color: Colors.blue,
+        ),
+      ),
       SwitchListTile(
         contentPadding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 0),
         value: _bloc.isAnimationEnabled,
@@ -359,6 +370,34 @@ class RectangularViewfinderSettingsView {
     return SimpleDialog(
       title: const Text("Color"),
       children: _bloc.availableColors
+          .map((item) => SimpleDialogOption(
+                padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
+                child: Text(item.name),
+                onPressed: () {
+                  Navigator.pop(context, item);
+                },
+              ))
+          .toList(),
+    );
+  }
+
+  Future<void> _showDisabledColorPicker(BuildContext context) async {
+    var selectedItem = await showDialog<ColorItem>(
+        context: context,
+        builder: (BuildContext context) {
+          return _getDisabledColorPickerDialog(context);
+        });
+    if (selectedItem != null) {
+      this._setState.call(() {
+        _bloc.currentDisabledColor = selectedItem;
+      });
+    }
+  }
+
+  SimpleDialog _getDisabledColorPickerDialog(BuildContext context) {
+    return SimpleDialog(
+      title: const Text("Disabled Color"),
+      children: _bloc.availableDisabledColors
           .map((item) => SimpleDialogOption(
                 padding: const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
                 child: Text(item.name),
