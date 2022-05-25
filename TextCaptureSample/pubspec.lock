@@ -115,21 +115,21 @@ packages:
       path: "../../scandit-flutter-datacapture-core"
       relative: true
     source: path
-    version: "6.11.0-beta.1.snapshot"
+    version: "6.13.0-beta.1.snapshot"
   scandit_flutter_datacapture_parser:
     dependency: "direct main"
     description:
       path: "../../scandit-flutter-datacapture-parser"
       relative: true
     source: path
-    version: "6.11.0-beta.1.snapshot"
+    version: "6.13.0-beta.1.snapshot"
   scandit_flutter_datacapture_text:
     dependency: "direct main"
     description:
       path: "../../scandit-flutter-datacapture-text"
       relative: true
     source: path
-    version: "6.11.0-beta.1.snapshot"
+    version: "6.13.0-beta.1.snapshot"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -88,7 +88,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     // Add a Id capture overlay to the data capture view to render the location of captured ids on top of
     // the video preview. This is optional, but recommended for better visual feedback.
     var overlay = IdCaptureOverlay.withIdCaptureForView(_idCapture, _captureView);
-    overlay.idLayoutStyle = IdLayoutStyle.square;
+    overlay.idLayoutStyle = IdLayoutStyle.rounded;
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
