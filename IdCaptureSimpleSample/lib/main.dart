@@ -60,7 +60,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     // Use the recommended camera settings for the IdCapture mode.
     _camera?.applySettings(IdCapture.recommendedCameraSettings);
@@ -73,8 +73,17 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     // and are then applied to the id capture instance that manages id recognition.
     var settings = IdCaptureSettings();
 
-    // We are interested in the front side of national Id Cards and passports using MRZ.
-    settings.supportedDocuments.addAll([IdDocumentType.idCardViz, IdDocumentType.aamvaBarcode, IdDocumentType.dlViz]);
+    // Recognize national ID cards, US driver licenses, Argentina ID barcodes,
+    // South Africa ID barcodes, South Africa DL barcodes and Colombian ID barcodes.
+    settings.supportedDocuments.addAll([
+      IdDocumentType.aamvaBarcode,
+      IdDocumentType.argentinaIdBarcode,
+      IdDocumentType.colombiaIdBarcode,
+      IdDocumentType.dlViz,
+      IdDocumentType.idCardViz,
+      IdDocumentType.southAfricaDlBarcode,
+      IdDocumentType.southAfricaIdBarcode,
+    ]);
 
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture.forContext(_context, settings)
@@ -122,7 +131,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _idCapture.removeListener(this);
     _idCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
@@ -349,6 +358,8 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     Date of Issue: ${result.dateOfIssue?.date.humanReadable ?? "empty"}
     \n""";
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }
 
 extension DateTimeExtension on DateTime {

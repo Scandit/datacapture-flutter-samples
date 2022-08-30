@@ -7,6 +7,7 @@
 import 'dart:ui';
 import 'dart:io' show Platform;
 
+import 'package:BarcodeCaptureViewsSample/common/common.dart';
 import 'package:BarcodeCaptureViewsSample/splitview/bloc/barcode_capture_split_view_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addObserver(this);
+    ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     _checkPermission();
 
@@ -215,6 +216,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
   @override
   void dispose() {
     _bloc.dispose();
+    ambiguate(WidgetsBinding.instance)?.removeObserver(this);
 
     super.dispose();
   }

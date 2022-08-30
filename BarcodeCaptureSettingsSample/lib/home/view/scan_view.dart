@@ -35,7 +35,7 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     _checkPermission();
 
@@ -80,7 +80,7 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
   @override
   void dispose() {
     _bloc.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     super.dispose();
   }
 
@@ -142,4 +142,6 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
     _entry?.remove();
     _entry = null;
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }

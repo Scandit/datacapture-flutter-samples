@@ -62,7 +62,7 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeSelection mode.
     _camera?.applySettings(BarcodeSelection.recommendedCameraSettings);
@@ -192,11 +192,13 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _barcodeSelection.removeListener(this);
     _barcodeSelection.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
     super.dispose();
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }

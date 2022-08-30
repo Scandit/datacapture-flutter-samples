@@ -57,7 +57,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeTracking mode.
     var cameraSettings = BarcodeTracking.recommendedCameraSettings;
@@ -162,7 +162,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _barcodeTracking.removeListener(this);
     _barcodeTracking.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
@@ -230,4 +230,6 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
     _isFrozen = isFrozen;
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }

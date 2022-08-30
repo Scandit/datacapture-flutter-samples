@@ -31,7 +31,7 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     _checkPermission();
 
@@ -56,7 +56,7 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
   @override
   void dispose() {
     _bloc.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     super.dispose();
   }
 
@@ -90,4 +90,6 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
       _bloc.enableBarcodeCapture();
     }
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }

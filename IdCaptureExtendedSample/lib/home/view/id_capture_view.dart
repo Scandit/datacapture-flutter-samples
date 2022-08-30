@@ -32,7 +32,7 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     _bloc.idCaptureController.listen((event) {
       if (event.content is AskBackScan) {
@@ -94,7 +94,7 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
   @override
   void dispose() {
     _bloc.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     super.dispose();
   }
 
@@ -158,4 +158,6 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
       _bloc.enableIdCapture();
     }
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }

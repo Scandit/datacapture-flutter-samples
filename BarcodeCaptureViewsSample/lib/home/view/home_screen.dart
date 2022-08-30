@@ -4,6 +4,7 @@
  * Copyright (C) 2020- Scandit AG. All rights reserved.
  */
 
+import 'package:BarcodeCaptureViewsSample/common/common.dart';
 import 'package:BarcodeCaptureViewsSample/home/bloc/home_bloc.dart';
 import 'package:BarcodeCaptureViewsSample/home/model/home_section.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) async {
       var permissionSatus = await Permission.camera.request();
 
       if (permissionSatus != PermissionStatus.granted) {
