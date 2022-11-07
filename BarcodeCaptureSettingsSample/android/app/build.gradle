@@ -27,7 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     ndkVersion "23.1.7779620"
-    compileSdk 31
+    compileSdk 32
 
     lintOptions {
         disable 'InvalidPackage'
@@ -36,7 +36,7 @@ android {
     defaultConfig {
         applicationId "com.scandit.flutter.bcsettings"
         minSdk 21
-        targetSdk 31
+        targetSdk 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

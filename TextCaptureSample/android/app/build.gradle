@@ -27,7 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     ndkVersion "23.1.7779620"
-    compileSdk 31
+    compileSdk 32
 
     lintOptions {
         disable 'InvalidPackage'
@@ -37,7 +37,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.scandit.flutter.textcapturesample"
         minSdk 21
-        targetSdk 31
+        targetSdk 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

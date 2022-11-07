@@ -67,7 +67,7 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Back of Card"),
-      content: Text("This document has additional data in the visual inspection zone on the back of the card?"),
+      content: Text("This document has additional data on the back of the card."),
       actions: [
         cancelButton,
         continueButton,
