@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_id:
-    '>=6.15.0 <6.15.1'
+    '>=6.15.1 <6.15.2'
   scandit_flutter_datacapture_text:
-    '>=6.15.0 <6.15.1'
+    '>=6.15.1 <6.15.2'
   permission_handler: ">=9.0.1 <=9.0.2"
   flutter_platform_widgets: ^1.12.1
   intl: ^0.17.0

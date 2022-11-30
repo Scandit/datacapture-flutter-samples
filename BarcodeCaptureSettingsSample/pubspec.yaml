@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    '>=6.15.0 <6.15.1'
+    '>=6.15.1 <6.15.2'
   permission_handler: ">=9.0.1 <=9.0.2"
 
   # The following adds the Cupertino Icons font to your application.
