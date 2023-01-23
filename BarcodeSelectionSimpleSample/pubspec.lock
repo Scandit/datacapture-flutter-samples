@@ -115,14 +115,14 @@ packages:
       path: "../../scandit-flutter-datacapture-barcode"
       relative: true
     source: path
-    version: "6.14.0-beta.1.snapshot"
+    version: "6.16.0-beta.1.snapshot"
   scandit_flutter_datacapture_core:
     dependency: transitive
     description:
       path: "../../scandit-flutter-datacapture-core"
       relative: true
     source: path
-    version: "6.14.0-beta.1.snapshot"
+    version: "6.16.0-beta.1.snapshot"
   sky_engine:
     dependency: transitive
     description: flutter
