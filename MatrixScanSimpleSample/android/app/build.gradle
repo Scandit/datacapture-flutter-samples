@@ -36,7 +36,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.scandit.matrixscansimplesample"
-        minSdk 24
+        minSdk 21
         targetSdk 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
