@@ -73,16 +73,10 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     // and are then applied to the id capture instance that manages id recognition.
     var settings = IdCaptureSettings();
 
-    // Recognize national ID cards, US driver licenses, Argentina ID barcodes,
-    // South Africa ID barcodes, South Africa DL barcodes and Colombian ID barcodes.
+    // Recognize national ID cards & driver's licenses.
     settings.supportedDocuments.addAll([
-      IdDocumentType.aamvaBarcode,
-      IdDocumentType.argentinaIdBarcode,
-      IdDocumentType.colombiaIdBarcode,
       IdDocumentType.dlViz,
       IdDocumentType.idCardViz,
-      IdDocumentType.southAfricaDlBarcode,
-      IdDocumentType.southAfricaIdBarcode,
     ]);
 
     // Create new Id capture mode with the settings from above.
@@ -229,25 +223,10 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
 
   String _getResultFromCapturedId(CapturedId capturedId) {
     String result = _getDescriptionForCapturedId(capturedId);
-    if (capturedId.mrz != null) {
-      result += _getDescriptionForMrzResult(capturedId);
-    } else if (capturedId.viz != null) {
+    if (capturedId.viz != null) {
       result += _getDescriptionForVizResult(capturedId);
-    } else if (capturedId.aamvaBarcode != null) {
-      result += _getDescriptionForUsDriverLicenseBarcodeResult(capturedId);
-    } else if (capturedId.usUniformedServicesBarcode != null) {
-      result += _getDescriptionForUsUniformedServicesBarcodeResult(capturedId);
     }
     return result;
-  }
-
-  String _getDescriptionForMrzResult(CapturedId result) {
-    return """
-    Document Code: ${result.mrz?.documentCode}
-    Names Are Truncated: ${result.mrz?.namesAreTruncated == true ? "Yes" : "No"}
-    Optional: ${result.mrz?.optional ?? "empty"}
-    Optional 1: ${result.mrz?.optional1 ?? "empty"}
-    \n""";
   }
 
   String _getDescriptionForVizResult(CapturedId result) {
@@ -266,79 +245,6 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     Issuing Jurisdiction: ${result.viz?.issuingJurisdiction ?? "empty"}
     Issuing Authority: ${result.viz?.issuingAuthority ?? "empty"}
     \n""";
-  }
-
-  String _getDescriptionForUsDriverLicenseBarcodeResult(CapturedId result) {
-    return """
-     AAMVA Version: ${result.aamvaBarcode?.aamvaVersion}
-     Jurisdiction Version: ${result.aamvaBarcode?.jurisdictionVersion}
-     IIN: ${result.aamvaBarcode?.iIN}
-     Issuing Jurisdiction: ${result.aamvaBarcode?.issuingJurisdiction}
-     Issuing Jurisdiction ISO: ${result.aamvaBarcode?.issuingJurisdictionIso}
-     Eye Color: ${result.aamvaBarcode?.eyeColor ?? "empty"}
-     Hair Color: ${result.aamvaBarcode?.hairColor ?? "empty"}
-     Height Inch: ${result.aamvaBarcode?.heightInch ?? 0}
-     Height Cm: ${result.aamvaBarcode?.heightCm ?? 0}
-     Weight Lb: ${result.aamvaBarcode?.weightLbs ?? 0}
-     Weight Kg: ${result.aamvaBarcode?.weightKg ?? 0}
-     Place of Birth: ${result.aamvaBarcode?.placeOfBirth ?? "empty"}
-     Race: ${result.aamvaBarcode?.race ?? "empty"}
-     Document Discriminator Number: ${result.aamvaBarcode?.documentDiscriminatorNumber ?? "empty"}
-     Vehicle Class: ${result.aamvaBarcode?.vehicleClass ?? "empty"}
-     Restrictions Code: ${result.aamvaBarcode?.restrictionsCode ?? "empty"}
-     Endorsements Code: ${result.aamvaBarcode?.endorsementsCode ?? "empty"}
-     Card Revision Date: ${result.aamvaBarcode?.cardRevisionDate?.date.humanReadable ?? "empty"}
-     Middle Name: ${result.aamvaBarcode?.middleName ?? "empty"}
-     Driver Name Suffix: ${result.aamvaBarcode?.driverNameSuffix ?? "empty"}
-     Driver Name Prefix: ${result.aamvaBarcode?.driverNamePrefix ?? "empty"}
-     Last Name Truncation: ${result.aamvaBarcode?.lastNameTruncation ?? "empty"}
-     First Name Truncation: ${result.aamvaBarcode?.firstNameTruncation ?? "empty"}
-     Middle Name Truncation: ${result.aamvaBarcode?.middleNameTruncation ?? "empty"}
-     Alias Family Name: ${result.aamvaBarcode?.aliasFamilyName ?? "empty"}
-     Alias Given Name: ${result.aamvaBarcode?.aliasGivenName ?? "empty"}
-     Alias Suffix Name: ${result.aamvaBarcode?.aliasSuffixName ?? "empty"}
-     \n""";
-  }
-
-  String _getDescriptionForUsUniformedServicesBarcodeResult(CapturedId result) {
-    return """
-     Version: ${result.usUniformedServicesBarcode?.version}
-     Sponsor Flag: ${result.usUniformedServicesBarcode?.sponsorFlag}
-     Person Designator Document: ${result.usUniformedServicesBarcode?.personDesignatorDocument}
-     Family Sequence Number: ${result.usUniformedServicesBarcode?.familySequenceNumber}
-     Deers Dependent Suffix Code: ${result.usUniformedServicesBarcode?.deersDependentSuffixCode}
-     Deers Dependent Suffix Description: ${result.usUniformedServicesBarcode?.deersDependentSuffixDescription}
-     Height: ${result.usUniformedServicesBarcode?.height}
-     Weight: ${result.usUniformedServicesBarcode?.weight}
-     Hair Color: ${result.usUniformedServicesBarcode?.hairColor}
-     Eye Color: ${result.usUniformedServicesBarcode?.eyeColor}
-     Direct Care Flag Code: ${result.usUniformedServicesBarcode?.directCareFlagCode}
-     Direct Care Flag Description: ${result.usUniformedServicesBarcode?.directCareFlagDescription}
-     Civilian Health Care Flag Code: ${result.usUniformedServicesBarcode?.civilianHealthCareFlagCode}
-     Civilian Health Care Flag Description: ${result.usUniformedServicesBarcode?.civilianHealthCareFlagDescription}
-     Commissary Flag Code: ${result.usUniformedServicesBarcode?.commissaryFlagCode}
-     Commissary Flag Description: ${result.usUniformedServicesBarcode?.commissaryFlagDescription}
-     MWR Flag Code: ${result.usUniformedServicesBarcode?.mwrFlagCode}
-     MWR Flag Description: ${result.usUniformedServicesBarcode?.mwrFlagDescription}
-     Exchange Flag Code: ${result.usUniformedServicesBarcode?.exchangeFlagCode}
-     Exchange Flag Description: ${result.usUniformedServicesBarcode?.exchangeFlagDescription}
-     Champus Effective Date: ${result.usUniformedServicesBarcode?.champusEffectiveDate?.date.humanReadable ?? "empty"}
-     Champus Expiry Date: ${result.usUniformedServicesBarcode?.champusExpiryDate?.date.humanReadable ?? "empty"}
-     Form Number: ${result.usUniformedServicesBarcode?.formNumber}
-     Security Code: ${result.usUniformedServicesBarcode?.securityCode}
-     Service Code: ${result.usUniformedServicesBarcode?.serviceCode}
-     Status Code: ${result.usUniformedServicesBarcode?.statusCode}
-     Status Code Description: ${result.usUniformedServicesBarcode?.statusCodeDescription}
-     Branch Of Service: ${result.usUniformedServicesBarcode?.branchOfService}
-     Rank: ${result.usUniformedServicesBarcode?.rank}
-     Pay Grade: ${result.usUniformedServicesBarcode?.payGrade}
-     Sponsor Name: ${result.usUniformedServicesBarcode?.sponsorName ?? "empty"}
-     Sponsor Person Designator Identifier: ${result.usUniformedServicesBarcode?.sponsorPersonDesignatorIdentifier ?? 0}
-     Relationship Code: ${result.usUniformedServicesBarcode?.relationshipCode ?? "empty"}
-     Relationship Description: ${result.usUniformedServicesBarcode?.relationshipDescription ?? "empty"}
-     Geneva Convention Category: ${result.usUniformedServicesBarcode?.genevaConventionCategory ?? "empty"}
-     Blood Type: ${result.usUniformedServicesBarcode?.bloodType ?? "empty"}
-     \n""";
   }
 
   String _getDescriptionForCapturedId(CapturedId result) {
