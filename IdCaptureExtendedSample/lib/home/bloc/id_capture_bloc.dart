@@ -176,6 +176,8 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
 
   @override
   void dispose() {
+    switchCameraOff();
+    disableIdCapture();
     _idCapture?.removeListener(this);
     _idCaptureController.close();
     super.dispose();

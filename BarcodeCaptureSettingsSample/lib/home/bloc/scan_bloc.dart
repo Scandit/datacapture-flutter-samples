@@ -94,6 +94,8 @@ class ScanBloc extends Bloc implements BarcodeCaptureListener {
   @override
   void dispose() {
     _settings.barcodeCapture.removeListener(this);
+    switchCameraOff();
+    disableBarcodeCapture();
     _continuousScanResultController.close();
     _singleScanResultController.close();
     super.dispose();

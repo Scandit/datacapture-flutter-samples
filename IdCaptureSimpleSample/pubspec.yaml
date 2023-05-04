@@ -12,17 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_id:
-    '>=6.16.2 <6.16.3'
+    '>=6.17.1 <6.17.2'
   scandit_flutter_datacapture_text:
-    '>=6.16.2 <6.16.3'
-  permission_handler: ">=9.0.1 <=9.0.2"
-  flutter_platform_widgets: ^1.12.1
-  intl: ^0.17.0
-  cupertino_icons: 1.0.4
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+    '>=6.17.1 <6.17.2'
+  permission_handler: "10.2.0"
+  flutter_platform_widgets: ^2.2.6
+  cupertino_icons: 1.0.5
+  intl: ^0.18.0
 
 flutter:
   uses-material-design: true

@@ -54,30 +54,28 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
   }
 
   @override
-  void dispose() {
-    _bloc.dispose();
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: key,
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          new IconButton(
-            icon: new Icon(Icons.settings),
-            onPressed: () {
-              _bloc.switchCameraOff();
-              Navigator.pushNamed(context, BSRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
-            },
-          )
-        ],
-      ),
-      body: SafeArea(child: _bloc.dataCaptureView),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          key: key,
+          appBar: AppBar(
+            title: Text(widget.title),
+            actions: [
+              new IconButton(
+                icon: new Icon(Icons.settings),
+                onPressed: () {
+                  _bloc.switchCameraOff();
+                  Navigator.pushNamed(context, BSRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
+                },
+              )
+            ],
+          ),
+          body: SafeArea(child: _bloc.dataCaptureView),
+        ),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   void _checkPermission() async {
@@ -89,6 +87,13 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
       _bloc.switchCameraOn();
       _bloc.enableBarcodeCapture();
     }
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+    super.dispose();
   }
 
   T? _ambiguate<T>(T? value) => value;

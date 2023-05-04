@@ -9,7 +9,6 @@ import 'dart:io' show Platform;
 
 import 'package:BarcodeCaptureViewsSample/common/common.dart';
 import 'package:BarcodeCaptureViewsSample/splitview/bloc/barcode_capture_split_view_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';

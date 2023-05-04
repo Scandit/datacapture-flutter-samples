@@ -8,7 +8,6 @@ import 'package:MatrixScanSimpleSample/main.dart';
 import 'package:MatrixScanSimpleSample/scan_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
@@ -123,9 +122,9 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
           padding: containerPadding,
           child: SizedBox(
               width: double.infinity,
-              child: PlatformButton(
+              child: PlatformElevatedButton(
                   onPressed: () => _showScanResults(context),
-                  cupertino: (_, __) => CupertinoButtonData(
+                  cupertino: (_, __) => CupertinoElevatedButtonData(
                       color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
                   child: PlatformText(
                     'Done',
@@ -134,7 +133,12 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
         )
       ]);
     }
-    return PlatformScaffold(appBar: PlatformAppBar(title: Text(widget.title)), body: child);
+    return WillPopScope(
+        child: PlatformScaffold(appBar: PlatformAppBar(title: Text(widget.title)), body: child),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   @override
@@ -166,11 +170,13 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   }
 
   void _showScanResults(BuildContext context) {
+    _barcodeTracking.isEnabled = false;
     Navigator.pushNamed(context, "/scanResults", arguments: scanResults).then((value) => _resetScanResults());
   }
 
   void _resetScanResults() {
     scanResults.clear();
+    _barcodeTracking.isEnabled = true;
   }
 
   T? _ambiguate<T>(T? value) => value;

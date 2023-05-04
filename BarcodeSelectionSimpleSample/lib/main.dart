@@ -4,7 +4,6 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
@@ -121,40 +120,45 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
     } else {
       child = _captureView;
     }
-    return SafeArea(
-      child: Scaffold(
-        body: child,
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: new Icon(Icons.qr_code),
-              label: 'Tap to Select',
+    return WillPopScope(
+        child: SafeArea(
+          child: Scaffold(
+            body: child,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              items: [
+                BottomNavigationBarItem(
+                  icon: new Icon(Icons.qr_code),
+                  label: 'Tap to Select',
+                ),
+                BottomNavigationBarItem(
+                  icon: new Icon(Icons.qr_code),
+                  label: 'Aim to Select',
+                )
+              ],
+              onTap: (int index) {
+                setState(() {
+                  // Update selection type and apply new settings
+                  if (index == 0) {
+                    _selectionSettings.selectionType = BarcodeSelectionTapSelection();
+                  } else {
+                    _selectionSettings.selectionType = BarcodeSelectionAimerSelection();
+                  }
+                  _barcodeSelection.applySettings(_selectionSettings);
+                  _currentIndex = index;
+                });
+              },
+              selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+              unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+              backgroundColor: Colors.black,
+              unselectedItemColor: Colors.white,
             ),
-            BottomNavigationBarItem(
-              icon: new Icon(Icons.qr_code),
-              label: 'Aim to Select',
-            )
-          ],
-          onTap: (int index) {
-            setState(() {
-              // Update selection type and apply new settings
-              if (index == 0) {
-                _selectionSettings.selectionType = BarcodeSelectionTapSelection();
-              } else {
-                _selectionSettings.selectionType = BarcodeSelectionAimerSelection();
-              }
-              _barcodeSelection.applySettings(_selectionSettings);
-              _currentIndex = index;
-            });
-          },
-          selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-          unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-          backgroundColor: Colors.black,
-          unselectedItemColor: Colors.white,
+          ),
         ),
-      ),
-    );
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   @override

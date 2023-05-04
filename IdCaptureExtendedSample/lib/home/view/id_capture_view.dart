@@ -104,48 +104,53 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [],
-      ),
-      body: SafeArea(child: _bloc.dataCaptureView),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _bloc.currentModeIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/ic_barcode.png',
-              scale: 1.5,
-            ),
-            label: IdCaptureMode.barcode.name,
+    return WillPopScope(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            actions: [],
           ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/ic_mrz.png',
-              scale: 1.5,
-            ),
-            label: IdCaptureMode.mrz.name,
+          body: SafeArea(child: _bloc.dataCaptureView),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _bloc.currentModeIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'assets/images/ic_barcode.png',
+                  scale: 1.5,
+                ),
+                label: IdCaptureMode.barcode.name,
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'assets/images/ic_mrz.png',
+                  scale: 1.5,
+                ),
+                label: IdCaptureMode.mrz.name,
+              ),
+              BottomNavigationBarItem(
+                icon: Image.asset(
+                  'assets/images/ic_viz.png',
+                  scale: 1.5,
+                ),
+                label: IdCaptureMode.viz.name,
+              )
+            ],
+            onTap: (int index) {
+              setState(() {
+                _bloc.currentModeIndex = index;
+              });
+            },
+            selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+            unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+            backgroundColor: Colors.black,
+            unselectedItemColor: Colors.white,
           ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/ic_viz.png',
-              scale: 1.5,
-            ),
-            label: IdCaptureMode.viz.name,
-          )
-        ],
-        onTap: (int index) {
-          setState(() {
-            _bloc.currentModeIndex = index;
-          });
-        },
-        selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-        unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-        backgroundColor: Colors.black,
-        unselectedItemColor: Colors.white,
-      ),
-    );
+        ),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   void _checkPermission() async {

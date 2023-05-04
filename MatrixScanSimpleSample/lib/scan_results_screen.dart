@@ -6,7 +6,6 @@
 
 import 'package:MatrixScanSimpleSample/main.dart';
 import 'package:MatrixScanSimpleSample/scan_result.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
@@ -48,10 +47,11 @@ class ScanResultsScreen extends StatelessWidget {
           padding: EdgeInsets.all(48.0),
           child: SizedBox(
               width: double.infinity,
-              child: PlatformButton(
+              child: PlatformTextButton(
                   onPressed: () => _scanAgain(context),
-                  material: (_, __) => MaterialRaisedButtonData(textColor: Colors.white),
-                  cupertino: (_, __) => CupertinoButtonData(
+                  material: (_, __) => MaterialTextButtonData(
+                      style: ButtonStyle(foregroundColor: MaterialStatePropertyAll(Colors.white))),
+                  cupertino: (_, __) => CupertinoTextButtonData(
                       color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
                   child: PlatformText(
                     'Scan Again',

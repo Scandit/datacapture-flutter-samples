@@ -111,7 +111,12 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     } else {
       child = _captureView;
     }
-    return Center(child: child);
+    return WillPopScope(
+        child: Center(child: child),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   @override

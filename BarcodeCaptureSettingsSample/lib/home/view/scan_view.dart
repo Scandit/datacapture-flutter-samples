@@ -87,22 +87,27 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     this._overlay = Overlay.of(context)!;
-    return Scaffold(
-      key: key,
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          new IconButton(
-            icon: new Icon(Icons.settings),
-            onPressed: () {
-              _bloc.switchCameraOff();
-              Navigator.pushNamed(context, BCRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
-            },
-          )
-        ],
-      ),
-      body: SafeArea(child: _bloc.dataCaptureView),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          key: key,
+          appBar: AppBar(
+            title: Text(widget.title),
+            actions: [
+              new IconButton(
+                icon: new Icon(Icons.settings),
+                onPressed: () {
+                  _bloc.switchCameraOff();
+                  Navigator.pushNamed(context, BCRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
+                },
+              )
+            ],
+          ),
+          body: SafeArea(child: _bloc.dataCaptureView),
+        ),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   void _checkPermission() async {

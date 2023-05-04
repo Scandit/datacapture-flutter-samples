@@ -6,7 +6,6 @@
 
 import 'package:TextCaptureSample/route/routes.dart';
 import 'package:TextCaptureSample/settings/view/settings_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_text/scandit_flutter_datacapture_text.dart';
 

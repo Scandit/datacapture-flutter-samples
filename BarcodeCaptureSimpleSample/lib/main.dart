@@ -4,9 +4,7 @@
  * Copyright (C) 2020- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_capture.dart';
@@ -23,8 +21,7 @@ const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlatformApp(
-      cupertino: (_, __) => CupertinoAppData(theme: CupertinoThemeData(brightness: Brightness.light)),
+    return MaterialApp(
       home: BarcodeScannerScreen(),
     );
   }
@@ -132,12 +129,17 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   Widget build(BuildContext context) {
     Widget child;
     if (_isPermissionMessageVisible) {
-      child = PlatformText('No permission to access the camera!',
+      child = Text('No permission to access the camera!',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
     } else {
       child = _captureView;
     }
-    return Center(child: child);
+    return WillPopScope(
+        child: Center(child: child),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   @override
@@ -155,16 +157,16 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     var code = session.newlyRecognizedBarcodes.first;
     var data = (code.data == null || code.data?.isEmpty == true) ? code.rawData : code.data;
     var humanReadableSymbology = SymbologyDescription.forSymbology(code.symbology);
-    await showPlatformDialog(
+    await showDialog(
         context: context,
-        builder: (_) => PlatformAlertDialog(
-              content: PlatformText(
+        builder: (_) => AlertDialog(
+              content: Text(
                 'Scanned: $data\n (${humanReadableSymbology.readableName})',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               actions: [
-                PlatformDialogAction(
-                    child: PlatformText('OK'),
+                TextButton(
+                    child: Text("OK"),
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).pop();
                     })

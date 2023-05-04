@@ -8,8 +8,6 @@ import 'package:MatrixScanBubblesSample/freeze_button.dart';
 import 'package:MatrixScanBubblesSample/product_bubble.dart';
 import 'package:MatrixScanBubblesSample/quadrilateral_extension.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_tracking.dart';
@@ -119,7 +117,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   Widget build(BuildContext context) {
     Widget child;
     if (_isPermissionMessageVisible) {
-      child = PlatformText('No permission to access the camera!',
+      child = Text('No permission to access the camera!',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
     } else {
       child = Stack(children: [
@@ -131,7 +129,12 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
         )
       ]);
     }
-    return PlatformScaffold(body: child);
+    return WillPopScope(
+        child: Scaffold(body: child),
+        onWillPop: () {
+          dispose();
+          return Future.value(true);
+        });
   }
 
   @override

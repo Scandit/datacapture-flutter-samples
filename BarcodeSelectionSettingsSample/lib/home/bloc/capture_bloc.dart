@@ -63,6 +63,8 @@ class CaptureBloc extends Bloc implements BarcodeSelectionListener {
 
   @override
   void dispose() {
+    switchCameraOff();
+    disableBarcodeCapture();
     _settings.barcodeSelection.removeListener(this);
     _selectionController.close();
     super.dispose();
