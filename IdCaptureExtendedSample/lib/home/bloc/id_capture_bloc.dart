@@ -144,14 +144,6 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
     _createIdCapture();
   }
 
-  void skipBackside() {
-    // Reset the state of IdCapture. This is necessary if you decide to skip the back side of
-    // a document when the back side scan is supported. If you omit this call, IdCapture still
-    // expects to capture the back side of the previous document instead of the new one.
-    _idCapture?.reset();
-    _emitResult();
-  }
-
   void continueBackside() {
     enableIdCapture();
   }
@@ -183,32 +175,19 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
     super.dispose();
   }
 
-  CapturedId? _lastCapturedId = null;
-
   @override
   void didCaptureId(IdCapture idCapture, IdCaptureSession session) {
     var capturedId = session.newlyCapturedId;
     if (capturedId == null) return;
-    _lastCapturedId = capturedId;
-    disableIdCapture();
 
-    if (capturedId.capturedResultType == CapturedResultType.vizResult &&
-        capturedId.viz?.capturedSides == SupportedSides.frontOnly &&
-        capturedId.viz?.isBackSideCaptureSupported == true) {
-      _emitConfirmationBacksideScanning();
-    } else {
-      _emitResult();
+    if (capturedId.capturedResultType != CapturedResultType.vizResult ||
+        capturedId.viz?.capturedSides != SupportedSides.frontOnly ||
+        capturedId.viz?.isBackSideCaptureSupported == false) {
+      _emitResult(capturedId);
     }
   }
 
-  void _emitConfirmationBacksideScanning() {
-    _idCaptureController.sink.add(ResultEvent(AskBackScan()));
-  }
-
-  void _emitResult() {
-    var capturedId = _lastCapturedId;
-    if (capturedId == null) return;
-
+  void _emitResult(CapturedId capturedId) {
     CapturedIdResult result;
 
     switch (capturedId.capturedResultType) {
@@ -239,7 +218,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
       default:
         throw new AssertionError('Unknown captured result type: ${capturedId.capturedResultType}');
     }
-
+    disableIdCapture();
     _idCaptureController.sink.add(ResultEvent(result));
   }
 

@@ -1,6 +1,6 @@
 buildscript {
-    ext { 
-       kotlin_version = "1.6.21"
+    ext {
+       kotlin_version = "1.7.21"
        agp_version = "7.2.1"
     }
     repositories {
@@ -15,14 +15,18 @@ buildscript {
     }
 }
 
-def parentFile = project.projectDir.parentFile
+def projectPath = project.projectDir.path
 allprojects {
-    repositories {
-        maven { url "file://${parentFile}/../../.m2/repository" }
-        mavenLocal()
-        google()
-        mavenCentral()
+    def frameworksGradle = "$projectPath/frameworks.gradle"
+    if (file(frameworksGradle).exists()) {
+        apply from: frameworksGradle
+    } else {
+        apply from: "${projectPath}/../../../../common/frameworks.gradle"
     }
+    repositories {
+        maven { url "file://${projectPath}/../../.m2/repository" }
+    }
+    repositories repos
 }
 
 rootProject.buildDir = '../build'
@@ -33,6 +37,6 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

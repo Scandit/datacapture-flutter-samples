@@ -5,14 +5,11 @@
  */
 
 import 'package:BarcodeSelectionSettingsSample/bloc/bloc_base.dart';
-import 'package:BarcodeSelectionSettingsSample/repository/settings_repository.dart';
 import 'package:BarcodeSelectionSettingsSample/route/routes.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/model/setting_item.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 class MainSettingsBloc extends Bloc {
-  final SettingsRepository _settings = SettingsRepository();
-
   final _settingsItems = [
     SettingItem(BSRoutes.BarcodeSelectionSettings),
     SettingItem(BSRoutes.CameraSettings),
@@ -20,10 +17,6 @@ class MainSettingsBloc extends Bloc {
   ];
 
   List<SettingItem> get settingsItems => _settingsItems;
-
-  Future<void> resetBarcodeSelectionSession() {
-    return _settings.barcodeSelection.reset();
-  }
 
   String get pluginVersion => DataCaptureVersion.pluginVersion;
 }

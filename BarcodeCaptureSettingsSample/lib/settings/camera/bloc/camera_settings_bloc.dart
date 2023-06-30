@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
+import 'dart:io';
 
 import 'package:BarcodeCaptureSettingsSample/bloc/bloc_base.dart';
 import 'package:BarcodeCaptureSettingsSample/repository/settings_repository.dart';
@@ -68,6 +69,10 @@ class CameraSettingsBloc extends Bloc {
   }
 
   List<VideoResolution> get availableVideoResolutions {
+    if (Platform.isAndroid) {
+      // Auto (default) / HD / Full HD
+      return [VideoResolution.auto, VideoResolution.hd, VideoResolution.fullHd];
+    }
     return VideoResolution.values;
   }
 

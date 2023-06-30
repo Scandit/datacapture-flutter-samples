@@ -61,23 +61,6 @@ class _MainSettingsViewState extends BaseState<MainSettingsView> with WidgetsBin
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-              child: Card(
-                child: ListTile(
-                  title: Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                        child: Text(
-                          'Reset Barcode Selection Session',
-                          textAlign: TextAlign.start,
-                        ),
-                        onPressed: () =>
-                            {_bloc.resetBarcodeSelectionSession().onError((error, stackTrace) => print(error))}),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
               padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
               child: Text(
                 'Plugin Version: ${_bloc.pluginVersion}',

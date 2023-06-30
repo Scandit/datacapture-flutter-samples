@@ -1,19 +1,19 @@
 PODS:
   - Flutter (1.0.0)
-  - "permission_handler (5.1.0+2)":
+  - permission_handler_apple (9.0.4):
     - Flutter
-  - scandit_flutter_datacapture_core (6.11.0-beta.1.snapshot):
+  - scandit_flutter_datacapture_core (6.19.0-beta.1-SNAPSHOT):
     - Flutter
-  - scandit_flutter_datacapture_parser (6.11.0-beta.1.snapshot):
+  - scandit_flutter_datacapture_parser (6.19.0-beta.1-SNAPSHOT):
     - Flutter
     - scandit_flutter_datacapture_core
-  - scandit_flutter_datacapture_text (6.11.0-beta.1.snapshot):
+  - scandit_flutter_datacapture_text (6.19.0-beta.1-SNAPSHOT):
     - Flutter
     - scandit_flutter_datacapture_core
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - scandit_flutter_datacapture_core (from `.symlinks/plugins/scandit_flutter_datacapture_core/ios`)
   - scandit_flutter_datacapture_parser (from `.symlinks/plugins/scandit_flutter_datacapture_parser/ios`)
   - scandit_flutter_datacapture_text (from `.symlinks/plugins/scandit_flutter_datacapture_text/ios`)
@@ -21,8 +21,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
-  permission_handler:
-    :path: ".symlinks/plugins/permission_handler/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   scandit_flutter_datacapture_core:
     :path: ".symlinks/plugins/scandit_flutter_datacapture_core/ios"
   scandit_flutter_datacapture_parser:
@@ -31,12 +31,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/scandit_flutter_datacapture_text/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  scandit_flutter_datacapture_core: 13995458976dbc145d9b60a15324312b730c4dc3
-  scandit_flutter_datacapture_parser: 7d49a4a038527bec0612c84288566213520debc9
-  scandit_flutter_datacapture_text: 6523576fbf086cd8bb41c4162d3b573c1159edc2
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  scandit_flutter_datacapture_core: 7bbc38a68ad47fd51fee8b8194c675f4ea6cbee2
+  scandit_flutter_datacapture_parser: f1bad39fa9e1e2a5da868ee8b7b92d42f0037261
+  scandit_flutter_datacapture_text: da7ab6e9addda68da78d7d10f44d8651731b9761
 
-PODFILE CHECKSUM: c501a8a084033a2636bd411fca991c86c09e4572
+PODFILE CHECKSUM: 442b54d72cc483a7c1e90cac6868a9672d3be08b
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3

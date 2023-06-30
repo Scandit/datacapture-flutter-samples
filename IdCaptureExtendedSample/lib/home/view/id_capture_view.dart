@@ -35,51 +35,12 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
     _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     _bloc.idCaptureController.listen((event) {
-      if (event.content is AskBackScan) {
-        showAskBackScanDialog(context);
-        return;
-      }
-
       // Display result
       Navigator.pushNamed(context, ICRoutes.Result.routeName, arguments: event.content)
           .then((value) => _bloc.enableIdCapture());
     });
 
     _checkPermission();
-  }
-
-  Future showAskBackScanDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      child: Text("Skip"),
-      onPressed: () {
-        Navigator.of(context).pop();
-        _bloc.skipBackside();
-      },
-    );
-    Widget continueButton = TextButton(
-      child: Text("Scan"),
-      onPressed: () {
-        Navigator.of(context).pop();
-        _bloc.continueBackside();
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Back of Card"),
-      content: Text("This document has additional data on the back of the card."),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 
   @override

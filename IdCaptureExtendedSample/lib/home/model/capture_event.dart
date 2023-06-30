@@ -17,7 +17,3 @@ class CaptureEvent<T> {
 class ResultEvent<CaptureResult> extends CaptureEvent {
   ResultEvent(content) : super(content);
 }
-
-class AskBackScan<Void> extends CaptureEvent {
-  AskBackScan() : super(Void);
-}
