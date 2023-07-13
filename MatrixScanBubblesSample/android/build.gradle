@@ -15,18 +15,30 @@ buildscript {
     }
 }
 
-def projectPath = project.projectDir.path
+def custom_config_scripts = [
+        "$project.projectDir.path/frameworks.gradle",
+        "$project.projectDir.path/../../../../common/frameworks.gradle"
+]
+
 allprojects {
-    def frameworksGradle = "$projectPath/frameworks.gradle"
-    if (file(frameworksGradle).exists()) {
-        apply from: frameworksGradle
-    } else {
-        apply from: "${projectPath}/../../../../common/frameworks.gradle"
+    def customConfigApplied = false
+    custom_config_scripts.each { location ->
+        def file = file(location)
+        if (file.exists()) {
+            apply from: file
+            repositories repos
+            customConfigApplied = true
+            return
+        }
     }
-    repositories {
-        maven { url "file://${projectPath}/../../.m2/repository" }
+
+    if (!customConfigApplied) {
+        repositories {
+            mavenCentral()
+            google()
+            maven { url 'https://jitpack.io' }
+        }
     }
-    repositories repos
 }
 
 rootProject.buildDir = '../build'
