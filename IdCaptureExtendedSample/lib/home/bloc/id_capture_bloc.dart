@@ -23,7 +23,7 @@ import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.da
 
 const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
-class IdCaptureBloc extends Bloc implements IdCaptureListener {
+class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
   IdCapture? _idCapture;
 
   late DataCaptureContext _dataCaptureContext;
@@ -75,12 +75,12 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
     var currentIdCapture = _idCapture;
 
     if (currentIdCapture != null) {
-      currentIdCapture.removeListener(this);
+      currentIdCapture.removeAdvancedAsyncListener(this);
       _dataCaptureContext.removeMode(currentIdCapture);
     }
 
     var idCapture = IdCapture.forContext(_dataCaptureContext, _getSettingsForCurrentType());
-    idCapture.addListener(this);
+    idCapture.addAdvancedAsyncListener(this);
     IdCaptureOverlay.withIdCaptureForView(idCapture, _dataCaptureView);
     _idCapture = idCapture;
   }
@@ -170,13 +170,13 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   void dispose() {
     switchCameraOff();
     disableIdCapture();
-    _idCapture?.removeListener(this);
+    _idCapture?.removeAdvancedAsyncListener(this);
     _idCaptureController.close();
     super.dispose();
   }
 
   @override
-  void didCaptureId(IdCapture idCapture, IdCaptureSession session) {
+  Future<void> didCaptureId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     var capturedId = session.newlyCapturedId;
     if (capturedId == null) return;
 
@@ -223,17 +223,12 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   }
 
   @override
-  void didFailWithError(IdCapture idCapture, IdCaptureError error, IdCaptureSession session) {
+  Future<void> didLocalizeId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     // In this sample we are not interested in this callback.
   }
 
   @override
-  void didLocalizeId(IdCapture idCapture, IdCaptureSession session) {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  void didRejectId(IdCapture idCapture, IdCaptureSession session) {
+  Future<void> didRejectId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     // In this sample we are not interested in this callback.
   }
 }

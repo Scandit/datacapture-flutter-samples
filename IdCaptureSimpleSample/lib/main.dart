@@ -36,7 +36,9 @@ class IdCaptureScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _IdCaptureScreenState(DataCaptureContext.forLicenseKey(licenseKey));
 }
 
-class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingObserver implements IdCaptureListener {
+class _IdCaptureScreenState extends State<IdCaptureScreen>
+    with WidgetsBindingObserver
+    implements IdCaptureAdvancedAsyncListener {
   final DataCaptureContext _context;
 
   // Use the world-facing (back) camera.
@@ -82,7 +84,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture.forContext(_context, settings)
       // Register self as a listener to get informed whenever a new id got recognized.
-      ..addListener(this);
+      ..addAdvancedAsyncListener(this);
 
     // To visualize the on-going id capturing process on screen, setup a data capture view that renders the
     // camera preview. The view must be connected to the data capture context.
@@ -131,7 +133,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
   @override
   void dispose() {
     _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
-    _idCapture.removeListener(this);
+    _idCapture.removeAdvancedAsyncListener(this);
     _idCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
@@ -139,7 +141,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
   }
 
   @override
-  void didCaptureId(IdCapture idCapture, IdCaptureSession session) async {
+  Future<void> didCaptureId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     CapturedId? capturedId = session.newlyCapturedId;
     if (capturedId == null) {
       return;
@@ -173,31 +175,12 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
   }
 
   @override
-  void didFailWithError(IdCapture idCapture, IdCaptureError error, IdCaptureSession session) {
-    showPlatformDialog(
-        context: context,
-        builder: (_) => PlatformAlertDialog(
-              content: PlatformText(
-                error.message,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              actions: [
-                PlatformDialogAction(
-                    child: PlatformText('OK'),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    })
-              ],
-            ));
-  }
-
-  @override
-  void didLocalizeId(IdCapture idCapture, IdCaptureSession session) {
+  Future<void> didLocalizeId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     // In this sample we are not interested in this callback.
   }
 
   @override
-  void didRejectId(IdCapture idCapture, IdCaptureSession session) async {
+  Future<void> didRejectId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     // Implement to handle documents recognized in a frame, but rejected.
     // A document or its part is considered rejected when (a) it's valid, but not enabled in the settings,
     // (b) it's a barcode of a correct symbology or a Machine Readable Zone (MRZ),
