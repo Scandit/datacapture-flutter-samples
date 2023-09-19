@@ -67,7 +67,7 @@ class BarcodeRepository {
 
   void addBarcodeToResultsMap(Barcode barcode, Map<String, ScanDetails> scanResults) {
     var barcodeData = barcode.data;
-    String symbology = barcode.symbology.jsonValue;
+    String symbology = barcode.symbology.toString();
     if (barcodeData == null) return;
 
     if (scanResults.containsKey(barcodeData)) {
