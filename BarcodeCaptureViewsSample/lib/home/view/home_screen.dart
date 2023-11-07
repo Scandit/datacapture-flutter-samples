@@ -10,7 +10,6 @@ import 'package:BarcodeCaptureViewsSample/home/model/home_section.dart';
 import 'package:flutter/material.dart';
 
 import 'package:BarcodeCaptureViewsSample/route/barcode_capture_routes.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,8 +32,8 @@ class HomeScreen extends StatelessWidget {
       }
     });
 
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(title),
       ),
       body: SafeArea(
@@ -44,14 +43,11 @@ class HomeScreen extends StatelessWidget {
           children: [
             Expanded(
               child: ListView.builder(
-                itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: GestureDetector(
-                    child: Text(
-                      _homeBloc.modes[index].title,
-                    ),
-                    onTap: () => {_onClick(context, _homeBloc.modes[index])},
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    _homeBloc.modes[index].title,
                   ),
+                  onTap: () => {_onClick(context, _homeBloc.modes[index])},
                 ),
                 itemCount: _homeBloc.modes.length,
               ),
