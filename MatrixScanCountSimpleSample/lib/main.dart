@@ -29,12 +29,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MatrixScanCountSimpleSample',
       theme: ThemeData(
-        useMaterial3: true,
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            color: Colors.black,
-            titleTextStyle: TextStyle(color: Colors.white)),
+          iconTheme: IconThemeData(color: Colors.white),
+          color: Colors.black,
+        ),
       ),
       initialRoute: SampleRoutes.Home.routeName,
       onGenerateRoute: (settings) {

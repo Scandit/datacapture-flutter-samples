@@ -5,8 +5,6 @@
  */
 
 import 'dart:ui';
-
-import 'package:flutter/material.dart' as material;
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_capture.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -449,27 +447,27 @@ class SettingsRepository {
   }
 
   Color get aimerDotColor {
-    return _aimerViewfinder?.dotColor ?? material.Colors.white;
+    return _aimerViewfinder.dotColor;
   }
 
   final Color aimerDefaultDotColor = AimerViewfinder().dotColor;
 
   set aimerDotColor(Color newColor) {
-    _aimerViewfinder?.dotColor = newColor;
+    _aimerViewfinder.dotColor = newColor;
   }
 
   final Color aimerDefaultFrameColor = AimerViewfinder().frameColor;
 
   Color get aimerFrameColor {
-    return _aimerViewfinder?.frameColor ?? material.Colors.white;
+    return _aimerViewfinder.frameColor;
   }
 
   set aimerFrameColor(Color newColor) {
-    _aimerViewfinder?.frameColor = newColor;
+    _aimerViewfinder.frameColor = newColor;
   }
 
   LaserlineViewfinderStyle get laserlineStyle {
-    return _laserlineViewfinder?.style ?? LaserlineViewfinderStyle.legacy;
+    return _laserlineViewfinder.style;
   }
 
   set laserlineStyle(LaserlineViewfinderStyle newStyle) {
@@ -477,11 +475,11 @@ class SettingsRepository {
   }
 
   DoubleWithUnit get laserlineWidth {
-    return _laserlineViewfinder?.width ?? DoubleWithUnit(0, MeasureUnit.dip);
+    return _laserlineViewfinder.width;
   }
 
   set laserlineWidth(DoubleWithUnit newValue) {
-    _laserlineViewfinder?.width = newValue;
+    _laserlineViewfinder.width = newValue;
   }
 
   final Color laserLineLegacyDefaultEnabledColor =
@@ -491,11 +489,11 @@ class SettingsRepository {
       LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated).enabledColor;
 
   Color get laserlineEnabledColor {
-    return _laserlineViewfinder?.enabledColor ?? material.Colors.white;
+    return _laserlineViewfinder.enabledColor;
   }
 
   set laserlineEnabledColor(Color newColor) {
-    _laserlineViewfinder?.enabledColor = newColor;
+    _laserlineViewfinder.enabledColor = newColor;
   }
 
   final Color laserLineLegacyDefaultDisabledColor =
@@ -505,15 +503,15 @@ class SettingsRepository {
       LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated).disabledColor;
 
   Color get laserlineDisabledColor {
-    return _laserlineViewfinder?.disabledColor ?? material.Colors.white;
+    return _laserlineViewfinder.disabledColor;
   }
 
   set laserlineDisabledColor(Color newColor) {
-    _laserlineViewfinder?.disabledColor = newColor;
+    _laserlineViewfinder.disabledColor = newColor;
   }
 
   RectangularViewfinderStyle get rectangularViewfinderStyle {
-    return _rectangularViewfinder?.style ?? RectangularViewfinderStyle.legacy;
+    return _rectangularViewfinder.style;
   }
 
   set rectangularViewfinderStyle(RectangularViewfinderStyle newStyle) {
@@ -521,7 +519,7 @@ class SettingsRepository {
   }
 
   RectangularViewfinderLineStyle get rectangularViewfinderLineStyle {
-    return _rectangularViewfinder?.lineStyle ?? RectangularViewfinderLineStyle.light;
+    return _rectangularViewfinder.lineStyle;
   }
 
   set rectangularViewfinderLineStyle(RectangularViewfinderLineStyle newStyle) {
@@ -529,47 +527,47 @@ class SettingsRepository {
   }
 
   double get rectangularViewfinderDimming {
-    return _rectangularViewfinder?.dimming ?? 0;
+    return _rectangularViewfinder.dimming;
   }
 
   set rectangularViewfinderDimming(double newValue) {
-    _rectangularViewfinder?.dimming = newValue;
+    _rectangularViewfinder.dimming = newValue;
   }
 
   Color get rectangularViewfinderColor {
-    return _rectangularViewfinder?.color ?? material.Colors.white;
+    return _rectangularViewfinder.color;
   }
 
   set rectangularViewfinderColor(Color newColor) {
-    _rectangularViewfinder?.color = newColor;
+    _rectangularViewfinder.color = newColor;
   }
 
   Color get rectangularViewfinderDisabledColor {
-    return _rectangularViewfinder?.disabledColor ?? material.Colors.white;
+    return _rectangularViewfinder.disabledColor;
   }
 
   set rectangularViewfinderDisabledColor(Color newColor) {
-    _rectangularViewfinder?.disabledColor = newColor;
+    _rectangularViewfinder.disabledColor = newColor;
   }
 
   bool get rectangularViewfinderAnimationEnabled {
-    return _rectangularViewfinder?.animation != null;
+    return _rectangularViewfinder.animation != null;
   }
 
   set rectangularViewfinderAnimationEnabled(bool enabled) {
-    _rectangularViewfinder?.animation = enabled ? RectangularViewfinderAnimation(isLooping: false) : null;
+    _rectangularViewfinder.animation = enabled ? RectangularViewfinderAnimation(isLooping: false) : null;
   }
 
   bool get rectangularViewfinderAnimationIsLooping {
-    return _rectangularViewfinder?.animation?.isLooping == true;
+    return _rectangularViewfinder.animation?.isLooping == true;
   }
 
   set rectangularViewfinderAnimationIsLooping(bool isLooping) {
-    _rectangularViewfinder?.animation = RectangularViewfinderAnimation(isLooping: isLooping);
+    _rectangularViewfinder.animation = RectangularViewfinderAnimation(isLooping: isLooping);
   }
 
   SizingMode get rectangularViewfinderSizingMode {
-    return _rectangularViewfinder?.sizeWithUnitAndAspect.sizingMode ?? SizingMode.widthAndHeight;
+    return _rectangularViewfinder.sizeWithUnitAndAspect.sizingMode;
   }
 
   set rectangularViewfinderSizingMode(SizingMode newMode) {
@@ -579,16 +577,16 @@ class SettingsRepository {
   void _setRectangularViewfiniderSize(SizingMode mode) {
     switch (mode) {
       case SizingMode.widthAndHeight:
-        _rectangularViewfinder?.setSize(SizeWithUnit(rectangularViewfinderWidth, rectangularViewfinderHeight));
+        _rectangularViewfinder.setSize(SizeWithUnit(rectangularViewfinderWidth, rectangularViewfinderHeight));
         break;
       case SizingMode.widthAndAspectRatio:
-        _rectangularViewfinder?.setWidthAndAspectRatio(rectangularViewfinderWidth, rectangularViewfinderHeightAspect);
+        _rectangularViewfinder.setWidthAndAspectRatio(rectangularViewfinderWidth, rectangularViewfinderHeightAspect);
         break;
       case SizingMode.heightAndAspectRatio:
-        _rectangularViewfinder?.setHeightAndAspectRatio(rectangularViewfinderHeight, rectangularViewfinderWidthAspect);
+        _rectangularViewfinder.setHeightAndAspectRatio(rectangularViewfinderHeight, rectangularViewfinderWidthAspect);
         break;
       case SizingMode.shorterDimensionAndAspectRatio:
-        _rectangularViewfinder?.setShorterDimensionAndAspectRatio(
+        _rectangularViewfinder.setShorterDimensionAndAspectRatio(
             _rectangularViewfinderShorterDimension, _rectangularViewfinderLongerDimensionAspect);
         break;
     }
@@ -663,15 +661,15 @@ class SettingsRepository {
 
   final Color rectangularViewfinderDefaultDisabledColor = RectangularViewfinder().disabledColor;
 
-  AimerViewfinder? get _aimerViewfinder {
+  AimerViewfinder get _aimerViewfinder {
     return _overlay.viewfinder as AimerViewfinder;
   }
 
-  LaserlineViewfinder? get _laserlineViewfinder {
+  LaserlineViewfinder get _laserlineViewfinder {
     return _overlay.viewfinder as LaserlineViewfinder;
   }
 
-  RectangularViewfinder? get _rectangularViewfinder {
+  RectangularViewfinder get _rectangularViewfinder {
     return _overlay.viewfinder as RectangularViewfinder;
   }
 

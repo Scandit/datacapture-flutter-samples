@@ -6,7 +6,9 @@
 
 import 'package:MatrixScanSimpleSample/matrix_scan_screen.dart';
 import 'package:MatrixScanSimpleSample/scan_results_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 void main() async {
@@ -37,19 +39,16 @@ const Map<int, Color> scanditBlueShades = {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
+    return PlatformApp(
+      material: (_, __) => MaterialAppData(
+          theme: ThemeData(
         buttonTheme: ButtonThemeData(buttonColor: const Color(scanditBlue), textTheme: ButtonTextTheme.primary),
         primarySwatch: MaterialColor(scanditBlue, scanditBlueShades),
         primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(color: Colors.white),
         primaryTextTheme: TextTheme(headline6: TextStyle(color: Colors.white)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            color: const Color(scanditBlue),
-            titleTextStyle: TextStyle(color: Colors.white)),
-      ),
+      )),
+      cupertino: (_, __) => CupertinoAppData(theme: CupertinoThemeData(brightness: Brightness.light)),
       initialRoute: '/',
       routes: {
         '/': (context) => MatrixScanScreen("MatrixScan Simple", licenseKey),

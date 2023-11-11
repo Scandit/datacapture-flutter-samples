@@ -12,10 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_text:
-    '>=6.20.0 <6.20.1'
+    '>=6.19.6 <6.19.7'
   scandit_flutter_datacapture_parser:
-    '>=6.20.0 <6.20.1'
+    '>=6.19.6 <6.19.7'
   permission_handler: "10.2.0"
+  flutter_platform_widgets: ^3.3.5
 
 flutter:
   uses-material-design: true

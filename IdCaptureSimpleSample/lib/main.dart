@@ -4,7 +4,9 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -21,17 +23,8 @@ const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'IdCaptureSimpleSample',
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-        appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            color: Colors.black,
-            titleTextStyle: TextStyle(color: Colors.white)),
-      ),
+    return PlatformApp(
+      cupertino: (_, __) => CupertinoAppData(theme: CupertinoThemeData(brightness: Brightness.light)),
       home: IdCaptureScreen(),
     );
   }
@@ -69,7 +62,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     // Use the recommended camera settings for the IdCapture mode.
     _camera?.applySettings(IdCapture.recommendedCameraSettings);
@@ -115,7 +108,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
   Widget build(BuildContext context) {
     Widget child;
     if (_isPermissionMessageVisible) {
-      child = Text('No permission to access the camera!',
+      child = PlatformText('No permission to access the camera!',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
     } else {
       child = _captureView;
@@ -139,7 +132,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _idCapture.removeAdvancedAsyncListener(this);
     _idCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
@@ -158,20 +151,20 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
 
     String result = _getResultFromCapturedId(capturedId);
 
-    showDialog(
+    showPlatformDialog(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (_) => PlatformAlertDialog(
               content: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                child: Text(
+                child: PlatformText(
                   result,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
               actions: [
-                GestureDetector(
-                    child: Text('OK'),
-                    onTap: () {
+                PlatformDialogAction(
+                    child: PlatformText('OK'),
+                    onPressed: () {
                       Navigator.of(context, rootNavigator: true).pop();
                     })
               ],
@@ -199,26 +192,26 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
     // but the data is encoded in an unexpected/incorrect format.
 
     // Don't capture unnecessarily when the dialog is displayed.
-    idCapture.isEnabled = false;
+    _idCapture.isEnabled = false;
 
-    showDialog(
+    await showPlatformDialog(
         context: context,
-        builder: (_) => AlertDialog(
-              content: Text(
+        builder: (_) => PlatformAlertDialog(
+              content: PlatformText(
                 'Document not supported',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               actions: [
-                GestureDetector(
-                    child: Text('OK'),
-                    onTap: () {
+                PlatformDialogAction(
+                    child: PlatformText('OK'),
+                    onPressed: () {
                       Navigator.of(context, rootNavigator: true).pop();
                     })
               ],
-            )).then((value) => {
-          // Enable capture again, after the dialog is dismissed.
-          idCapture.isEnabled = true
-        });
+            ));
+
+    // Enable capture again, after the dialog is dismissed.
+    _idCapture.isEnabled = true;
   }
 
   String _getResultFromCapturedId(CapturedId capturedId) {
@@ -264,6 +257,8 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
     Date of Issue: ${result.dateOfIssue?.date.humanReadable ?? "empty"}
     \n""";
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }
 
 extension DateTimeExtension on DateTime {

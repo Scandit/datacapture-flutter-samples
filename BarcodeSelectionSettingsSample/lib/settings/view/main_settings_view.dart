@@ -39,20 +39,26 @@ class _MainSettingsViewState extends BaseState<MainSettingsView> with WidgetsBin
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) => Padding(
-                  padding: EdgeInsets.all(1.0),
-                  child: ListTile(
-                    title: Text(
-                      _bloc.settingsItems[index].title,
-                    ),
-                    onTap: () {
-                      _onClick(context, _bloc.settingsItems[index]);
-                    },
-                  )),
-              itemCount: _bloc.settingsItems.length,
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              child: Container(
+                color: Colors.white,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => Padding(
+                      padding: EdgeInsets.all(1.0),
+                      child: ListTile(
+                        title: Text(
+                          _bloc.settingsItems[index].title,
+                        ),
+                        onTap: () {
+                          _onClick(context, _bloc.settingsItems[index]);
+                        },
+                      )),
+                  itemCount: _bloc.settingsItems.length,
+                ),
+              ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 10, 0, 0),

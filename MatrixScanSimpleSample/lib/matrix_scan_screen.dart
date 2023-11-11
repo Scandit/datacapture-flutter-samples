@@ -4,15 +4,15 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
+import 'package:MatrixScanSimpleSample/main.dart';
 import 'package:MatrixScanSimpleSample/scan_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_tracking.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
-
-import 'main.dart';
 
 class MatrixScanScreen extends StatefulWidget {
   final String title;
@@ -53,7 +53,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeTracking mode.
     var cameraSettings = BarcodeTracking.recommendedCameraSettings;
@@ -108,7 +108,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   Widget build(BuildContext context) {
     Widget child;
     if (_isPermissionMessageVisible) {
-      child = Text('No permission to access the camera!',
+      child = PlatformText('No permission to access the camera!',
           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
     } else {
       var bottomPadding = 48 + MediaQuery.of(context).padding.bottom;
@@ -122,14 +122,11 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
           padding: containerPadding,
           child: SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: PlatformElevatedButton(
                   onPressed: () => _showScanResults(context),
-                  style: TextButton.styleFrom(
-                      backgroundColor: const Color(scanditBlue),
-                      padding: EdgeInsets.all(15),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6.0), side: BorderSide(color: Colors.white, width: 0))),
-                  child: Text(
+                  cupertino: (_, __) => CupertinoElevatedButtonData(
+                      color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                  child: PlatformText(
                     'Done',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ))),
@@ -137,7 +134,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
       ]);
     }
     return WillPopScope(
-        child: Scaffold(appBar: AppBar(title: Text(widget.title)), body: child),
+        child: PlatformScaffold(appBar: PlatformAppBar(title: Text(widget.title)), body: child),
         onWillPop: () {
           dispose();
           return Future.value(true);
@@ -164,7 +161,7 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
     _barcodeTracking.removeListener(this);
     _barcodeTracking.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
@@ -181,4 +178,6 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     scanResults.clear();
     _barcodeTracking.isEnabled = true;
   }
+
+  T? _ambiguate<T>(T? value) => value;
 }

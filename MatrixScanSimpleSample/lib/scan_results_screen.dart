@@ -7,6 +7,7 @@
 import 'package:MatrixScanSimpleSample/main.dart';
 import 'package:MatrixScanSimpleSample/scan_result.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 class ScanResultsScreen extends StatelessWidget {
@@ -18,8 +19,8 @@ class ScanResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ScanResult> results = ModalRoute.of(context)?.settings.arguments as List<ScanResult>? ?? [];
 
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(title),
       ),
       body: Column(children: [
@@ -30,11 +31,11 @@ class ScanResultsScreen extends StatelessWidget {
                   var result = results[index];
                   return Material(
                       child: ListTile(
-                    title: Text(
+                    title: PlatformText(
                       result.data,
                       style: TextStyle(fontSize: 20),
                     ),
-                    subtitle: Text(
+                    subtitle: PlatformText(
                       SymbologyDescription.forSymbology(result.symbology).readableName,
                       style: TextStyle(color: Color(scanditBlue)),
                     ),
@@ -46,12 +47,13 @@ class ScanResultsScreen extends StatelessWidget {
           padding: EdgeInsets.all(48.0),
           child: SizedBox(
               width: double.infinity,
-              child: TextButton(
+              child: PlatformTextButton(
                   onPressed: () => _scanAgain(context),
-                  style: TextButton.styleFrom(
-                      foregroundColor: const Color(scanditBlue),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0))),
-                  child: Text(
+                  material: (_, __) => MaterialTextButtonData(
+                      style: ButtonStyle(foregroundColor: MaterialStatePropertyAll(Colors.white))),
+                  cupertino: (_, __) => CupertinoTextButtonData(
+                      color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
+                  child: PlatformText(
                     'Scan Again',
                     style: TextStyle(fontSize: 16),
                   ))),
