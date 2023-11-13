@@ -147,11 +147,11 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
       return;
     }
     // Don't capture unnecessarily when the alert is displayed.
-    idCapture.isEnabled = false;
+    _idCapture.isEnabled = false;
 
     String result = _getResultFromCapturedId(capturedId);
 
-    showPlatformDialog(
+    await showPlatformDialog(
         context: context,
         builder: (_) => PlatformAlertDialog(
               content: SingleChildScrollView(
@@ -168,19 +168,14 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
                       Navigator.of(context, rootNavigator: true).pop();
                     })
               ],
-            )).then((value) => {
-          // Enable capture again, after the dialog is dismissed.
-          idCapture.isEnabled = true
-        });
+            ));
+
+    // Enable capture again, after the dialog is dismissed.
+    _idCapture.isEnabled = true;
   }
 
   @override
   Future<void> didLocalizeId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  Future<void> didTimedOut(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     // In this sample we are not interested in this callback.
   }
 

@@ -190,28 +190,35 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
   void _emitResult(CapturedId capturedId) {
     CapturedIdResult result;
 
-    if (capturedId.capturedResultTypes.contains(CapturedResultType.aamvaBarcodeResult)) {
-      result = AamvaCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.colombiaIdBarcodeResult)) {
-      result = ColombiaIdCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.argentinaIdBarcodeResult)) {
-      result = ArgentinaIdCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.southAfricaIdBarcodeResult)) {
-      result = SouthAfricaIdCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.southAfricaDlBarcodeResult)) {
-      result = SouthAfricaDlCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.usUniformedServicesBarcodeResult)) {
-      result = UsUniformedServicesCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.mrzResult)) {
-      result = MrzCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.vizResult)) {
-      result = VizCapturedIdResult(capturedId);
-    } else {
-      result = CapturedIdResult(capturedId);
+    switch (capturedId.capturedResultType) {
+      case CapturedResultType.aamvaBarcodeResult:
+        result = AamvaCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.colombiaIdBarcodeResult:
+        result = ColombiaIdCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.argentinaIdBarcodeResult:
+        result = ArgentinaIdCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.southAfricaIdBarcodeResult:
+        result = SouthAfricaIdCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.southAfricaDlBarcodeResult:
+        result = SouthAfricaDlCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.usUniformedServicesBarcodeResult:
+        result = UsUniformedServicesCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.mrzResult:
+        result = MrzCapturedIdResult(capturedId);
+        break;
+      case CapturedResultType.vizResult:
+        result = VizCapturedIdResult(capturedId);
+        break;
+      default:
+        throw new AssertionError('Unknown captured result type: ${capturedId.capturedResultType}');
     }
-
     disableIdCapture();
-
     _idCaptureController.sink.add(ResultEvent(result));
   }
 
@@ -222,11 +229,6 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
 
   @override
   Future<void> didRejectId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  Future<void> didTimedOut(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
     // In this sample we are not interested in this callback.
   }
 }

@@ -86,7 +86,7 @@ class _ScanViewState extends State<ScanView> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    this._overlay = Overlay.of(context);
+    this._overlay = Overlay.of(context)!;
     return WillPopScope(
         child: Scaffold(
           key: key,

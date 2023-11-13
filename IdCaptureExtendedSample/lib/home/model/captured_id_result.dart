@@ -7,7 +7,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
-class CapturedIdResult {
+abstract class CapturedIdResult {
   final CapturedId _capturedId;
 
   CapturedIdResult(this._capturedId);
