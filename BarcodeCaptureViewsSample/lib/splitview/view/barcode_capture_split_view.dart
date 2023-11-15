@@ -171,7 +171,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
         children: [
           Text(barcode.data ?? ''),
           Text(
-            barcode.symbology.jsonValue,
+            barcode.symbology.toString(),
             style: TextStyle(color: Colors.cyan),
           )
         ],
