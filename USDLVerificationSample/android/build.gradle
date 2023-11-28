@@ -1,0 +1,54 @@
+buildscript {
+    ext {
+       kotlin_version = "1.7.21"
+       agp_version = "7.2.1"
+    }
+    repositories {
+        mavenLocal()
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$agp_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+def custom_config_scripts = [
+        "$project.projectDir.path/frameworks.gradle",
+        "$project.projectDir.path/../../../../common/frameworks.gradle"
+]
+
+allprojects {
+    def customConfigApplied = false
+    custom_config_scripts.each { location ->
+        def file = file(location)
+        if (file.exists()) {
+            apply from: file
+            repositories repos
+            customConfigApplied = true
+            return
+        }
+    }
+
+    if (!customConfigApplied) {
+        repositories {
+            mavenCentral()
+            google()
+            maven { url 'https://jitpack.io' }
+        }
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

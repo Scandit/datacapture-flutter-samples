@@ -11,7 +11,6 @@ import 'package:BarcodeCaptureViewsSample/common/common.dart';
 import 'package:BarcodeCaptureViewsSample/splitview/bloc/barcode_capture_split_view_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as widgets;
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -60,18 +59,14 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
 
   @override
   Widget build(BuildContext context) {
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(widget.title),
-        leading: GestureDetector(
-          onTap: () => _onBackClick(context),
-          child: _getBackWidget(),
-        ),
-        trailingActions: [
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 15.0),
-            child: PlatformIconButton(
-              icon: Icon(PlatformIcons(context).delete, size: 26),
+            child: IconButton(
+              icon: Icon(Icons.delete, size: 26),
               padding: Platform.isIOS ? EdgeInsets.only(bottom: 6) : null,
               onPressed: () => _onClearClick(context),
             ),
@@ -195,10 +190,6 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
 
   void _onClearClick(BuildContext context) {
     _bloc.clearCapturedBarcodes();
-  }
-
-  void _onBackClick(BuildContext context) {
-    Navigator.pop(context);
   }
 
   void _checkPermission() {

@@ -7,7 +7,6 @@
 import 'package:MatrixScanSimpleSample/main.dart';
 import 'package:MatrixScanSimpleSample/scan_result.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 class ScanResultsScreen extends StatelessWidget {
@@ -19,8 +18,8 @@ class ScanResultsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ScanResult> results = ModalRoute.of(context)?.settings.arguments as List<ScanResult>? ?? [];
 
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: Text(title),
       ),
       body: Column(children: [
@@ -31,11 +30,11 @@ class ScanResultsScreen extends StatelessWidget {
                   var result = results[index];
                   return Material(
                       child: ListTile(
-                    title: PlatformText(
+                    title: Text(
                       result.data,
                       style: TextStyle(fontSize: 20),
                     ),
-                    subtitle: PlatformText(
+                    subtitle: Text(
                       SymbologyDescription.forSymbology(result.symbology).readableName,
                       style: TextStyle(color: Color(scanditBlue)),
                     ),
@@ -47,13 +46,12 @@ class ScanResultsScreen extends StatelessWidget {
           padding: EdgeInsets.all(48.0),
           child: SizedBox(
               width: double.infinity,
-              child: PlatformTextButton(
+              child: TextButton(
                   onPressed: () => _scanAgain(context),
-                  material: (_, __) => MaterialTextButtonData(
-                      style: ButtonStyle(foregroundColor: MaterialStatePropertyAll(Colors.white))),
-                  cupertino: (_, __) => CupertinoTextButtonData(
-                      color: Color(scanditBlue), borderRadius: BorderRadius.all(Radius.circular(3.0))),
-                  child: PlatformText(
+                  style: TextButton.styleFrom(
+                      foregroundColor: const Color(scanditBlue),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0))),
+                  child: Text(
                     'Scan Again',
                     style: TextStyle(fontSize: 16),
                   ))),

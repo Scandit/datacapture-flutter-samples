@@ -4,8 +4,7 @@
  * Copyright (C) 2020- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
@@ -27,9 +26,21 @@ const String licenseKey = 'AWHjFzlFHa+fLq/kfS8GCBU/hT60NkQeVGQOWhhtRVcDZxJfsD0OY
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PlatformApp(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
+        listTileTheme: ListTileThemeData(
+          tileColor: Colors.white,
+        ),
+        appBarTheme: AppBarTheme(
+            iconTheme: IconThemeData(color: Colors.white),
+            color: Colors.blue,
+            titleTextStyle: TextStyle(color: Colors.white)),
+      ),
       title: 'Barcode Capture',
-      cupertino: (_, __) => CupertinoAppData(theme: CupertinoThemeData(brightness: Brightness.light)),
       initialRoute: BCRoutes.Home.routeName,
       routes: {
         BCRoutes.Home.routeName: (context) => HomeScreen(BCRoutes.Home.viewTitle),

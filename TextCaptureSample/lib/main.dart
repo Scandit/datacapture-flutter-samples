@@ -23,7 +23,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          useMaterial3: true,
           primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: Colors.white,
+          listTileTheme: ListTileThemeData(
+            tileColor: Colors.white,
+          ),
+          appBarTheme: AppBarTheme(
+              iconTheme: IconThemeData(color: Colors.white),
+              color: Colors.blue,
+              titleTextStyle: TextStyle(color: Colors.white)),
         ),
         initialRoute: TCRoutes.Home.routeName,
         routes: {
