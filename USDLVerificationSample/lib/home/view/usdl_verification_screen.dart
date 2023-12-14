@@ -106,9 +106,11 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
         message = _bloc.getResultMessage(
             capturedId, false, comparisonResult.checksPassed, verificationResult.allChecksPassed);
       } catch (error) {
-        message = (error is PlatformException)
-            ? (error.details?.toString() ?? "Unable to verify the document.")
-            : error.toString();
+        if (error is PlatformException) {
+          message = error.details ?? "Unable to verify the document.";
+        } else {
+          message = error.toString();
+        }
       }
     } else {
       message = _bloc.getResultMessage(capturedId, capturedId.isExpired == true, comparisonResult.checksPassed, false);
