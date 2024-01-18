@@ -25,6 +25,7 @@ const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
   IdCapture? _idCapture;
+  IdCaptureOverlay? _overlay;
 
   late DataCaptureContext _dataCaptureContext;
 
@@ -73,15 +74,19 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
 
   void _createIdCapture() {
     var currentIdCapture = _idCapture;
+    var currentOverlay = _overlay;
 
     if (currentIdCapture != null) {
       currentIdCapture.removeAdvancedAsyncListener(this);
       _dataCaptureContext.removeMode(currentIdCapture);
+      if (currentOverlay != null) {
+        _dataCaptureView.removeOverlay(currentOverlay);
+      }
     }
 
     var idCapture = IdCapture.forContext(_dataCaptureContext, _getSettingsForCurrentType());
     idCapture.addAdvancedAsyncListener(this);
-    IdCaptureOverlay.withIdCaptureForView(idCapture, _dataCaptureView);
+    _overlay = IdCaptureOverlay.withIdCaptureForView(idCapture, _dataCaptureView);
     _idCapture = idCapture;
   }
 
