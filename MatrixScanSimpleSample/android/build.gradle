@@ -39,6 +39,10 @@ allprojects {
             maven { url 'https://jitpack.io' }
         }
     }
+
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
 }
 
 rootProject.buildDir = '../build'

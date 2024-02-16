@@ -185,7 +185,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
     var capturedId = session.newlyCapturedId;
     if (capturedId == null) return;
 
-    if (capturedId.capturedResultType != CapturedResultType.vizResult ||
+    if (!capturedId.capturedResultTypes.contains(CapturedResultType.vizResult) ||
         capturedId.viz?.capturedSides != SupportedSides.frontOnly ||
         capturedId.viz?.isBackSideCaptureSupported == false) {
       _emitResult(capturedId);

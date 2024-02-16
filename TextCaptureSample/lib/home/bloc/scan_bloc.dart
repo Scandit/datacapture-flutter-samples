@@ -87,6 +87,7 @@ class ScanBloc extends Bloc implements TextCaptureListener {
     _settings.textCapture.removeListener(this);
     _textCaptureResultController.close();
     _textCaptureErrorController.close();
+    _parser.dispose();
     switchCameraOff();
     disableTextCapture();
     super.dispose();
