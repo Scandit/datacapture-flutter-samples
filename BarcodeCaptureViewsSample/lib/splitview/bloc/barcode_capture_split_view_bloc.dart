@@ -115,7 +115,9 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   void switchCameraOff() {
+    _timer?.cancel();
     _camera?.switchToDesiredState(FrameSourceState.off);
+    _isCapturingStreamController.sink.add(false);
   }
 
   void switchCameraOn() {
@@ -137,7 +139,7 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
 
   @override
   void dispose() {
-    switchCameraOff();
+    _camera?.switchToDesiredState(FrameSourceState.off);
     _barcodeCapture.removeListener(this);
     _timer?.cancel();
     _capturedBarcodesStreamController.close();

@@ -7,7 +7,6 @@
 import 'dart:ui';
 import 'dart:io' show Platform;
 
-import 'package:BarcodeCaptureViewsSample/common/common.dart';
 import 'package:BarcodeCaptureViewsSample/splitview/bloc/barcode_capture_split_view_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as widgets;
@@ -37,7 +36,7 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
   void initState() {
     super.initState();
 
-    ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     _checkPermission();
 
@@ -174,39 +173,25 @@ class _BarcodeCaptureSplitViewState extends State<BarcodeCaptureSplitView> with 
     );
   }
 
-  Widget _getBackWidget() {
-    if (Platform.isAndroid) {
-      return Icon(
-        Icons.arrow_back,
-        size: 26.0,
-      );
-    } else {
-      return Row(children: [
-        Icon(Icons.arrow_back_ios_rounded),
-        Align(alignment: Alignment.centerLeft, child: Text("Back")),
-      ]);
-    }
-  }
-
   void _onClearClick(BuildContext context) {
     _bloc.clearCapturedBarcodes();
   }
 
   void _checkPermission() {
     // Check camera permission is granted before switching the camera on
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          if (value) {
-            // Switch camera on to start streaming frames.
-            // The camera is started asynchronously and will take some time to completely turn on.
-            _bloc.switchCameraOn();
-          }
-        }));
+    Permission.camera.request().isGranted.then((value) {
+      if (value && _isCapturingEnabled) {
+        // Switch camera on to start streaming frames.
+        // The camera is started asynchronously and will take some time to completely turn on.
+        _bloc.switchCameraOn();
+      }
+    });
   }
 
   @override
   void dispose() {
     _bloc.dispose();
-    ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
 
     super.dispose();
   }
