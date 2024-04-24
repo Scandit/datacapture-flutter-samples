@@ -1,0 +1,23 @@
+name: SearchAndFindSample
+description: ID Verification setup for US driver's licenses.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_barcode:
+    '>=6.23.1 <6.23.2'
+  permission_handler: "10.2.0"
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/fastfind.png
+

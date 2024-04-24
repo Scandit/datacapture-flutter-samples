@@ -1,0 +1,20 @@
+name: ListBuildingSample
+description: A basic sample that demonstrates how to populate a list of scanned barcodes using the Scandit SparkScan API.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_barcode:
+    '>=6.23.1 <6.23.2'
+  permission_handler: "10.2.0"
+  intl: ^0.18.1
+
+flutter:
+  uses-material-design: true
