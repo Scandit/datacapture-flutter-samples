@@ -65,7 +65,7 @@ class _ResultScreenState extends State<ResultScreen> with WidgetsBindingObserver
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: Colors.black),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
                     onPressed: () {
                       Navigator.pop(context, ResultScreenReturn(false));
                     },
@@ -74,7 +74,7 @@ class _ResultScreenState extends State<ResultScreen> with WidgetsBindingObserver
                   ),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.white, side: BorderSide(width: 2, color: Colors.black)),
+                          backgroundColor: Colors.white, side: BorderSide(width: 2, color: Colors.black)),
                       onPressed: () {
                         Navigator.pop(context, ResultScreenReturn(true));
                       },

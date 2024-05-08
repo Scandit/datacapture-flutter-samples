@@ -1,4 +1,4 @@
-package com.example.matrixscancountsimplesample
+package com.scandit.flutter.matrixscancountsimplesample
 
 import io.flutter.embedding.android.FlutterActivity
 
