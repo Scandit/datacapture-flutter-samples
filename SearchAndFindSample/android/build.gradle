@@ -24,7 +24,9 @@ allprojects {
     }
 
     configurations.configureEach {
-        resolutionStrategy.cacheChangingModulesFor snapshotCacheDuration, 'seconds'
+        if (project.hasProperty("snapshotCacheDuration")) {
+            resolutionStrategy.cacheChangingModulesFor project.property("snapshotCacheDuration"), 'seconds'
+        }
     }
 }
 
