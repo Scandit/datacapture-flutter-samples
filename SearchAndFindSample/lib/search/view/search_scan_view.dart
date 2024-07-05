@@ -102,8 +102,12 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     if (_isModalSheetVisible) {
       Navigator.pop(context);
     }
+
     // Artificial delay added to give time to fluter to close the previous bottom sheet
-    Future.delayed(Duration(milliseconds: 150)).then((value) => showBottomPopup(barcode));
+    Future.delayed(Duration(milliseconds: 150)).then((value) {
+      showBottomPopup(barcode);
+      _bloc.enableCapture();
+    });
   }
 
   bool _isModalSheetVisible = false;
@@ -137,7 +141,8 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     Navigator.pop(context);
 
     // Disable current capture session
-    _bloc.disposeCurrentScanning();
+    await _bloc.disposeCurrentScanning();
+
     // Remove overlay
     _dataCaptureView.removeOverlay(_overlay);
 

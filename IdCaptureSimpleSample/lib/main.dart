@@ -244,6 +244,10 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
     Document Additional Number: ${result.viz?.documentAdditionalNumber ?? "empty"}
     Issuing Jurisdiction: ${result.viz?.issuingJurisdiction ?? "empty"}
     Issuing Authority: ${result.viz?.issuingAuthority ?? "empty"}
+    Blood Type: ${result.viz?.bloodType ?? "empty"}
+    Sponsor: ${result.viz?.sponsor ?? "empty"}
+    Mother's Name: ${result.viz?.mothersName ?? "empty"}
+    Father's Name: ${result.viz?.fathersName ?? "empty"}
     \n""";
   }
 

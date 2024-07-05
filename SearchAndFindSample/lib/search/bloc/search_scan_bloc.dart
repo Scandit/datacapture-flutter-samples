@@ -66,21 +66,29 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
     _barcodeCapture = barcodeCapture;
   }
 
-  void disposeCurrentScanning() {
+  Future<void> disposeCurrentScanning() {
     _barcodeCapture.removeListener(this);
     _barcodeCapture.isEnabled = false;
     dataCaptureContext.removeMode(_barcodeCapture);
-    _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off);
+    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off) ?? Future.value(null);
   }
 
-  void resumeScanning() {
+  Future<void> resumeScanning() {
+    enableCapture();
+    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.on) ?? Future.value(null);
+  }
+
+  Future<void> pauseScanning() {
+    disableCapture();
+    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off) ?? Future.value(null);
+  }
+
+  void enableCapture() {
     _barcodeCapture.isEnabled = true;
-    _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.on);
   }
 
-  void pauseScanning() {
+  void disableCapture() {
     _barcodeCapture.isEnabled = false;
-    _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off);
   }
 
   @override
@@ -90,6 +98,9 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
 
     // In this sample we decided to ignore barcodes withot data
     if (barcode.data == null) return;
+
+    // disable capture until the popup is shown
+    disableCapture();
 
     // Emit new barcode is captured
     _onBarcodeCaptured.add(CapturedBarcode(barcode.symbology, barcode.data!));

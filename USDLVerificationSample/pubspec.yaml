@@ -6,15 +6,15 @@ publish_to: 'none'
 version: 1.0.0
 
 environment:
-  sdk: ">=2.19.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_id:
-    '>=6.24.1 <6.24.2'
+    '>=6.25.0 <6.25.1'
   scandit_flutter_datacapture_id_aamva_barcode_verification:
-    '>=6.24.1 <6.24.2'
+    '>=6.25.0 <6.25.1'
   permission_handler: "11.3.0"
   intl: ^0.18.0
 

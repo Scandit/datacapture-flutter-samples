@@ -24,7 +24,9 @@ class MatrixScanCountScreen extends StatefulWidget {
   _MatrixScanCountScreenState createState() => _MatrixScanCountScreenState();
 }
 
-class _MatrixScanCountScreenState extends State<MatrixScanCountScreen> with WidgetsBindingObserver, NavigationHandler {
+class _MatrixScanCountScreenState extends State<MatrixScanCountScreen>
+    with WidgetsBindingObserver
+    implements NavigationHandler {
   late MatrixScanCountBloc _bloc;
 
   _MatrixScanCountScreenState() {
