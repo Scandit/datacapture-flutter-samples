@@ -159,7 +159,9 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   @override
   void didScan(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) async {
     _barcodeCapture.isEnabled = false;
-    var code = session.newlyRecognizedBarcodes.first;
+    var code = session.newlyRecognizedBarcode;
+    if (code == null) return;
+
     var data = (code.data == null || code.data?.isEmpty == true) ? code.rawData : code.data;
     var humanReadableSymbology = SymbologyDescription.forSymbology(code.symbology);
     await showDialog(

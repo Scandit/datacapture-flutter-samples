@@ -53,9 +53,8 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
 
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(
-        _barcodeCapture, _captureView, BarcodeCaptureOverlayStyle.frame)
-      ..viewfinder = LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated);
+    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(_barcodeCapture, _captureView)
+      ..viewfinder = AimerViewfinder();
 
     // Adjust the overlay's barcode highlighting to match the new viewfinder styles and improve the visibility of feedback.
     // With 6.10 we will introduce this visual treatment as a new style for the overlay.
@@ -132,9 +131,10 @@ class BarcodeCaptureSplitBloc extends Bloc implements BarcodeCaptureListener {
 
   @override
   void didUpdateSession(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {
-    if (session.newlyRecognizedBarcodes.isEmpty) return;
+    var barcode = session.newlyRecognizedBarcode;
+    if (barcode == null) return;
 
-    _storeAndNotifyNewBarcode(session.newlyRecognizedBarcodes.first);
+    _storeAndNotifyNewBarcode(barcode);
   }
 
   @override

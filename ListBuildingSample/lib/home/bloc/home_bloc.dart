@@ -98,8 +98,7 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
 
   @override
   void didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData> Function() getFrameData) {
-    var barcode = session.newlyRecognizedBarcodes.firstOrNull;
-
+    var barcode = session.newlyRecognizedBarcode;
     if (barcode == null) return;
 
     if (_isValidBarcode(barcode)) {

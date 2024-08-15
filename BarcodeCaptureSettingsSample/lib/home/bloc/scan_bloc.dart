@@ -53,7 +53,9 @@ class ScanBloc extends Bloc implements BarcodeCaptureListener {
       disableBarcodeCapture();
     }
 
-    var barcode = session.newlyRecognizedBarcodes[0];
+    var barcode = session.newlyRecognizedBarcode;
+    if (barcode == null) return;
+
     var symbology = SymbologyDescription.forSymbology(barcode.symbology);
 
     var scannedMessage = 'Scanned: ${barcode.data} (${symbology.readableName})';
