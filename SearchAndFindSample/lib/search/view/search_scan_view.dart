@@ -106,7 +106,6 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     // Artificial delay added to give time to fluter to close the previous bottom sheet
     Future.delayed(Duration(milliseconds: 150)).then((value) {
       showBottomPopup(barcode);
-      _bloc.enableCapture();
     });
   }
 

@@ -76,13 +76,7 @@ class _FindScanScreenState extends State<FindScanView>
       onWillPop: () {
         return _barcodeFindView.widgetPaused().then((value) => true);
       },
-      child: SafeArea(
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text('Search & Find'),
-            ),
-            body: _barcodeFindView),
-      ),
+      child: SafeArea(child: _barcodeFindView),
     );
   }
 

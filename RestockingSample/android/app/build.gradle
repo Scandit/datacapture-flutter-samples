@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace "com.scandit.flutter.restockingsample"
-    ndkVersion "26.1.10909125"
+    ndkVersion "27.0.12077973"
     compileSdk 33
 
     lintOptions {

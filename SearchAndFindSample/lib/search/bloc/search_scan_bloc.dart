@@ -99,9 +99,6 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
     // In this sample we decided to ignore barcodes withot data
     if (barcode.data == null) return;
 
-    // disable capture until the popup is shown
-    disableCapture();
-
     // Emit new barcode is captured
     _onBarcodeCaptured.add(CapturedBarcode(barcode.symbology, barcode.data!));
 

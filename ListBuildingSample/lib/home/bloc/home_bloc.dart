@@ -129,7 +129,7 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
     if (_isValidBarcode(barcode)) {
       return SparkScanBarcodeSuccessFeedback();
     } else {
-      return SparkScanBarcodeErrorFeedback.fromMessage('This code should not have been scanned', Duration(seconds: 60));
+      return SparkScanBarcodeErrorFeedback.fromMessage('Wrong barcode', Duration(seconds: 60));
     }
   }
 }
