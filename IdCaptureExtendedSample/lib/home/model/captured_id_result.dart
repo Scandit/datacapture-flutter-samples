@@ -14,33 +14,20 @@ class CapturedIdResult {
 
   List<ResultEntry> getResult() {
     return [
-      ResultEntry('Result Type', _capturedId.capturedResultType.name),
-      ResultEntry('Document Type', _capturedId.documentType.name),
-      ResultEntry('First Name', parseStringValue(_capturedId.firstName)),
-      ResultEntry('Last Name', parseStringValue(_capturedId.lastName)),
       ResultEntry('Full Name', _capturedId.fullName),
-      ResultEntry('Sex', parseStringValue(_capturedId.sex)),
       ResultEntry('Date of Birth', parseDateValue(_capturedId.dateOfBirth)),
-      ResultEntry('Nationality', parseStringValue(_capturedId.nationality)),
-      ResultEntry('Address', parseStringValue(_capturedId.address)),
-      ResultEntry('Issuing Country ISO', parseStringValue(_capturedId.issuingCountryIso)),
-      ResultEntry('Issuing Country', parseStringValue(_capturedId.issuingCountry)),
-      ResultEntry('Document Number', parseStringValue(_capturedId.documentNumber)),
       ResultEntry('Date of Expiry', parseDateValue(_capturedId.dateOfExpiry)),
-      ResultEntry('Date of Issue', parseDateValue(_capturedId.dateOfIssue)),
+      ResultEntry('Document Number', parseStringValue(_capturedId.documentNumber)),
+      ResultEntry('Nationality', parseStringValue(_capturedId.nationality)),
     ];
   }
 
   Image? get faceImage {
-    return _capturedId.getImageForType(IdImageType.face);
+    return _capturedId.images.face;
   }
 
-  Image? get idFrontImage {
-    return _capturedId.getImageForType(IdImageType.idFront);
-  }
-
-  Image? get idBackImage {
-    return _capturedId.getImageForType(IdImageType.idBack);
+  Image? get croppedDocument {
+    return _capturedId.images.getCroppedDocument(IdSide.front);
   }
 
   String parseStringValue(String? value) {
@@ -77,21 +64,5 @@ class ResultEntry {
 
   String get value {
     return _value;
-  }
-}
-
-extension CapturedResultTypeDisplay on CapturedResultType {
-  String get name {
-    var enumName = toString().split('.').last;
-
-    return "${enumName[0].toUpperCase()}${enumName.substring(1)}";
-  }
-}
-
-extension DocumentTypeDisplay on DocumentType {
-  String get name {
-    var enumName = toString().split('.').last;
-
-    return "${enumName[0].toUpperCase()}${enumName.substring(1)}";
   }
 }

@@ -5,10 +5,8 @@
  */
 
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/bloc/aimer_viewfinder_bloc.dart';
-import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/bloc/laserline_viewfinder_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/bloc/rectangular_viewfinder_bloc.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/bloc/viewfinder_bloc.dart';
-import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/view/laserline_viewfinder_view.dart';
 import 'package:BarcodeCaptureSettingsSample/settings/view_settings/viewfinders/view/rectangular_viewfinder_view.dart';
 import 'package:flutter/material.dart';
 
@@ -28,12 +26,10 @@ class ViewfindersSettingsView extends StatefulWidget {
 class _ViewfindersSettingsViewState extends State<ViewfindersSettingsView> with WidgetsBindingObserver {
   final ViewfindersBloc _bloc;
   late AimerViewfinderSettingsView _aimerViewfinderSettingsView;
-  late LaserlineViewfinderSettingsView _laserlineViewfinderSettingsView;
   late RectangularViewfinderSettingsView _rectangularViewfinderSettingsView;
 
   _ViewfindersSettingsViewState(this._bloc) {
     _aimerViewfinderSettingsView = AimerViewfinderSettingsView(this.setState, AimerViewfinderBloc());
-    _laserlineViewfinderSettingsView = LaserlineViewfinderSettingsView(this.setState, LaserlineViewfinderBloc());
     _rectangularViewfinderSettingsView = RectangularViewfinderSettingsView(this.setState, RectangularViewfinderBloc());
   }
 
@@ -100,7 +96,6 @@ class _ViewfindersSettingsViewState extends State<ViewfindersSettingsView> with 
   void dispose() {
     _bloc.dispose();
     _aimerViewfinderSettingsView.dispose();
-    _laserlineViewfinderSettingsView.dispose();
     _rectangularViewfinderSettingsView.dispose();
     super.dispose();
   }
@@ -111,8 +106,6 @@ class _ViewfindersSettingsViewState extends State<ViewfindersSettingsView> with 
         return [];
       case Viewfinders.rectangular:
         return _rectangularViewfinderSettingsView.build(context);
-      case Viewfinders.Laserline:
-        return _laserlineViewfinderSettingsView.build(context);
       case Viewfinders.Aimer:
         return _aimerViewfinderSettingsView.build(context);
     }

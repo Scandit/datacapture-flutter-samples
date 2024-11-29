@@ -16,7 +16,6 @@ class OverlaySettingsBloc extends Bloc {
   final SettingsRepository _settings = SettingsRepository();
   final Brush _redBrush = Brush(Colors.transparent, Colors.red, 1);
   final Brush _greenBrush = Brush(Colors.transparent, Colors.green, 1);
-  final OverlayStyleItem _legacyStyleItem = OverlayStyleItem(BarcodeCaptureOverlayStyle.legacy, 'Legacy');
   final OverlayStyleItem _frameStyleItem = OverlayStyleItem(BarcodeCaptureOverlayStyle.frame, 'Frame');
 
   late BrushItem _selectedBrush;
@@ -34,11 +33,7 @@ class OverlaySettingsBloc extends Bloc {
       _selectedBrush = BrushItem('Default', defaultBrush);
     }
 
-    if (_settings.overlayStyle == BarcodeCaptureOverlayStyle.legacy) {
-      _selectedStyle = _legacyStyleItem;
-    } else {
-      _selectedStyle = _frameStyleItem;
-    }
+    _selectedStyle = _frameStyleItem;
   }
 
   List<BrushItem> get availableBrushes {
@@ -62,7 +57,7 @@ class OverlaySettingsBloc extends Bloc {
   }
 
   List<OverlayStyleItem> get availableStyles {
-    return [_legacyStyleItem, _frameStyleItem];
+    return [_frameStyleItem];
   }
 
   OverlayStyleItem get selectedStyle {

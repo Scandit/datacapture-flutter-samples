@@ -101,24 +101,9 @@ extension CompositeTypePrettyPrint on CompositeType {
   }
 }
 
-extension LaserlineViewfinderStylePrettyPrint on LaserlineViewfinderStyle {
-  String get name {
-    switch (this) {
-      case LaserlineViewfinderStyle.legacy:
-        return 'Legacy';
-      case LaserlineViewfinderStyle.animated:
-        return 'Animated';
-      default:
-        throw Exception("Missing name for '$this' laserline viewfinder style");
-    }
-  }
-}
-
 extension RectangularViewfinderStylePrettyPrint on RectangularViewfinderStyle {
   String get name {
     switch (this) {
-      case RectangularViewfinderStyle.legacy:
-        return 'Legacy';
       case RectangularViewfinderStyle.rounded:
         return 'Rounded';
       case RectangularViewfinderStyle.square:

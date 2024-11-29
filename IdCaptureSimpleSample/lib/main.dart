@@ -43,9 +43,7 @@ class IdCaptureScreen extends StatefulWidget {
   State<StatefulWidget> createState() => _IdCaptureScreenState(DataCaptureContext.forLicenseKey(licenseKey));
 }
 
-class _IdCaptureScreenState extends State<IdCaptureScreen>
-    with WidgetsBindingObserver
-    implements IdCaptureAdvancedAsyncListener {
+class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingObserver implements IdCaptureListener {
   final DataCaptureContext _context;
 
   // Use the world-facing (back) camera.
@@ -82,16 +80,18 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
     // and are then applied to the id capture instance that manages id recognition.
     var settings = IdCaptureSettings();
 
-    // Recognize national ID cards & driver's licenses.
-    settings.supportedDocuments.addAll([
-      IdDocumentType.dlViz,
-      IdDocumentType.idCardViz,
+    // Recognize national ID cards, driver's licenses and passports.
+    settings.acceptedDocuments.addAll([
+      new IdCard(IdCaptureRegion.any),
+      new DriverLicense(IdCaptureRegion.any),
+      new Passport(IdCaptureRegion.any),
     ]);
+    settings.scannerType = FullDocumentScanner();
 
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture.forContext(_context, settings)
       // Register self as a listener to get informed whenever a new id got recognized.
-      ..addAdvancedAsyncListener(this);
+      ..addListener(this);
 
     // To visualize the on-going id capturing process on screen, setup a data capture view that renders the
     // camera preview. The view must be connected to the data capture context.
@@ -140,7 +140,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _idCapture.removeAdvancedAsyncListener(this);
+    _idCapture.removeListener(this);
     _idCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
@@ -148,15 +148,9 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
   }
 
   @override
-  Future<void> didCaptureId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    CapturedId? capturedId = session.newlyCapturedId;
-    if (capturedId == null) {
-      return;
-    }
+  Future<void> didCaptureId(IdCapture idCapture, CapturedId capturedId) async {
     // Don't capture unnecessarily when the alert is displayed.
     idCapture.isEnabled = false;
-
-    String result = _getResultFromCapturedId(capturedId);
 
     showDialog(
         context: context,
@@ -164,7 +158,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
               content: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Text(
-                  result,
+                  _getDescriptionForCapturedId(capturedId),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
@@ -182,17 +176,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
   }
 
   @override
-  Future<void> didLocalizeId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  Future<void> didTimedOut(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  Future<void> didRejectId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
+  Future<void> didRejectId(IdCapture idCapture, CapturedId? rejectedId, RejectionReason reason) async {
     // Implement to handle documents recognized in a frame, but rejected.
     // A document or its part is considered rejected when (a) it's valid, but not enabled in the settings,
     // (b) it's a barcode of a correct symbology or a Machine Readable Zone (MRZ),
@@ -205,7 +189,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
         context: context,
         builder: (_) => AlertDialog(
               content: Text(
-                'Document not supported',
+                _getRejectionReasonMessage(reason),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               actions: [
@@ -221,52 +205,25 @@ class _IdCaptureScreenState extends State<IdCaptureScreen>
         });
   }
 
-  String _getResultFromCapturedId(CapturedId capturedId) {
-    String result = _getDescriptionForCapturedId(capturedId);
-    if (capturedId.viz != null) {
-      result += _getDescriptionForVizResult(capturedId);
+  String _getRejectionReasonMessage(RejectionReason reason) {
+    switch (reason) {
+      case RejectionReason.notAcceptedDocumentType:
+        return 'Document not supported. Try scanning another document.';
+      case RejectionReason.timeout:
+        return 'Document capture failed. Make sure the document is well lit and free of glare. Alternatively, try scanning another document';
+      default:
+        return 'Document capture was rejected. Reason=${reason}.';
     }
-    return result;
   }
 
-  String _getDescriptionForVizResult(CapturedId result) {
+  String _getDescriptionForCapturedId(CapturedId capturedId) {
     return """
-    Additional Name Information: ${result.viz?.additionalNameInformation ?? "empty"}
-    Additional Address Information: ${result.viz?.additionalAddressInformation ?? "empty"}
-    Place of Birth: ${result.viz?.placeOfBirth ?? "empty"}
-    Race: ${result.viz?.race ?? "empty"}
-    Religion: ${result.viz?.religion ?? "empty"}
-    Profession: ${result.viz?.profession ?? "empty"}
-    Marital Status: ${result.viz?.maritalStatus ?? "empty"}
-    Residential Status: ${result.viz?.residentialStatus ?? "empty"}
-    Employer: ${result.viz?.employer ?? "empty"}
-    Personal Id Number: ${result.viz?.personalIdNumber ?? "empty"}
-    Document Additional Number: ${result.viz?.documentAdditionalNumber ?? "empty"}
-    Issuing Jurisdiction: ${result.viz?.issuingJurisdiction ?? "empty"}
-    Issuing Authority: ${result.viz?.issuingAuthority ?? "empty"}
-    Blood Type: ${result.viz?.bloodType ?? "empty"}
-    Sponsor: ${result.viz?.sponsor ?? "empty"}
-    Mother's Name: ${result.viz?.mothersName ?? "empty"}
-    Father's Name: ${result.viz?.fathersName ?? "empty"}
-    \n""";
-  }
-
-  String _getDescriptionForCapturedId(CapturedId result) {
-    return """Name: ${result.firstName ?? "empty"}
-    Last Name: ${result.lastName ?? "empty"}
-    Full Name: ${result.fullName}
-    Sex: ${result.sex ?? "empty"}
-    Date of Birth: ${result.dateOfBirth?.date.humanReadable ?? "empty"}
-    Nationality: ${result.nationality ?? "empty"}
-    Address: ${result.address ?? "empty"}
-    Document Type: ${result.documentType}
-    Captured Result Type: ${result.capturedResultType}
-    Issuing Country: ${result.issuingCountry ?? "empty"}
-    Issuing Country ISO: ${result.issuingCountryIso ?? "empty"}
-    Document Number: ${result.documentNumber ?? "empty"}
-    Date of Expiry: ${result.dateOfExpiry?.date.humanReadable ?? "empty"}
-    Date of Issue: ${result.dateOfIssue?.date.humanReadable ?? "empty"}
-    \n""";
+    Full Name: ${capturedId.fullName}
+    Date of Birth: ${capturedId.dateOfBirth?.utcDate.humanReadable}
+    Date of Expiry: ${capturedId.dateOfExpiry?.utcDate.humanReadable}
+    Document Number: ${capturedId.documentNumber}
+    Nationality: ${capturedId.nationality}
+    """;
   }
 }
 

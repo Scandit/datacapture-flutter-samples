@@ -13,7 +13,8 @@ class MainSettingsBloc extends Bloc {
   final _settingsItems = [
     SettingItem(BSRoutes.BarcodeSelectionSettings),
     SettingItem(BSRoutes.CameraSettings),
-    SettingItem(BSRoutes.ViewSettings)
+    SettingItem(BSRoutes.ViewSettings),
+    SettingItem(BSRoutes.OpenSourceSoftwareLicenseInfo)
   ];
 
   List<SettingItem> get settingsItems => _settingsItems;

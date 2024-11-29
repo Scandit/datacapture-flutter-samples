@@ -69,7 +69,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     // Use the recommended camera settings for the BarcodeCapture mode.
     _camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
 
-    // Switch camera on to start streaming frames and enable the barcode tracking mode.
+    // Switch camera on to start streaming frames and enable the barcode batch mode.
     // The camera is started asynchronously and will take some time to completely turn on.
     _checkPermission();
 
@@ -157,14 +157,15 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   }
 
   @override
-  void didScan(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) async {
+  Future<void> didScan(
+      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {
     _barcodeCapture.isEnabled = false;
     var code = session.newlyRecognizedBarcode;
     if (code == null) return;
 
     var data = (code.data == null || code.data?.isEmpty == true) ? code.rawData : code.data;
     var humanReadableSymbology = SymbologyDescription.forSymbology(code.symbology);
-    await showDialog(
+    showDialog(
         context: context,
         builder: (_) => AlertDialog(
               content: Text(
@@ -178,12 +179,12 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
                       Navigator.of(context, rootNavigator: true).pop();
                     })
               ],
-            ));
-    _barcodeCapture.isEnabled = true;
+            )).then((result) => _barcodeCapture.isEnabled = true);
   }
 
   @override
-  void didUpdateSession(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {}
+  Future<void> didUpdateSession(
+      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {}
 
   @override
   void dispose() {

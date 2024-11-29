@@ -35,12 +35,8 @@ class ResultView extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible: bloc.idFrontImage != null,
-            child: bloc.idFrontImage ?? Container(),
-          ),
-          Visibility(
-            visible: bloc.idBackImage != null,
-            child: bloc.idBackImage ?? Container(),
+            visible: bloc.croppedDocument != null,
+            child: bloc.croppedDocument ?? Container(),
           ),
           ListView.separated(
             shrinkWrap: true,

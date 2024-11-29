@@ -48,7 +48,8 @@ class ScanBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   @override
-  void didScan(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {
+  Future<void> didScan(
+      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {
     if (!_settings.continuousScan) {
       disableBarcodeCapture();
     }
@@ -91,7 +92,8 @@ class ScanBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   @override
-  void didUpdateSession(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {}
+  Future<void> didUpdateSession(
+      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {}
 
   @override
   void dispose() {

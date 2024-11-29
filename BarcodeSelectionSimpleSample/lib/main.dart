@@ -176,7 +176,8 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   }
 
   @override
-  void didUpdateSelection(BarcodeSelection barcodeSelection, BarcodeSelectionSession session) {
+  Future<void> didUpdateSelection(
+      BarcodeSelection barcodeSelection, BarcodeSelectionSession session, Future<FrameData?> getFrameData()) async {
     // Check if we have selected a barcode, if that's the case, show a snackbar with its info.
     var newlySelectedBarcodes = session.newlySelectedBarcodes;
     if (newlySelectedBarcodes.isEmpty) return;
@@ -197,7 +198,8 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   }
 
   @override
-  void didUpdateSession(BarcodeSelection barcodeCapture, BarcodeSelectionSession session) {}
+  Future<void> didUpdateSession(
+      BarcodeSelection barcodeCapture, BarcodeSelectionSession session, Future<FrameData?> getFrameData()) async {}
 
   @override
   void dispose() {

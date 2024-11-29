@@ -32,7 +32,7 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addObserver(this);
+    _addAppStateListener();
 
     _bloc.onBarcodeCaptured.listen((barcode) {
       _onBarcodeCaptured(barcode);
@@ -145,6 +145,9 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     // Remove overlay
     _dataCaptureView.removeOverlay(_overlay);
 
+    // remove app state listener
+    _removeAppStateListener();
+
     await Navigator.push(
       context,
       MaterialPageRoute(
@@ -158,11 +161,22 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     _bloc.resumeScanning();
     // add overlay to set a viewfinder UI again
     _dataCaptureView.addOverlay(_overlay);
+
+    // add app state listener
+    _addAppStateListener();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    _removeAppStateListener();
     super.dispose();
+  }
+
+  void _addAppStateListener() {
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  void _removeAppStateListener() {
+    WidgetsBinding.instance.removeObserver(this);
   }
 }

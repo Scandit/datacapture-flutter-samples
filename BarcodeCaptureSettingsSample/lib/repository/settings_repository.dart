@@ -469,52 +469,8 @@ class SettingsRepository {
     _aimerViewfinder?.frameColor = newColor;
   }
 
-  LaserlineViewfinderStyle get laserlineStyle {
-    return _laserlineViewfinder?.style ?? LaserlineViewfinderStyle.legacy;
-  }
-
-  set laserlineStyle(LaserlineViewfinderStyle newStyle) {
-    currentViewfinder = LaserlineViewfinder.withStyle(newStyle);
-  }
-
-  DoubleWithUnit get laserlineWidth {
-    return _laserlineViewfinder?.width ?? DoubleWithUnit(0, MeasureUnit.dip);
-  }
-
-  set laserlineWidth(DoubleWithUnit newValue) {
-    _laserlineViewfinder?.width = newValue;
-  }
-
-  final Color laserLineLegacyDefaultEnabledColor =
-      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.legacy).enabledColor;
-
-  final Color laserLineAnimatedDefaultEnabledColor =
-      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated).enabledColor;
-
-  Color get laserlineEnabledColor {
-    return _laserlineViewfinder?.enabledColor ?? material.Colors.white;
-  }
-
-  set laserlineEnabledColor(Color newColor) {
-    _laserlineViewfinder?.enabledColor = newColor;
-  }
-
-  final Color laserLineLegacyDefaultDisabledColor =
-      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.legacy).disabledColor;
-
-  final Color laserLineAnimatedDefaultDisabledColor =
-      LaserlineViewfinder.withStyle(LaserlineViewfinderStyle.animated).disabledColor;
-
-  Color get laserlineDisabledColor {
-    return _laserlineViewfinder?.disabledColor ?? material.Colors.white;
-  }
-
-  set laserlineDisabledColor(Color newColor) {
-    _laserlineViewfinder?.disabledColor = newColor;
-  }
-
   RectangularViewfinderStyle get rectangularViewfinderStyle {
-    return _rectangularViewfinder?.style ?? RectangularViewfinderStyle.legacy;
+    return _rectangularViewfinder?.style ?? RectangularViewfinderStyle.rounded;
   }
 
   set rectangularViewfinderStyle(RectangularViewfinderStyle newStyle) {
@@ -666,10 +622,6 @@ class SettingsRepository {
 
   AimerViewfinder? get _aimerViewfinder {
     return _overlay.viewfinder as AimerViewfinder;
-  }
-
-  LaserlineViewfinder? get _laserlineViewfinder {
-    return _overlay.viewfinder as LaserlineViewfinder;
   }
 
   RectangularViewfinder? get _rectangularViewfinder {

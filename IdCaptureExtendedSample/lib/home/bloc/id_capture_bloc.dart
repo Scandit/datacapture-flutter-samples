@@ -8,22 +8,17 @@ import 'dart:async';
 
 import 'package:IdCaptureExtendedSample/bloc/bloc_base.dart';
 import 'package:IdCaptureExtendedSample/home/model/Id_capture_mode.dart';
-import 'package:IdCaptureExtendedSample/home/model/aamva_captured_id_result.dart';
-import 'package:IdCaptureExtendedSample/home/model/argentina_id_captured_id_result.dart';
+import 'package:IdCaptureExtendedSample/home/model/barcode_captured_id_result.dart';
 import 'package:IdCaptureExtendedSample/home/model/capture_event.dart';
 import 'package:IdCaptureExtendedSample/home/model/captured_id_result.dart';
-import 'package:IdCaptureExtendedSample/home/model/colombia_id_captured_id_result.dart';
 import 'package:IdCaptureExtendedSample/home/model/mrz_captured_id_result.dart';
-import 'package:IdCaptureExtendedSample/home/model/south_africa_dl_captured_id_result.dart';
-import 'package:IdCaptureExtendedSample/home/model/south_africa_id_captured_id_result.dart';
-import 'package:IdCaptureExtendedSample/home/model/us_uniformed_services_captured_id_result.dart';
 import 'package:IdCaptureExtendedSample/home/model/viz_captured_id_result.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
 const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
-class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
+class IdCaptureBloc extends Bloc implements IdCaptureListener {
   IdCapture? _idCapture;
   IdCaptureOverlay? _overlay;
 
@@ -36,23 +31,11 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
 
   late DataCaptureView _dataCaptureView;
 
-  Map<IdCaptureMode, List<IdDocumentType>> get _supportedDocuments => {
-        IdCaptureMode.barcode: [
-          IdDocumentType.aamvaBarcode,
-          IdDocumentType.colombiaIdBarcode,
-          IdDocumentType.usUsIdBarcode,
-          IdDocumentType.argentinaIdBarcode,
-          IdDocumentType.southAfricaDlBarcode,
-          IdDocumentType.southAfricaIdBarcode,
-        ],
-        IdCaptureMode.mrz: [
-          IdDocumentType.visaMrz,
-          IdDocumentType.passportMrz,
-          IdDocumentType.swissDlMrz,
-          IdDocumentType.idCardMrz,
-        ],
-        IdCaptureMode.viz: [IdDocumentType.dlViz, IdDocumentType.idCardViz]
-      };
+  List<IdCaptureDocument> _acceptedDocuments = [
+    new IdCard(IdCaptureRegion.any),
+    new DriverLicense(IdCaptureRegion.any),
+    new Passport(IdCaptureRegion.any),
+  ];
 
   IdCaptureBloc() {
     _camera?.applySettings(_cameraSettings);
@@ -68,16 +51,20 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
     _createIdCapture();
   }
 
-  StreamController<ResultEvent> _idCaptureController = StreamController();
+  StreamController<ResultEvent> _idCapturedController = StreamController();
 
-  Stream<ResultEvent> get idCaptureController => _idCaptureController.stream;
+  Stream<ResultEvent> get onItemCaptured => _idCapturedController.stream;
+
+  StreamController<String> _idRejectedController = StreamController();
+
+  Stream<String> get onIdRejected => _idRejectedController.stream;
 
   void _createIdCapture() {
     var currentIdCapture = _idCapture;
     var currentOverlay = _overlay;
 
     if (currentIdCapture != null) {
-      currentIdCapture.removeAdvancedAsyncListener(this);
+      currentIdCapture.removeListener(this);
       _dataCaptureContext.removeMode(currentIdCapture);
       if (currentOverlay != null) {
         _dataCaptureView.removeOverlay(currentOverlay);
@@ -85,7 +72,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
     }
 
     var idCapture = IdCapture.forContext(_dataCaptureContext, _getSettingsForCurrentType());
-    idCapture.addAdvancedAsyncListener(this);
+    idCapture.addListener(this);
     _overlay = IdCaptureOverlay.withIdCaptureForView(idCapture, _dataCaptureView);
     _idCapture = idCapture;
   }
@@ -94,18 +81,16 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
   IdCaptureSettings _getBarcodeSettings() {
     IdCaptureSettings settings = new IdCaptureSettings();
     settings.setShouldPassImageTypeToResult(IdImageType.face, true);
-    var supportedDocuments = _supportedDocuments[IdCaptureMode.barcode];
-    if (supportedDocuments != null && supportedDocuments.isNotEmpty)
-      settings.supportedDocuments.addAll(supportedDocuments);
+    settings.acceptedDocuments.addAll(_acceptedDocuments);
+    settings.scannerType = SingleSideScanner(true, false, false);
     return settings;
   }
 
   // Extract data from Machine Readable Zones (MRZ) present for example on IDs, passports or visas.
   IdCaptureSettings _getMrzSettings() {
     IdCaptureSettings settings = new IdCaptureSettings();
-    var supportedDocuments = _supportedDocuments[IdCaptureMode.mrz];
-    if (supportedDocuments != null && supportedDocuments.isNotEmpty)
-      settings.supportedDocuments.addAll(supportedDocuments);
+    settings.acceptedDocuments.addAll(_acceptedDocuments);
+    settings.scannerType = SingleSideScanner(false, true, false);
     return settings;
   }
 
@@ -113,13 +98,10 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
   // (like the holder's name or date of birth printed on an ID).
   IdCaptureSettings _getVizSettings() {
     IdCaptureSettings settings = new IdCaptureSettings();
-    settings.supportedSides = SupportedSides.frontAndBack;
+    settings.acceptedDocuments.addAll(_acceptedDocuments);
+    settings.scannerType = new SingleSideScanner(false, false, true);
     settings.setShouldPassImageTypeToResult(IdImageType.face, true);
-    settings.setShouldPassImageTypeToResult(IdImageType.idFront, true);
-    settings.setShouldPassImageTypeToResult(IdImageType.idBack, true);
-    var supportedDocuments = _supportedDocuments[IdCaptureMode.viz];
-    if (supportedDocuments != null && supportedDocuments.isNotEmpty)
-      settings.supportedDocuments.addAll(supportedDocuments);
+    settings.setShouldPassImageTypeToResult(IdImageType.croppedDocument, true);
     return settings;
   }
 
@@ -175,41 +157,25 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
   void dispose() {
     switchCameraOff();
     disableIdCapture();
-    _idCapture?.removeAdvancedAsyncListener(this);
-    _idCaptureController.close();
+    _idCapture?.removeListener(this);
+    _idCapturedController.close();
+    _idRejectedController.close();
     super.dispose();
   }
 
   @override
-  Future<void> didCaptureId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    var capturedId = session.newlyCapturedId;
-    if (capturedId == null) return;
-
-    if (!capturedId.capturedResultTypes.contains(CapturedResultType.vizResult) ||
-        capturedId.viz?.capturedSides != SupportedSides.frontOnly ||
-        capturedId.viz?.isBackSideCaptureSupported == false) {
-      _emitResult(capturedId);
-    }
+  Future<void> didCaptureId(IdCapture idCapture, CapturedId capturedId) async {
+    _emitResult(capturedId);
   }
 
   void _emitResult(CapturedId capturedId) {
     CapturedIdResult result;
 
-    if (capturedId.capturedResultTypes.contains(CapturedResultType.aamvaBarcodeResult)) {
-      result = AamvaCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.colombiaIdBarcodeResult)) {
-      result = ColombiaIdCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.argentinaIdBarcodeResult)) {
-      result = ArgentinaIdCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.southAfricaIdBarcodeResult)) {
-      result = SouthAfricaIdCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.southAfricaDlBarcodeResult)) {
-      result = SouthAfricaDlCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.usUniformedServicesBarcodeResult)) {
-      result = UsUniformedServicesCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.mrzResult)) {
+    if (capturedId.barcode != null) {
+      result = BarcodeCapturedIdResult(capturedId);
+    } else if (capturedId.mrz != null) {
       result = MrzCapturedIdResult(capturedId);
-    } else if (capturedId.capturedResultTypes.contains(CapturedResultType.vizResult)) {
+    } else if (capturedId.viz != null) {
       result = VizCapturedIdResult(capturedId);
     } else {
       result = CapturedIdResult(capturedId);
@@ -217,21 +183,23 @@ class IdCaptureBloc extends Bloc implements IdCaptureAdvancedAsyncListener {
 
     disableIdCapture();
 
-    _idCaptureController.sink.add(ResultEvent(result));
+    _idCapturedController.sink.add(ResultEvent(result));
   }
 
   @override
-  Future<void> didLocalizeId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
+  Future<void> didRejectId(IdCapture idCapture, CapturedId? rejectedId, RejectionReason reason) async {
+    disableIdCapture();
+    _idRejectedController.sink.add(_getRejectionReasonMessage(reason));
   }
 
-  @override
-  Future<void> didRejectId(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  Future<void> didTimedOut(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) async {
-    // In this sample we are not interested in this callback.
+  String _getRejectionReasonMessage(RejectionReason reason) {
+    switch (reason) {
+      case RejectionReason.notAcceptedDocumentType:
+        return 'Document not supported. Try scanning another document';
+      case RejectionReason.timeout:
+        return 'Document capture failed. Make sure the document is well lit and free of glare. Alternatively, try scanning another document';
+      default:
+        return 'Document capture was rejected. Reason=${reason}';
+    }
   }
 }

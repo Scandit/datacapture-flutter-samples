@@ -31,12 +31,33 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
   void initState() {
     super.initState();
 
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
-    _bloc.idCaptureController.listen((event) {
+    _bloc.onItemCaptured.listen((event) {
       // Display result
       Navigator.pushNamed(context, ICRoutes.Result.routeName, arguments: event.content)
           .then((value) => _bloc.enableIdCapture());
+    });
+
+    _bloc.onIdRejected.listen((rejectedReason) {
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                content: Text(
+                  rejectedReason,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                actions: [
+                  GestureDetector(
+                      child: Text('OK'),
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      })
+                ],
+              )).then((value) => {
+            // Enable capture again, after the dialog is dismissed.
+            _bloc.enableIdCapture()
+          });
     });
 
     _checkPermission();
@@ -54,7 +75,7 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
   @override
   void dispose() {
     _bloc.dispose();
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -64,53 +85,48 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-            actions: [],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [],
+      ),
+      body: SafeArea(child: _bloc.dataCaptureView),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _bloc.currentModeIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/images/ic_barcode.png',
+              scale: 1.5,
+            ),
+            label: IdCaptureMode.barcode.name,
           ),
-          body: SafeArea(child: _bloc.dataCaptureView),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _bloc.currentModeIndex,
-            items: [
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/images/ic_barcode.png',
-                  scale: 1.5,
-                ),
-                label: IdCaptureMode.barcode.name,
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/images/ic_mrz.png',
-                  scale: 1.5,
-                ),
-                label: IdCaptureMode.mrz.name,
-              ),
-              BottomNavigationBarItem(
-                icon: Image.asset(
-                  'assets/images/ic_viz.png',
-                  scale: 1.5,
-                ),
-                label: IdCaptureMode.viz.name,
-              )
-            ],
-            onTap: (int index) {
-              setState(() {
-                _bloc.currentModeIndex = index;
-              });
-            },
-            selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-            unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-            backgroundColor: Colors.black,
-            unselectedItemColor: Colors.white,
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/images/ic_mrz.png',
+              scale: 1.5,
+            ),
+            label: IdCaptureMode.mrz.name,
           ),
-        ),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/images/ic_viz.png',
+              scale: 1.5,
+            ),
+            label: IdCaptureMode.viz.name,
+          )
+        ],
+        onTap: (int index) {
+          setState(() {
+            _bloc.currentModeIndex = index;
+          });
+        },
+        selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+        unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+        backgroundColor: Colors.black,
+        unselectedItemColor: Colors.white,
+      ),
+    );
   }
 
   void _checkPermission() async {
@@ -123,6 +139,4 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
       _bloc.enableIdCapture();
     }
   }
-
-  T? _ambiguate<T>(T? value) => value;
 }

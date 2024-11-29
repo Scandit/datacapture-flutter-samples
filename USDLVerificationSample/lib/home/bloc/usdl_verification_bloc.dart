@@ -7,6 +7,7 @@
 import 'dart:async';
 
 import 'package:USDLVerificationSample/bloc/bloc_base.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
@@ -30,9 +31,9 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
 
   Stream<CapturedId> get onIdCaptured => _onIdCapturedEvent.stream;
 
-  // The verifier that compares the human-readable data from the front side of the document with
-  // the data encoded in the barcode, and signals any suspicious differences.
-  late AamvaVizBarcodeComparisonVerifier _comparisonVerifier;
+  final _onIdRejectedEvent = StreamController<String>();
+
+  Stream<String> get onIdRejected => _onIdRejectedEvent.stream;
 
   // The verifier that checks the validity of a Driver's License.
   late AamvaBarcodeVerifier _barcodeVerifier;
@@ -51,8 +52,10 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     var settings = IdCaptureSettings();
 
     // We are interested in both front and back sides of US DL.
-    settings.supportedDocuments.addAll([IdDocumentType.dlViz, IdDocumentType.idCardViz]);
-    settings.supportedSides = SupportedSides.frontAndBack;
+    settings.acceptedDocuments.addAll([
+      DriverLicense(IdCaptureRegion.us),
+    ]);
+    settings.scannerType = FullDocumentScanner();
 
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture.forContext(_dataCaptureContext, settings)..addListener(this);
@@ -62,7 +65,6 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     var overlay = IdCaptureOverlay.withIdCaptureForView(_idCapture, _dataCaptureView);
     overlay.idLayoutStyle = IdLayoutStyle.square;
 
-    _comparisonVerifier = AamvaVizBarcodeComparisonVerifier.create();
     AamvaBarcodeVerifier.create(_dataCaptureContext).then((value) => _barcodeVerifier = value);
   }
 
@@ -106,74 +108,79 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
   // and if the license is issued in the United States. If so, the driver's license is verified.
   // If the license is not issued in the United States, a dialog is shown to warn the user.
   @override
-  void didCaptureId(IdCapture idCapture, IdCaptureSession session) {
-    var capturedId = session.newlyCapturedId;
-    if (capturedId == null) return;
-
-    _onIdCapturedEvent.add(capturedId);
-  }
-
-  bool isUSDocument(CapturedId capturedId) {
-    return capturedId.issuingCountryIso == "USA";
-  }
-
-  bool isBackScanNeeded(CapturedId capturedId) {
-    return capturedId.capturedResultType == CapturedResultType.vizResult &&
-        capturedId.viz?.capturedSides == SupportedSides.frontOnly &&
-        capturedId.viz?.isBackSideCaptureSupported == true;
-  }
-
-  Future<AamvaVizBarcodeComparisonResult> compareFrontAndBack(CapturedId capturedId) {
-    return _comparisonVerifier.verify(capturedId);
+  Future<void> didCaptureId(IdCapture idCapture, CapturedId rejectedId) async {
+    _onIdCapturedEvent.add(rejectedId);
   }
 
   Future<AamvaBarcodeVerificationResult> verifyIdOnBarcode(CapturedId capturedId) {
     return _barcodeVerifier.verify(capturedId);
   }
 
-  String getResultMessage(
-      CapturedId capturedId, bool isDocumentExpired, bool didFrontAndBackMatch, bool didVerificationSucceed) {
-    return """
-    ${isDocumentExpired ? "Document is expired." : "Document is not expired."}
-    ${didFrontAndBackMatch ? "Information on front and back match." : "Information on front and back do not match."}
-    ${didVerificationSucceed ? "Verification checks passed." : "Verification checks failed"}
+  List<Text> getResultMessage(CapturedId capturedId, bool didVerificationSucceed) {
+    List<Text> result = [];
 
-    
-    Name: ${capturedId.firstName ?? "empty"}
-    Last Name: ${capturedId.lastName ?? "empty"}
-    Full Name: ${capturedId.fullName}
-    Sex: ${capturedId.sex ?? "empty"}
-    Date of Birth: ${capturedId.dateOfBirth?.date.humanReadable ?? "empty"}
-    Nationality: ${capturedId.nationality ?? "empty"}
-    Address: ${capturedId.address ?? "empty"}
-    Document Type: ${capturedId.documentType}
-    Captured Result Type: ${capturedId.capturedResultType}
-    Issuing Country: ${capturedId.issuingCountry ?? "empty"}
-    Issuing Country ISO: ${capturedId.issuingCountryIso ?? "empty"}
-    Document Number: ${capturedId.documentNumber ?? "empty"}
-    Date of Expiry: ${capturedId.dateOfExpiry?.date.humanReadable ?? "empty"}
-    Date of Issue: ${capturedId.dateOfIssue?.date.humanReadable ?? "empty"}
-    \n""";
+    if (capturedId.isExpired == true) {
+      result.add(Text(
+        'Document is expired.',
+        style: TextStyle(color: Colors.red, fontSize: 16),
+      ));
+    } else {
+      result.add(Text(
+        'Document is not expired.',
+        style: TextStyle(color: Colors.green, fontSize: 16),
+      ));
+
+      if (didVerificationSucceed) {
+        result.add(Text(
+          'Verification checks passed.',
+          style: TextStyle(color: Colors.green, fontSize: 16),
+        ));
+      } else {
+        result.add(Text(
+          'Verification checks failed.',
+          style: TextStyle(color: Colors.red, fontSize: 16),
+        ));
+      }
+    }
+
+    result.add(Text(
+      'Full Name: ${capturedId.fullName}',
+      style: TextStyle(fontSize: 16),
+    ));
+    result.add(Text(
+      'Date of Birth: ${capturedId.dateOfBirth?.utcDate.humanReadable ?? "empty"}',
+      style: TextStyle(fontSize: 16),
+    ));
+    result.add(Text(
+      'Date of Expiry: ${capturedId.dateOfExpiry?.utcDate.humanReadable ?? "empty"}',
+      style: TextStyle(fontSize: 16),
+    ));
+    result.add(Text(
+      'Document Number: ${capturedId.documentNumber ?? "empty"}',
+      style: TextStyle(fontSize: 16),
+    ));
+    result.add(Text(
+      'Nationality: ${capturedId.nationality ?? "empty"}',
+      style: TextStyle(fontSize: 16),
+    ));
+    return result;
   }
 
   @override
-  void didLocalizeId(IdCapture idCapture, IdCaptureSession session) {
-    // In this sample we are not interested in this callback.
+  Future<void> didRejectId(IdCapture idCapture, CapturedId? capturedId, RejectionReason reason) async {
+    disableIdCapture();
+    _onIdRejectedEvent.sink.add(_getRejectionReasonMessage(reason));
   }
 
-  @override
-  void didRejectId(IdCapture idCapture, IdCaptureSession session) {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  void didTimedOut(IdCapture idCapture, IdCaptureSession session, Future<FrameData> getFrameData()) {
-    // In this sample we are not interested in this callback.
-  }
-
-  @override
-  void didFailWithError(IdCapture idCapture, IdCaptureError error, IdCaptureSession session) {
-    // In this sample we are not interested in this callback.
+  String _getRejectionReasonMessage(RejectionReason reason) {
+    switch (reason) {
+      case RejectionReason.notAcceptedDocumentType:
+        return 'Document not supported. Try scanning another document';
+      case RejectionReason.timeout:
+        return 'Document capture failed. Make sure the document is well lit and free of glare. Alternatively, try scanning another document';
+      default:
+        return 'Document capture was rejected. Reason=${reason}';
+    }
   }
 }
 

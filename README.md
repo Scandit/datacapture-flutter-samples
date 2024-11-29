@@ -8,8 +8,6 @@ This repository contains both simple and advanced samples that show you how use 
 
 **Barcode Capture Settings Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/BarcodeCaptureSettingsSample))
 
-**Barcode Capture Views Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/BarcodeCaptureViewsSample))
-
 ## **Pre-Built Barcode Scanning Components**
 
 Scandit offers building blocks that can be integrated in just a few lines of code. The pre-built camera UI has been designed and user-tested to achieve superior process efficiency, ergonomics and usability.
@@ -61,8 +59,6 @@ ID Scanning Samples demonstrate the features of the ID Capture API and demonstra
 **Barcode Capture Simple Sample (**[Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/BarcodeCaptureSimpleSample))
 
 **Barcode Capture Settings Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/BarcodeCaptureSettingsSample))
-
-**Barcode Capture Views Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/BarcodeCaptureViewsSample))
 
 ### MatrixScan AR Sam**ples**
 

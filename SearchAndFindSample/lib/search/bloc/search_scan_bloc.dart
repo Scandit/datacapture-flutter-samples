@@ -92,8 +92,9 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   @override
-  void didScan(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {
-    var barcode = session.newlyRecognizedBarcodes.firstOrNull;
+  Future<void> didScan(
+      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {
+    var barcode = session.newlyRecognizedBarcode;
     if (barcode == null) return;
 
     // In this sample we decided to ignore barcodes withot data
@@ -106,7 +107,8 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
   }
 
   @override
-  void didUpdateSession(BarcodeCapture barcodeCapture, BarcodeCaptureSession session) {
+  Future<void> didUpdateSession(
+      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {
     // not relevant in this sample
   }
 

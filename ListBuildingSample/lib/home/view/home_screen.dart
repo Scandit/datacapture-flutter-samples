@@ -47,8 +47,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _sparkScanView?.onPause();
     }
   }
 

@@ -20,6 +20,7 @@ enum BSRoutes {
   ViewPointOfInterest,
   Overlay,
   Viewfinder,
+  OpenSourceSoftwareLicenseInfo
 }
 
 extension RoutesValue on BSRoutes {
@@ -55,6 +56,8 @@ extension RoutesValue on BSRoutes {
         return '/overlay-settings';
       case BSRoutes.Viewfinder:
         return '/view-finder-settings';
+      case BSRoutes.OpenSourceSoftwareLicenseInfo:
+        return '/open-source-software-license-info';
       default:
         return '/';
     }
@@ -92,6 +95,8 @@ extension RoutesValue on BSRoutes {
         return 'Overlay';
       case BSRoutes.Viewfinder:
         return 'Viewfinder';
+      case BSRoutes.OpenSourceSoftwareLicenseInfo:
+        return 'Open Source Software Licenses';
       default:
         return 'Barcode Selection Settings';
     }

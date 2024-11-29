@@ -14,6 +14,7 @@ import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_sel
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/symbologies/view/symbologies_settings_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/view/barcode_selection_settings_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/camera/view/cemera_settings_view.dart';
+import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/open_source_software_license_info/view/open_source_software_license_info_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_settings/overlay/view/overlay_settings_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_settings/point_of_interest/view/point_of_interest_settings_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_settings/scan_area/view/scan_area_view.dart';
@@ -69,6 +70,8 @@ class MyApp extends StatelessWidget {
               PointOfInterestSettingsView(BSRoutes.ViewPointOfInterest.viewTitle),
           BSRoutes.Overlay.routeName: (context) => OverlaySettingsView(BSRoutes.Overlay.viewTitle),
           BSRoutes.Viewfinder.routeName: (context) => ViewfinderSettingsView(BSRoutes.Viewfinder.viewTitle),
+          BSRoutes.OpenSourceSoftwareLicenseInfo.routeName: (context) =>
+              OpenSourceSoftwareLicenseInfoView(BSRoutes.OpenSourceSoftwareLicenseInfo.viewTitle),
         });
   }
 }

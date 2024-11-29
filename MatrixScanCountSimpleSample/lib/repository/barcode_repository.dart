@@ -7,7 +7,7 @@
 import '../result/model/scan_details.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_count.dart';
-import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_tracking.dart';
+import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_batch.dart';
 
 class BarcodeRepository {
   static final BarcodeRepository _singleton = BarcodeRepository._internal();
@@ -16,7 +16,7 @@ class BarcodeRepository {
     return _singleton;
   }
 
-  Iterable<TrackedBarcode> _scannedBarcodes = [];
+  Iterable<Barcode> _scannedBarcodes = [];
   Iterable<Barcode> _additionalBarcodes = [];
 
   BarcodeRepository._internal();
@@ -29,7 +29,7 @@ class BarcodeRepository {
 
 // Update lists of barcodes with the contents of the current session.
   void updateWithSession(BarcodeCountSession session) {
-    _scannedBarcodes = session.recognizedBarcodes.values;
+    _scannedBarcodes = session.recognizedBarcodes;
     _additionalBarcodes = session.additionalBarcodes;
   }
 
@@ -39,7 +39,7 @@ class BarcodeRepository {
     List<Barcode> barcodesToSave = [];
 
     for (var barcode in _scannedBarcodes) {
-      barcodesToSave.add(barcode.barcode);
+      barcodesToSave.add(barcode);
     }
 
     barcodesToSave.addAll(_additionalBarcodes);
@@ -53,8 +53,8 @@ class BarcodeRepository {
     var scanResults = Map<String, ScanDetails>();
 
     // Add the inner Barcode objects of each scanned TrackedBarcode to the results map.
-    for (TrackedBarcode trackedBarcode in _scannedBarcodes) {
-      addBarcodeToResultsMap(trackedBarcode.barcode, scanResults);
+    for (Barcode barcode in _scannedBarcodes) {
+      addBarcodeToResultsMap(barcode, scanResults);
     }
 
     // Add the previously saved Barcode objects to the results map.

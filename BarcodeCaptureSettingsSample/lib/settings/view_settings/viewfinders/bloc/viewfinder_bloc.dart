@@ -14,9 +14,7 @@ class ViewfindersBloc extends Bloc {
   late Viewfinders _currentViewfinder;
 
   ViewfindersBloc() {
-    if (_settings.currentViewfinder is LaserlineViewfinder) {
-      _currentViewfinder = Viewfinders.Laserline;
-    } else if (_settings.currentViewfinder is RectangularViewfinder) {
+    if (_settings.currentViewfinder is RectangularViewfinder) {
       _currentViewfinder = Viewfinders.rectangular;
     } else if (_settings.currentViewfinder is AimerViewfinder) {
       _currentViewfinder = Viewfinders.Aimer;
@@ -39,9 +37,6 @@ class ViewfindersBloc extends Bloc {
       case Viewfinders.rectangular:
         _settings.currentViewfinder = RectangularViewfinder();
         break;
-      case Viewfinders.Laserline:
-        _settings.currentViewfinder = LaserlineViewfinder();
-        break;
       case Viewfinders.Aimer:
         _settings.currentViewfinder = AimerViewfinder();
         break;
@@ -53,7 +48,7 @@ class ViewfindersBloc extends Bloc {
   }
 }
 
-enum Viewfinders { none, rectangular, Laserline, Aimer }
+enum Viewfinders { none, rectangular, Aimer }
 
 extension ViewfindersPrettyPrint on Viewfinders {
   String get name {
@@ -62,8 +57,6 @@ extension ViewfindersPrettyPrint on Viewfinders {
         return 'None';
       case Viewfinders.rectangular:
         return 'Rectangular';
-      case Viewfinders.Laserline:
-        return 'Laserline';
       case Viewfinders.Aimer:
         return 'Aimer';
       default:

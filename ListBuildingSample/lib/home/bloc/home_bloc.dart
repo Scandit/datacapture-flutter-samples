@@ -97,7 +97,7 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
   int _scannedItems = 0;
 
   @override
-  void didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData> Function() getFrameData) {
+  Future<void> didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData> Function() getFrameData) async {
     var barcode = session.newlyRecognizedBarcode;
     if (barcode == null) return;
 
@@ -116,7 +116,8 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
   }
 
   @override
-  void didUpdateSession(SparkScan sparkScan, SparkScanSession session, Future<FrameData> Function() getFrameData) {
+  Future<void> didUpdateSession(
+      SparkScan sparkScan, SparkScanSession session, Future<FrameData> Function() getFrameData) async {
     // TODO: implement didUpdateSession
   }
 

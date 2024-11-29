@@ -44,7 +44,8 @@ class CaptureBloc extends Bloc implements BarcodeSelectionListener {
   }
 
   @override
-  void didUpdateSelection(BarcodeSelection barcodeSelection, BarcodeSelectionSession session) {
+  Future<void> didUpdateSelection(
+      BarcodeSelection barcodeSelection, BarcodeSelectionSession session, Future<FrameData?> getFrameData()) async {
     // Check if we have selected a barcode, if that's the case, add the result to the stream.
     var newlySelectedBarcodes = session.newlySelectedBarcodes;
     if (newlySelectedBarcodes.isEmpty) return;
@@ -59,7 +60,8 @@ class CaptureBloc extends Bloc implements BarcodeSelectionListener {
   }
 
   @override
-  void didUpdateSession(BarcodeSelection barcodeSelection, BarcodeSelectionSession session) {}
+  Future<void> didUpdateSession(
+      BarcodeSelection barcodeSelection, BarcodeSelectionSession session, Future<FrameData?> getFrameData()) async {}
 
   @override
   void dispose() {

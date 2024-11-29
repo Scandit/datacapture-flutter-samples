@@ -41,6 +41,27 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
       _onCapturedIdEvent(capturedId);
     });
 
+    _bloc.onIdRejected.listen((rejectedReason) {
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                content: Text(
+                  rejectedReason,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                actions: [
+                  GestureDetector(
+                      child: Text('OK'),
+                      onTap: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      })
+                ],
+              )).then((value) => {
+            // Enable capture again, after the dialog is dismissed.
+            _bloc.enableIdCapture()
+          });
+    });
+
     // Switch camera on to start streaming frames and enable the id capture mode.
     // The camera is started asynchronously and will take some time to completely turn on.
     _checkPermission();
@@ -80,52 +101,48 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
   }
 
   void _onCapturedIdEvent(CapturedId capturedId) async {
-    if (!_bloc.isUSDocument(capturedId)) {
-      _bloc.resetIdCapture();
-      _showMessage("Document is not a US driver’s license.");
-      return;
-    }
-
-    if (_bloc.isBackScanNeeded(capturedId)) {
-      return;
-    }
     _bloc.disableIdCapture();
 
     _showVerificationDialog();
 
-    // If document scanning is complete, verify the driver's license.
-    var comparisonResult = await _bloc.compareFrontAndBack(capturedId);
+    List<Text> result = [];
 
-    var message = "";
+    try {
+      var verificationResultPassed = false;
 
-    // If front and back match AND ID is not expired, run verification
-    if (comparisonResult.checksPassed && capturedId.isExpired == false) {
-      try {
+      if (capturedId.isExpired == false) {
         var verificationResult = await _bloc.verifyIdOnBarcode(capturedId);
-
-        message = _bloc.getResultMessage(
-            capturedId, false, comparisonResult.checksPassed, verificationResult.allChecksPassed);
-      } catch (error) {
-        message = (error is PlatformException)
-            ? (error.details?.toString() ?? "Unable to verify the document.")
-            : error.toString();
+        verificationResultPassed = verificationResult.allChecksPassed;
       }
-    } else {
-      message = _bloc.getResultMessage(capturedId, capturedId.isExpired == true, comparisonResult.checksPassed, false);
+
+      result = _bloc.getResultMessage(capturedId, verificationResultPassed);
+    } catch (error) {
+      if (error is PlatformException) {
+        result.add(Text(
+          error.details?.toString() ?? 'Unable to verify the document.',
+          style: TextStyle(color: Colors.red, fontSize: 16),
+        ));
+      } else {
+        result.add(Text(
+          error.toString(),
+          style: TextStyle(color: Colors.red, fontSize: 16),
+        ));
+      }
     }
 
     Navigator.of(context).pop();
 
-    _showMessage(message);
+    _showMessage(result);
   }
 
-  void _showMessage(String message) {
+  void _showMessage(List<Text> results) {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              content: Text(
-                message,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: results,
               ),
               actions: [
                 GestureDetector(

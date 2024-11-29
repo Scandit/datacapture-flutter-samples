@@ -9,7 +9,7 @@ import 'package:matrixscancountsimplesample/repository/barcode_repository.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_count.dart';
-import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_tracking.dart';
+import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_batch.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 import '../model/navigation_handler.dart';
@@ -167,7 +167,8 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
   }
 
   @override
-  void didScan(BarcodeCount barcodeCount, BarcodeCountSession session, Future<FrameData> Function() getFrameData) {
+  Future<void> didScan(
+      BarcodeCount barcodeCount, BarcodeCountSession session, Future<FrameData> Function() getFrameData) async {
     _barcodeRepository.updateWithSession(session);
   }
 

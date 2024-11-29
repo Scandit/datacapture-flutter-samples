@@ -19,11 +19,7 @@ class ResultBloc extends Bloc {
     return _captureResult.faceImage;
   }
 
-  Image? get idFrontImage {
-    return _captureResult.idFrontImage;
-  }
-
-  Image? get idBackImage {
-    return _captureResult.idBackImage;
+  Image? get croppedDocument {
+    return _captureResult.croppedDocument;
   }
 }

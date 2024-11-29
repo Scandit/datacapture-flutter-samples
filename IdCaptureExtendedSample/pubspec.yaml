@@ -12,11 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_id:
-    '>=6.28.1 <6.28.2'
-  scandit_flutter_datacapture_text:
-    '>=6.28.1 <6.28.2'
-  permission_handler: "11.3.0"
-  intl: ^0.18.0
+    '>=7.0.0 <7.0.1'
+  permission_handler: 11.3.1
+  intl: ^0.19.0
 
 flutter:
   uses-material-design: true
