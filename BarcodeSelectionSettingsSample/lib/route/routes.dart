@@ -58,8 +58,6 @@ extension RoutesValue on BSRoutes {
         return '/view-finder-settings';
       case BSRoutes.OpenSourceSoftwareLicenseInfo:
         return '/open-source-software-license-info';
-      default:
-        return '/';
     }
   }
 
@@ -97,8 +95,6 @@ extension RoutesValue on BSRoutes {
         return 'Viewfinder';
       case BSRoutes.OpenSourceSoftwareLicenseInfo:
         return 'Open Source Software Licenses';
-      default:
-        return 'Barcode Selection Settings';
     }
   }
 }

@@ -119,12 +119,6 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
   }
 
   @override
-  Brush? brushForUnrecognizedBarcode(BarcodeCountView view, TrackedBarcode trackedBarcode) {
-    // No need to return a brush here, BarcodeCountViewStyle.ICON style is used
-    return null;
-  }
-
-  @override
   void didCompleteCaptureList(BarcodeCountView view) {
     // Not relevant in this sample
   }
@@ -158,11 +152,6 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
 
   @override
   void didTapSingleScanButton(BarcodeCountView view) {
-    // Not relevant in this sample
-  }
-
-  @override
-  void didTapUnrecognizedBarcode(BarcodeCountView view, TrackedBarcode trackedBarcode) {
     // Not relevant in this sample
   }
 

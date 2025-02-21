@@ -27,8 +27,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   final List<ScannedItem> _scannedItems = [];
 
-  SparkScanView? _sparkScanView;
-
   _HomeScreenState(this._homeBloc);
 
   @override
@@ -55,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     var sparkScanView = SparkScanView.forContext(
         getWidgetBody(), _homeBloc.dataCaptureContext, _homeBloc.sparkScan, _homeBloc.sparkScanViewSettings)
       ..feedbackDelegate = _homeBloc;
-    _sparkScanView = sparkScanView;
 
     return Scaffold(
       appBar: AppBar(

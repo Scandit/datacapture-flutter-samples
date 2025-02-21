@@ -13,8 +13,6 @@ extension RoutesValue on ICRoutes {
         return '/';
       case ICRoutes.Result:
         return '/result';
-      default:
-        return '/';
     }
   }
 
@@ -24,8 +22,6 @@ extension RoutesValue on ICRoutes {
         return 'IdCaptureExtended Sample';
       case ICRoutes.Result:
         return 'Scan Result';
-      default:
-        return 'IdCaptureExtended Sample';
     }
   }
 }

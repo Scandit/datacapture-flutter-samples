@@ -13,8 +13,6 @@ extension RoutesValue on SampleRoutes {
         return '/';
       case SampleRoutes.Results:
         return '/scanResults';
-      default:
-        return '/';
     }
   }
 
@@ -24,8 +22,6 @@ extension RoutesValue on SampleRoutes {
         return 'MatrixScan Count';
       case SampleRoutes.Results:
         return 'Scan Results';
-      default:
-        return 'MatrixScan Count';
     }
   }
 }

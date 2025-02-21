@@ -15,8 +15,6 @@ extension SelectionTypePrettyPrint on SelectionType {
         return 'Aim to Select';
       case SelectionType.tapToSelect:
         return 'Tap to Select';
-      default:
-        throw Exception("Missing pretty name for '$this' selection type");
     }
   }
 }

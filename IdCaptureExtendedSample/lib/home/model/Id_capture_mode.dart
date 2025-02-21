@@ -15,8 +15,6 @@ extension IdCaptureModeNamePretty on IdCaptureMode {
         return "MRZ";
       case IdCaptureMode.viz:
         return "VIZ";
-      default:
-        return toString().split('.').last;
     }
   }
 }

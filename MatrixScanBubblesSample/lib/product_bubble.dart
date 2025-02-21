@@ -49,18 +49,12 @@ class ProductBubbleState extends BarcodeBatchAdvancedOverlayWidgetState<ProductB
   @override
   BarcodeBatchAdvancedOverlayContainer build(BuildContext context) {
     return BarcodeBatchAdvancedOverlayContainer(
-      width: 180,
+      width: 160,
       height: 60,
       decoration: BoxDecoration(color: const Color(0xFFFFFFEE), borderRadius: BorderRadius.circular(30)),
       child: Row(
         textDirection: TextDirection.ltr,
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(color: const Color(0xFF58B5C2), borderRadius: BorderRadius.circular(30)),
-            child: Image(image: AssetImage("assets/images/stock_count.png")),
-          ),
           Expanded(
               child: Center(
             // The text content of the bubble, switching between stock information and the barcode data.

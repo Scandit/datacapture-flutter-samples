@@ -7,7 +7,6 @@
 import '../result/model/scan_details.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_count.dart';
-import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_batch.dart';
 
 class BarcodeRepository {
   static final BarcodeRepository _singleton = BarcodeRepository._internal();

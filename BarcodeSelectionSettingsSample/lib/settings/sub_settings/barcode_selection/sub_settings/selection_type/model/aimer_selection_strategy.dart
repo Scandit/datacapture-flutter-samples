@@ -15,8 +15,6 @@ extension AimerSelectionStrategyPrettyPrint on AimerSelectionStrategy {
         return 'Auto';
       case AimerSelectionStrategy.manual:
         return 'Manual';
-      default:
-        throw Exception("Missing pretty name for '$this' aimer selection strategy type");
     }
   }
 }

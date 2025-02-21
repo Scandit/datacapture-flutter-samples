@@ -35,8 +35,6 @@ extension VideoResolutionPrettyPrint on VideoResolution {
         return 'fullHd';
       case VideoResolution.uhd4k:
         return 'uhd4k';
-      default:
-        throw Exception("Missing pretty name for '$this' video resolution");
     }
   }
 }
@@ -52,8 +50,6 @@ extension FocusRangePrettyPrint on FocusRange {
         return 'Full';
       case FocusRange.near:
         return 'Near';
-      default:
-        throw Exception("Missing pretty name for '$this' focus range");
     }
   }
 }
@@ -67,8 +63,6 @@ extension MeasureUnitPrettyPrint on MeasureUnit {
         return 'FRACTION';
       case MeasureUnit.pixel:
         return 'PIXEL';
-      default:
-        throw Exception("Missing name for '$this' measure unit");
     }
   }
 }
@@ -80,8 +74,6 @@ extension BarcodeSelectionFreezeBehaviorPrettyPrint on BarcodeSelectionFreezeBeh
         return 'Manual';
       case BarcodeSelectionFreezeBehavior.manualAndAutomatic:
         return 'Manual and Automatic';
-      default:
-        throw Exception("Missing name for '$this' barcode selection freeze behaviour");
     }
   }
 }
@@ -93,8 +85,6 @@ extension BarcodeSelectionTapBehaviorPrettyPrint on BarcodeSelectionTapBehavior 
         return 'Repeat Selection';
       case BarcodeSelectionTapBehavior.toggleSelection:
         return 'Toggle Selection';
-      default:
-        throw Exception("Missing name for '$this' barcode selection tap behaviour");
     }
   }
 }
@@ -106,8 +96,6 @@ extension BarcodeSelectionBasicOverlayStylePrettyPrint on BarcodeSelectionBasicO
         return 'Frame';
       case BarcodeSelectionBasicOverlayStyle.dot:
         return 'Dot';
-      default:
-        throw Exception("Missing name for '$this' barcode selection basic overlay style");
     }
   }
 }
