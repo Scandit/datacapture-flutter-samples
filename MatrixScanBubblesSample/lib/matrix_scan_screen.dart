@@ -44,12 +44,14 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   _MatrixScanScreenState(this._context);
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          _isPermissionMessageVisible = !value;
-          if (value) {
-            _camera?.switchToDesiredState(_isFrozen ? FrameSourceState.off : FrameSourceState.on);
-          }
-        }));
+    Permission.camera.request().isGranted.then(
+      (value) => setState(() {
+        _isPermissionMessageVisible = !value;
+        if (value) {
+          _camera?.switchToDesiredState(_isFrozen ? FrameSourceState.off : FrameSourceState.on);
+        }
+      }),
+    );
   }
 
   @override
@@ -95,7 +97,10 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     // Add a barcode batch overlay to the data capture view to render the tracked barcodes on top of the video
     // preview. This is optional, but recommended for better visual feedback.
     var _basicOverlay = BarcodeBatchBasicOverlay.withBarcodeBatchForViewWithStyle(
-        _barcodeBatch, _captureView, BarcodeBatchBasicOverlayStyle.dot);
+      _barcodeBatch,
+      _captureView,
+      BarcodeBatchBasicOverlayStyle.dot,
+    );
     _captureView.addOverlay(_basicOverlay);
 
     // Add an advanced barcode batch overlay to the data capture view to render AR visualization on
@@ -117,24 +122,29 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   Widget build(BuildContext context) {
     Widget child;
     if (_isPermissionMessageVisible) {
-      child = Text('No permission to access the camera!',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
+      child = Text(
+        'No permission to access the camera!',
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+      );
     } else {
-      child = Stack(children: [
-        _captureView,
-        Container(
-          alignment: Alignment.bottomCenter,
-          padding: EdgeInsets.all(48.0),
-          child: SizedBox(height: 120, width: 120, child: FreezeButton(onPressed: (isFrozen) => _freeze(isFrozen))),
-        )
-      ]);
+      child = Stack(
+        children: [
+          _captureView,
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.all(48.0),
+            child: SizedBox(height: 120, width: 120, child: FreezeButton(onPressed: (isFrozen) => _freeze(isFrozen))),
+          ),
+        ],
+      );
     }
     return WillPopScope(
-        child: Scaffold(body: child),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+      child: Scaffold(body: child),
+      onWillPop: () {
+        dispose();
+        return Future.value(true);
+      },
+    );
   }
 
   @override
@@ -150,7 +160,10 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   // the batch results.
   @override
   Future<void> didUpdateSession(
-      BarcodeBatch barcodeBatch, BarcodeBatchSession session, Future<FrameData> getFrameData()) async {
+    BarcodeBatch barcodeBatch,
+    BarcodeBatchSession session,
+    Future<FrameData> getFrameData(),
+  ) async {
     // Remove information about tracked barcodes that are no longer tracked.
     for (final removedBarcodeId in session.removedTrackedBarcodes) {
       _trackedBarcodes[removedBarcodeId] = null;
@@ -203,7 +216,9 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
   @override
   BarcodeBatchAdvancedOverlayWidget? widgetForTrackedBarcode(
-      BarcodeBatchAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
+    BarcodeBatchAdvancedOverlay overlay,
+    TrackedBarcode trackedBarcode,
+  ) {
     return null;
   }
 

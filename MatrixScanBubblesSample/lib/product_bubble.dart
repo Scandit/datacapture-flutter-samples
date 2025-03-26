@@ -35,15 +35,23 @@ class ProductBubbleState extends BarcodeBatchAdvancedOverlayWidgetState<ProductB
       crossAxisAlignment: CrossAxisAlignment.start,
       textDirection: TextDirection.ltr,
       children: [
-        Text("Report stock count",
-            textDirection: TextDirection.ltr,
-            style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black)),
-        Text("Shelf: 4 Back room: 8",
-            textDirection: TextDirection.ltr, style: TextStyle(fontSize: 10, color: Colors.black))
+        Text(
+          "Report stock count",
+          textDirection: TextDirection.ltr,
+          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        Text(
+          "Shelf: 4 Back room: 8",
+          textDirection: TextDirection.ltr,
+          style: TextStyle(fontSize: 10, color: Colors.black),
+        ),
       ],
     );
-    _barcodeData =
-        Text(widget.barcodeData, textDirection: TextDirection.ltr, style: TextStyle(fontSize: 12, color: Colors.black));
+    _barcodeData = Text(
+      widget.barcodeData,
+      textDirection: TextDirection.ltr,
+      style: TextStyle(fontSize: 12, color: Colors.black),
+    );
   }
 
   @override
@@ -56,10 +64,11 @@ class ProductBubbleState extends BarcodeBatchAdvancedOverlayWidgetState<ProductB
         textDirection: TextDirection.ltr,
         children: [
           Expanded(
-              child: Center(
-            // The text content of the bubble, switching between stock information and the barcode data.
-            child: widget.viewState.viewType == BubbleType.BarcodeData ? _barcodeData : _stockInfo,
-          ))
+            child: Center(
+              // The text content of the bubble, switching between stock information and the barcode data.
+              child: widget.viewState.viewType == BubbleType.BarcodeData ? _barcodeData : _stockInfo,
+            ),
+          ),
         ],
       ),
     );
