@@ -1,0 +1,21 @@
+name: MatrixScanCheckSimpleSample
+description: "Very simple sample which shows how you can use MatrixScan Check to show product information with the Scandit Data Capture SDK."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_barcode:
+    path: ../../../../scandit-flutter-datacapture-barcode
+  scandit_flutter_datacapture_core:
+    path: ../../../../scandit-flutter-datacapture-core
+  permission_handler: 11.3.1
+
+flutter:
+  uses-material-design: true

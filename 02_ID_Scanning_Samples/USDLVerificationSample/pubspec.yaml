@@ -1,0 +1,22 @@
+name: USDLVerificationSample
+description: ID Verification setup for US driver's licenses.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_id:
+    path: ../../../scandit-flutter-datacapture-id
+  scandit_flutter_datacapture_id_aamva_barcode_verification:
+    path: ../../../scandit-flutter-datacapture-id-aamva-barcode-verification
+  permission_handler: 11.3.1
+  intl: ^0.19.0
+
+flutter:
+  uses-material-design: true
