@@ -6,7 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
-import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_check.dart';
+import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_ar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'bloc/capture_bloc.dart';
@@ -20,10 +20,10 @@ class CaptureScreen extends StatefulWidget {
 
 class CaptureScreenState extends State<CaptureScreen>
     with WidgetsBindingObserver
-    implements BarcodeCheckHighlightProvider, BarcodeCheckAnnotationProvider {
-  final BarcodeCheckBloc bloc = BarcodeCheckBloc();
+    implements BarcodeArHighlightProvider, BarcodeArAnnotationProvider {
+  final BarcodeArBloc bloc = BarcodeArBloc();
 
-  BarcodeCheckView? barcodeCheckView;
+  BarcodeArView? barcodeArView;
 
   CaptureScreenState() : super();
 
@@ -34,10 +34,10 @@ class CaptureScreenState extends State<CaptureScreen>
     WidgetsBinding.instance.addObserver(this);
     _checkPermission();
 
-    barcodeCheckView = BarcodeCheckView.forModeWithViewSettingsAndCameraSettings(
+    barcodeArView = BarcodeArView.forModeWithViewSettingsAndCameraSettings(
       bloc.dataCaptureContext,
-      bloc.barcodeCheck,
-      bloc.barcodeCheckViewSettings,
+      bloc.barcodeAr,
+      bloc.barcodeArViewSettings,
       bloc.cameraSettings,
     )
       ..highlightProvider = this
@@ -48,7 +48,7 @@ class CaptureScreenState extends State<CaptureScreen>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: barcodeCheckView,
+        body: barcodeArView,
       ),
     );
   }
@@ -68,12 +68,12 @@ class CaptureScreenState extends State<CaptureScreen>
   }
 
   @override
-  Future<BarcodeCheckHighlight?> highlightForBarcode(Barcode barcode) {
+  Future<BarcodeArHighlight?> highlightForBarcode(Barcode barcode) {
     return bloc.highlightForBarcode(barcode);
   }
 
   @override
-  Future<BarcodeCheckAnnotation?> annotationForBarcode(Barcode barcode) async {
+  Future<BarcodeArAnnotation?> annotationForBarcode(Barcode barcode) async {
     return bloc.annotationForBarcode(barcode);
   }
 

@@ -38,7 +38,7 @@ class _FreezeButtonState extends State<FreezeButton> {
         child: TextButton(
           onPressed: () => _onPressed(context),
           child: Image(image: _buttonAsset),
-          style: ButtonStyle(overlayColor: MaterialStateProperty.all(Colors.transparent)),
+          style: ButtonStyle(overlayColor: WidgetStateProperty.all(Colors.transparent)),
         ));
   }
 

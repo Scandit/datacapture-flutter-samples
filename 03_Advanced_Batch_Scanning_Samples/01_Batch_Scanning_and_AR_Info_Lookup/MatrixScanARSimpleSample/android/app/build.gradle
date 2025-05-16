@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.scandit.flutter.matrixscanchecksimplesample"
+    namespace = "com.scandit.flutter.matrixscanarsimplesample"
     ndkVersion "27.0.12077973"
     compileSdk 34
 
@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.scandit.flutter.matrixscanchecksimplesample"
+        applicationId "com.scandit.flutter.matrixscanarsimplesample"
         minSdk 23
         targetSdk 34
         versionCode 1

@@ -1,5 +1,5 @@
-name: MatrixScanCheckSimpleSample
-description: "Very simple sample which shows how you can use MatrixScan Check to show product information with the Scandit Data Capture SDK."
+name: MatrixScanARSimpleSample
+description: "Very simple sample which shows how you can use MatrixScan AR to show product information with the Scandit Data Capture SDK."
 
 publish_to: 'none'
 

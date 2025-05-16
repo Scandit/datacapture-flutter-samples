@@ -7,7 +7,6 @@
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/model/setting_item.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/bloc/barcode_selection_settings_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BarcodeSelectionSettingsView extends StatefulWidget {

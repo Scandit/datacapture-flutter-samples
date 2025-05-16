@@ -58,7 +58,7 @@ class _SymbologiesSettingsViewState extends BaseState<SymbologiesSettingsView> w
                       },
                   child: Text("Disable All"),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                    backgroundColor: WidgetStateProperty.all(Colors.red),
                   )),
             ]),
             Expanded(
