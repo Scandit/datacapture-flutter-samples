@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    path: ../../../../scandit-flutter-datacapture-barcode
+    '>=7.3.1 <7.3.2'
   scandit_flutter_datacapture_core:
-    path: ../../../../scandit-flutter-datacapture-core
+    '>=7.3.1 <7.3.2'
   permission_handler: 11.3.1
 
 flutter:
