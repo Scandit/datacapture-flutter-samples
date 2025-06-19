@@ -16,7 +16,7 @@ android {
     defaultConfig {
 
         applicationId "com.scandit.flutter.usdlverificationsample"
-        minSdk 23
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
