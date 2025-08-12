@@ -161,10 +161,11 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
     _barcodeRepository.updateWithSession(session);
   }
 
-  Future<void> resetSession() {
-    _registerBarcodeCountListener();
+  Future<void> resetSession() async {
     _barcodeRepository.reset();
-    return _barcodeCount.clearAdditionalBarcodes().then((value) => _barcodeCount.reset());
+    await _barcodeCount.clearAdditionalBarcodes();
+    await _barcodeCount.reset();
+    _registerBarcodeCountListener();
   }
 
   @override

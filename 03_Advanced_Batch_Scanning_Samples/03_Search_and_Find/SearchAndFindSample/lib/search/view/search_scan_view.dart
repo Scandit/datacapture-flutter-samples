@@ -158,6 +158,11 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
       ),
     );
 
+    // Artificial delay added to give time to fluter to close the FindView
+    // and close the camera so that when we re-create the camera instance here
+    // we will have the correct state in sync.
+    await Future.delayed(Duration(milliseconds: 500));
+
     // Once we come back we will need to re-create the barcode capture session
     _bloc.setupScanning();
     // resume scanning
