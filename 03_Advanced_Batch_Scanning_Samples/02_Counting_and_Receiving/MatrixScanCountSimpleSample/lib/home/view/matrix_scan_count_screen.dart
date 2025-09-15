@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:matrixscancountsimplesample/home/bloc/matrix_scan_count_bloc.dart';
 import 'package:matrixscancountsimplesample/result/model/result_screen_navigation_args.dart';
 import 'package:matrixscancountsimplesample/result/model/result_screen_return.dart';
@@ -36,41 +37,48 @@ class _MatrixScanCountScreenState extends State<MatrixScanCountScreen>
   @override
   void initState() {
     super.initState();
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: Scaffold(
-          body: BarcodeCountView.forContextWithModeAndStyle(
-              _bloc.dataCaptureContext, _bloc.barcodeCount, BarcodeCountViewStyle.icon)
-            ..uiListener = _bloc
-            ..listener = _bloc,
-        ),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        // Cleanup everything on back press because this is the only screen
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: Scaffold(
+        body: BarcodeCountView.forContextWithModeAndStyle(
+            _bloc.dataCaptureContext, _bloc.barcodeCount, BarcodeCountViewStyle.icon)
+          ..uiListener = _bloc
+          ..listener = _bloc,
+      ),
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _bloc.didResume();
-    } else if (state == AppLifecycleState.paused) {
-      _bloc.didPause();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _bloc.didResume();
+        break;
+      default:
+        _bloc.didPause();
+        break;
     }
   }
 
-  @override
-  void dispose() {
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+  void _cleanup() {
+    WidgetsBinding.instance.removeObserver(this);
     _bloc.dispose();
-    super.dispose();
   }
-
-  T? _ambiguate<T>(T? value) => value;
 
   @override
   void navigateOnExitButtonTap(Map<String, ScanDetails> scannedItems) async {

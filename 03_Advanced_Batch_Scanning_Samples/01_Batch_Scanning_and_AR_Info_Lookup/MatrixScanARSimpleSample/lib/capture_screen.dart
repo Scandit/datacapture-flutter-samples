@@ -55,8 +55,13 @@ class CaptureScreenState extends State<CaptureScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        bloc.stopCapturing();
+        break;
     }
   }
 
@@ -78,10 +83,12 @@ class CaptureScreenState extends State<CaptureScreen>
   }
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          if (value) {
-            bloc.startCapturing();
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      if (status.isGranted) {
+        bloc.startCapturing();
+      }
+    });
   }
 }

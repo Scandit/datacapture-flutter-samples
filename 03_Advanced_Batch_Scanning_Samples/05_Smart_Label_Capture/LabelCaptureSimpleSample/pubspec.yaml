@@ -1,0 +1,26 @@
+name: LabelCaptureSimpleSample
+description: A basic Label Capture setup to scan labels with barcodes.
+
+publish_to: 'none'
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  scandit_flutter_datacapture_core:
+    '>=7.6.0 <7.6.1'
+  scandit_flutter_datacapture_barcode:
+    '>=7.6.0 <7.6.1'
+  scandit_flutter_datacapture_label:
+    '>=7.6.0 <7.6.1'
+  scandit_flutter_datacapture_label_text:
+    '>=7.6.0 <7.6.1'
+  permission_handler: 11.3.1
+  flutter_bloc: ^8.1.6
+
+flutter:
+  uses-material-design: true

@@ -6,12 +6,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
+import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 import 'matrix_scan_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
+  await DataCaptureContext.initialize(licenseKey);
   runApp(MyApp());
 }
 
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MatrixScanScreen(licenseKey),
+      home: MatrixScanScreen(),
     );
   }
 }

@@ -53,7 +53,7 @@ class BarcodeArBloc extends Bloc implements BarcodeArListener, BarcodeArInfoAnno
         Symbology.dataMatrix,
       });
 
-    _barcodeAr = BarcodeAr.forContext(_dcManager.dataCaptureContext, barcodeArSettings);
+    _barcodeAr = BarcodeAr(barcodeArSettings);
   }
 
   void startCapturing() {

@@ -47,8 +47,7 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     _bloc.setupScanning();
 
     // Add a barcode capture overlay to the data capture view to set a viewfinder UI.
-    _overlay = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(
-        _bloc.barcodeCapture, null, BarcodeCaptureOverlayStyle.frame);
+    _overlay = BarcodeCaptureOverlay(_bloc.barcodeCapture);
 
     // We add the aim viewfinder to the overlay.
     _overlay.viewfinder = new AimerViewfinder();
@@ -66,10 +65,13 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _bloc.pauseScanning();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        _bloc.pauseScanning();
+        break;
     }
   }
 
@@ -94,11 +96,13 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
   }
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          if (value) {
-            _bloc.resumeScanning();
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      if (status.isGranted) {
+        _bloc.resumeScanning();
+      }
+    });
   }
 
   void _onBarcodeCaptured(CapturedBarcode barcode) {
@@ -146,7 +150,7 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     await _bloc.disposeCurrentScanning();
 
     // Remove overlay
-    _dataCaptureView.removeOverlay(_overlay);
+    await _dataCaptureView.removeOverlay(_overlay);
 
     // remove app state listener
     _removeAppStateListener();
@@ -164,11 +168,11 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     await Future.delayed(Duration(milliseconds: 500));
 
     // Once we come back we will need to re-create the barcode capture session
-    _bloc.setupScanning();
+    await _bloc.setupScanning();
     // resume scanning
-    _bloc.resumeScanning();
+    await _bloc.resumeScanning();
     // add overlay to set a viewfinder UI again
-    _dataCaptureView.addOverlay(_overlay);
+    await _dataCaptureView.addOverlay(_overlay);
 
     // add app state listener
     _addAppStateListener();

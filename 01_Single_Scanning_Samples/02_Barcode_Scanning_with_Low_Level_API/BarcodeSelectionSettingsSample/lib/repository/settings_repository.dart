@@ -367,10 +367,10 @@ class SettingsRepository {
 
   set overlayStyle(BarcodeSelectionBasicOverlayStyle newStyle) {
     dataCaptureView.removeOverlay(_overlay);
+
     var shouldShowScanAreaGuides = _overlay.shouldShowScanAreaGuides;
     var viewfinder = _overlay.viewfinder as AimerViewfinder;
-    _overlay =
-        BarcodeSelectionBasicOverlay.withBarcodeSelectionForViewWithStyle(barcodeSelection, dataCaptureView, newStyle);
+    _overlay = BarcodeSelectionBasicOverlay(_barcodeSelection, style: newStyle);
     _overlay.shouldShowScanAreaGuides = shouldShowScanAreaGuides;
     (_overlay.viewfinder as AimerViewfinder).dotColor = viewfinder.dotColor;
     (_overlay.viewfinder as AimerViewfinder).frameColor = viewfinder.frameColor;
@@ -382,6 +382,8 @@ class SettingsRepository {
     _defaultFrozenBackgroundColor = _overlay.frozenBackgroundColor;
     _defaultFrameColor = viewfinder.dotColor;
     _defaultDotColor = viewfinder.frameColor;
+
+    _dataCaptureView.addOverlay(_overlay);
   }
 
   Brush get trackedBrush {
@@ -488,7 +490,7 @@ class SettingsRepository {
     _barcodeSelection.applySettings(_barcodeSelectionSettings);
   }
 
-  void init() {
+  void init() async {
     // Default camera settings for this sample
     _cameraSettings.focusRange = FocusRange.far;
     _cameraSettings.zoomFactor = 1.0;
@@ -502,14 +504,16 @@ class SettingsRepository {
     _barcodeSelectionSettings.codeDuplicateFilter = Duration(milliseconds: 500);
 
     // Create new barcode selection mode with the initial settings
-    _barcodeSelection = BarcodeSelection.forContext(_dataCaptureContext, _barcodeSelectionSettings);
+    _barcodeSelection = BarcodeSelection(_barcodeSelectionSettings);
 
     // To visualize the on-going barcode selection process on screen, setup a data capture view that renders the
     // camera preview. The view must be connected to the data capture context.
     _dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
 
-    _overlay = BarcodeSelectionBasicOverlay.withBarcodeSelectionForViewWithStyle(
-        _barcodeSelection, _dataCaptureView, BarcodeSelectionBasicOverlayStyle.frame);
+    // Set the barcode selection mode as the current mode of the data capture context.
+    await dataCaptureContext.setMode(_barcodeSelection);
+
+    _overlay = BarcodeSelectionBasicOverlay(_barcodeSelection, style: BarcodeSelectionBasicOverlayStyle.frame);
 
     _defaultTrackedBrush = _overlay.trackedBrush;
     _defaultAimedBrush = _overlay.aimedBrush;
@@ -518,5 +522,8 @@ class SettingsRepository {
     _defaultFrozenBackgroundColor = _overlay.frozenBackgroundColor;
     _defaultFrameColor = _viewfinder.frameColor;
     _defaultDotColor = _viewfinder.dotColor;
+
+    // Add the overlay to the data capture view
+    await _dataCaptureView.addOverlay(_overlay);
   }
 }

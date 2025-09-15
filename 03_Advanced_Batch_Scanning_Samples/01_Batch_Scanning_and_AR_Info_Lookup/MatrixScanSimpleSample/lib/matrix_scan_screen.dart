@@ -7,6 +7,7 @@
 import 'package:MatrixScanSimpleSample/scan_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_batch.dart';
@@ -42,12 +43,18 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   _MatrixScanScreenState(this._context);
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          _isPermissionMessageVisible = !value;
-          if (value) {
-            _camera?.switchToDesiredState(FrameSourceState.on);
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      final isGranted = status.isGranted;
+      setState(() {
+        _isPermissionMessageVisible = !isGranted;
+      });
+
+      if (isGranted && _camera != null) {
+        _camera!.switchToDesiredState(FrameSourceState.on);
+      }
+    });
   }
 
   @override
@@ -55,6 +62,10 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    _setup();
+  }
+
+  void _setup() async {
     // Use the recommended camera settings for the BarcodeBatch mode.
     var cameraSettings = BarcodeBatch.recommendedCameraSettings;
     // Adjust camera settings - set Full HD resolution.
@@ -82,9 +93,14 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     });
 
     // Create new barcode batch mode with the settings from above.
-    _barcodeBatch = BarcodeBatch.forContext(_context, captureSettings)
+    _barcodeBatch = BarcodeBatch(captureSettings)
       // Register self as a listener to get informed of tracked barcodes.
       ..addListener(this);
+
+    _barcodeBatch.isEnabled = true;
+
+    // Set the barcode batch mode as the current mode of the data capture context.
+    await _context.setMode(_barcodeBatch);
 
     // To visualize the on-going barcode capturing process on screen, setup a data capture view that renders the
     // camera preview. The view must be connected to the data capture context.
@@ -92,16 +108,13 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
 
     // Add a barcode batch overlay to the data capture view to render the tracked barcodes on
     // top of the video preview. This is optional, but recommended for better visual feedback.
-    _captureView.addOverlay(BarcodeBatchBasicOverlay.withBarcodeBatchForViewWithStyle(
-        _barcodeBatch, _captureView, BarcodeBatchBasicOverlayStyle.frame));
+    await _captureView.addOverlay(BarcodeBatchBasicOverlay(_barcodeBatch, style: BarcodeBatchBasicOverlayStyle.frame));
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
     if (_camera != null) {
       _context.setFrameSource(_camera!);
     }
-    _camera?.switchToDesiredState(FrameSourceState.on);
-    _barcodeBatch.isEnabled = true;
   }
 
   @override
@@ -136,20 +149,33 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
         )
       ]);
     }
-    return WillPopScope(
-        child: Scaffold(appBar: AppBar(title: Text(widget.title)), body: child),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        // Cleanup everything on back press because this is the only screen
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: Scaffold(appBar: AppBar(title: Text(widget.title)), body: child),
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _camera?.switchToDesiredState(FrameSourceState.off);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        if (_camera != null) {
+          _camera!.switchToDesiredState(FrameSourceState.off);
+        }
+        break;
     }
   }
 
@@ -163,14 +189,12 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     }
   }
 
-  @override
-  void dispose() {
+  void _cleanup() {
     WidgetsBinding.instance.removeObserver(this);
     _barcodeBatch.removeListener(this);
     _barcodeBatch.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
-    super.dispose();
   }
 
   void _showScanResults(BuildContext context) {

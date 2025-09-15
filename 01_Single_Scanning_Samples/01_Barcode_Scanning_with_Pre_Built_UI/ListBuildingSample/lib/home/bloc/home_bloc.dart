@@ -76,7 +76,7 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
 
     // Create the spark scan instance.
     // Spark scan will automatically apply and maintain the optimal camera settings.
-    _sparkScan = new SparkScan.withSettings(sparkScanSettings);
+    _sparkScan = new SparkScan(settings: sparkScanSettings);
 
     // Register self as a listener to get informed of tracked barcodes.
     _sparkScan.addListener(this);
@@ -118,7 +118,7 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
   @override
   Future<void> didUpdateSession(
       SparkScan sparkScan, SparkScanSession session, Future<FrameData> Function() getFrameData) async {
-    // TODO: implement didUpdateSession
+    // Not relevant for this sample
   }
 
   void clear() {

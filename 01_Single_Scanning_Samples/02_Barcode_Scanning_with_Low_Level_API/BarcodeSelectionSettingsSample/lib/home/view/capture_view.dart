@@ -8,6 +8,7 @@ import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/home/bloc/capture_bloc.dart';
 import 'package:BarcodeSelectionSettingsSample/route/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class CaptureView extends StatefulWidget {
@@ -31,7 +32,7 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
   void initState() {
     super.initState();
 
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     _checkPermission();
 
@@ -46,41 +47,54 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _bloc.switchCameraOff();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        _bloc.switchCameraOff();
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: Scaffold(
-          key: key,
-          appBar: AppBar(
-            title: Text(widget.title),
-            actions: [
-              new IconButton(
-                icon: new Icon(Icons.settings),
-                onPressed: () {
-                  _bloc.switchCameraOff();
-                  Navigator.pushNamed(context, BSRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
-                },
-              )
-            ],
-          ),
-          body: SafeArea(child: _bloc.dataCaptureView),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        // Cleanup everything on back press because this is the only screen
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: Scaffold(
+        key: key,
+        appBar: AppBar(
+          title: Text(widget.title),
+          actions: [
+            new IconButton(
+              icon: new Icon(Icons.settings),
+              onPressed: () {
+                _bloc.switchCameraOff();
+                Navigator.pushNamed(context, BSRoutes.Settings.routeName).then((value) => _bloc.switchCameraOn());
+              },
+            )
+          ],
         ),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+        body: SafeArea(child: _bloc.dataCaptureView),
+      ),
+    );
   }
 
   void _checkPermission() async {
     // Check camera permission is granted before switching the camera on
     var permissionsResult = await Permission.camera.request();
+    if (!mounted) return;
+
     if (permissionsResult.isGranted) {
       // Switch camera on to start streaming frames.
       // The camera is started asynchronously and will take some time to completely turn on.
@@ -89,12 +103,8 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
     }
   }
 
-  @override
-  void dispose() {
+  void _cleanup() {
     _bloc.dispose();
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
-    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
-
-  T? _ambiguate<T>(T? value) => value;
 }

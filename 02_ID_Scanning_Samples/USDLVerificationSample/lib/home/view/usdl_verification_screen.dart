@@ -24,12 +24,18 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
   _USDLVerificationScreenState(this._bloc);
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          _isPermissionMessageVisible = !value;
-          if (value) {
-            _bloc.switchCameraOn();
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      final isGranted = status.isGranted;
+      setState(() {
+        _isPermissionMessageVisible = !isGranted;
+      });
+
+      if (isGranted) {
+        _bloc.switchCameraOn();
+      }
+    });
   }
 
   @override
@@ -76,28 +82,36 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
     } else {
       child = _bloc.dataCaptureView;
     }
-    return WillPopScope(
-        child: Center(child: child),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: Center(child: child),
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _bloc.switchCameraOff();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        _bloc.switchCameraOff();
+        break;
     }
   }
 
-  @override
-  void dispose() {
+  void _cleanup() {
     WidgetsBinding.instance.removeObserver(this);
     _bloc.dispose();
-    super.dispose();
   }
 
   void _onCapturedIdEvent(CapturedId capturedId) async {
@@ -108,14 +122,7 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
     List<Text> result = [];
 
     try {
-      var verificationResultPassed = false;
-
-      if (capturedId.isExpired == false) {
-        var verificationResult = await _bloc.verifyIdOnBarcode(capturedId);
-        verificationResultPassed = verificationResult.allChecksPassed;
-      }
-
-      result = _bloc.getResultMessage(capturedId, verificationResultPassed);
+      result = _bloc.getResultMessage(capturedId);
     } catch (error) {
       if (error is PlatformException) {
         result.add(Text(

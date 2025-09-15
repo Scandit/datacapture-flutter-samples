@@ -65,10 +65,13 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _bloc.switchCameraOff();
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        _bloc.switchCameraOff();
+        break;
     }
   }
 
@@ -132,6 +135,8 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
   void _checkPermission() async {
     // Check camera permission is granted before switching the camera on
     var permissionsResult = await Permission.camera.request();
+    if (!mounted) return;
+
     if (permissionsResult.isGranted) {
       // Switch camera on to start streaming frames.
       // The camera is started asynchronously and will take some time to completely turn on.

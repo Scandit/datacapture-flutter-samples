@@ -59,7 +59,10 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
         .enableSymbologies({Symbology.ean13Upca, Symbology.ean8, Symbology.upce, Symbology.code39, Symbology.code128});
 
     // Create barcode count and attach to context.
-    _barcodeCount = BarcodeCount.forContext(dataCaptureContext, barcodeCountSettings);
+    _barcodeCount = BarcodeCount(barcodeCountSettings);
+
+    // Set the barcode count mode as the current mode of the data capture context.
+    _dataCaptureContext.setMode(_barcodeCount);
 
     _barcodeRepository.initialize(_barcodeCount);
 
@@ -77,8 +80,8 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
   void didResume() {
     _registerBarcodeCountListener();
     _barcodeCount.isEnabled = true;
-    Permission.camera.request().isGranted.then((value) {
-      if (value) {
+    Permission.camera.request().then((status) {
+      if (status.isGranted) {
         resumeFrameSource();
       }
     });

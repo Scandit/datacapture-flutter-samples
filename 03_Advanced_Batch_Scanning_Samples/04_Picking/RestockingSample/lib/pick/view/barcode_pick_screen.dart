@@ -19,7 +19,6 @@ class BarcodePickScreen extends StatefulWidget {
 }
 
 class _BarcodePickScreenState extends State<BarcodePickScreen>
-    with WidgetsBindingObserver
     implements BarcodePickActionListener, BarcodePickViewUiListener {
   BarcodePickBloc _bloc;
   late BarcodePickView _barcodePickView;
@@ -29,8 +28,6 @@ class _BarcodePickScreenState extends State<BarcodePickScreen>
   @override
   void initState() {
     super.initState();
-
-    WidgetsBinding.instance.addObserver(this);
 
     // We create the view settings.
     // We keep the default here, but you can use them to specify your own hints to display,
@@ -47,23 +44,14 @@ class _BarcodePickScreenState extends State<BarcodePickScreen>
     _checkPermission();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // Resume the process when the app is resumed
-      _barcodePickView.resume();
-    } else {
-      // Pause the process when the app goes in background
-      _barcodePickView.pause();
-    }
-  }
-
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          if (value) {
-            _barcodePickView.start();
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      if (status.isGranted) {
+        _barcodePickView.start();
+      }
+    });
   }
 
   @override
@@ -80,7 +68,6 @@ class _BarcodePickScreenState extends State<BarcodePickScreen>
   @override
   void dispose() {
     _bloc.dispose();
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

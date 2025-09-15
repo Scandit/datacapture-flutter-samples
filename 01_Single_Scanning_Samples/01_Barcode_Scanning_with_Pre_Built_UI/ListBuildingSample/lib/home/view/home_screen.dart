@@ -115,9 +115,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   void _checkPermission() {
     // Check camera permission is granted before handling the camera
-    Permission.camera.request().isGranted.then((value) => {
-          if (!value) {print("Camera permission denied!!")}
-        });
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      if (!status.isGranted) {
+        print("Camera permission denied!!");
+      }
+    });
   }
 
   @override

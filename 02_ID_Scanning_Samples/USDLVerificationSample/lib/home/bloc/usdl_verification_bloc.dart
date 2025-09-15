@@ -35,10 +35,11 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
 
   Stream<String> get onIdRejected => _onIdRejectedEvent.stream;
 
-  // The verifier that checks the validity of a Driver's License.
-  late AamvaBarcodeVerifier _barcodeVerifier;
-
   USDLVerificationBloc() {
+    _setup();
+  }
+
+  void _setup() async {
     _camera?.applySettings(_cameraSettings);
 
     if (_camera != null) _dataCaptureContext.setFrameSource(_camera!);
@@ -49,7 +50,7 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
 
     // The Id capturing process is configured through id capture settings
     // and are then applied to the id capture instance that manages id recognition.
-    var settings = IdCaptureSettings();
+    var settings = IdCaptureSettings()..rejectForgedAamvaBarcodes = true;
 
     // We are interested in both front and back sides of US DL.
     settings.acceptedDocuments.addAll([
@@ -58,14 +59,17 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     settings.scannerType = FullDocumentScanner();
 
     // Create new Id capture mode with the settings from above.
-    _idCapture = IdCapture.forContext(_dataCaptureContext, settings)..addListener(this);
+    _idCapture = IdCapture(settings)..addListener(this);
 
     // Add a Id capture overlay to the data capture view to render the location of captured ids on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    var overlay = IdCaptureOverlay.withIdCaptureForView(_idCapture, _dataCaptureView);
-    overlay.idLayoutStyle = IdLayoutStyle.square;
+    var overlay = IdCaptureOverlay(_idCapture)..idLayoutStyle = IdLayoutStyle.square;
 
-    AamvaBarcodeVerifier.create(_dataCaptureContext).then((value) => _barcodeVerifier = value);
+    // Set the id capture mode as the current mode of the data capture context.
+    await _dataCaptureContext.setMode(_idCapture);
+
+    // Add the overlay to the data capture view.
+    await _dataCaptureView.addOverlay(overlay);
   }
 
   DataCaptureView get dataCaptureView {
@@ -112,11 +116,7 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     _onIdCapturedEvent.add(rejectedId);
   }
 
-  Future<AamvaBarcodeVerificationResult> verifyIdOnBarcode(CapturedId capturedId) {
-    return _barcodeVerifier.verify(capturedId);
-  }
-
-  List<Text> getResultMessage(CapturedId capturedId, bool didVerificationSucceed) {
+  List<Text> getResultMessage(CapturedId capturedId) {
     List<Text> result = [];
 
     if (capturedId.isExpired == true) {
@@ -130,17 +130,10 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
         style: TextStyle(color: Colors.green, fontSize: 16),
       ));
 
-      if (didVerificationSucceed) {
-        result.add(Text(
-          'Verification checks passed.',
-          style: TextStyle(color: Colors.green, fontSize: 16),
-        ));
-      } else {
-        result.add(Text(
-          'Verification checks failed.',
-          style: TextStyle(color: Colors.red, fontSize: 16),
-        ));
-      }
+      result.add(Text(
+        'Verification checks passed.',
+        style: TextStyle(color: Colors.green, fontSize: 16),
+      ));
     }
 
     result.add(Text(
@@ -174,6 +167,8 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
 
   String _getRejectionReasonMessage(RejectionReason reason) {
     switch (reason) {
+      case RejectionReason.forgedAamvaBarcode:
+        return 'Document barcode is forged.';
       case RejectionReason.notAcceptedDocumentType:
         return 'Document not supported. Try scanning another document';
       case RejectionReason.timeout:

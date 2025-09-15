@@ -47,35 +47,35 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
     // Setting the code duplicate filter to one second means that the scanner won't report
     // the same code as recognized for one second once it's recognized.
     _settings.codeDuplicateFilter = Duration(seconds: 1);
-  }
-
-  void setupScanning() {
-    // Remove all modes added from the other screens
-    dataCaptureContext.removeAllModes();
 
     // Create new barcode capture mode with the settings from above.
-    _barcodeCapture = BarcodeCapture.forContext(_dataCaptureManager.dataCaptureContext, _settings);
+    _barcodeCapture = BarcodeCapture(_settings);
+  }
+
+  Future<void> setupScanning() async {
+    // Remove all modes added from the other screens
+    dataCaptureContext.removeAllModes();
 
     // listen for barcode capture events
     _barcodeCapture.addListener(this);
 
     _dataCaptureManager.camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
 
-    dataCaptureContext.addMode(barcodeCapture);
+    await dataCaptureContext.setMode(barcodeCapture);
 
     _barcodeCapture = barcodeCapture;
   }
 
-  Future<void> disposeCurrentScanning() {
+  Future<void> disposeCurrentScanning() async {
     _barcodeCapture.removeListener(this);
     _barcodeCapture.isEnabled = false;
-    dataCaptureContext.removeMode(_barcodeCapture);
-    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off) ?? Future.value(null);
+    await dataCaptureContext.removeMode(_barcodeCapture);
+    await _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off);
   }
 
-  Future<void> resumeScanning() {
+  Future<void> resumeScanning() async {
     enableCapture();
-    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.on) ?? Future.value(null);
+    await _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.on);
   }
 
   Future<void> pauseScanning() {
@@ -116,7 +116,7 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
   void dispose() {
     _onBarcodeCaptured.close();
     barcodeCapture.removeListener(this);
-    dataCaptureContext.removeMode(barcodeCapture);
+    dataCaptureContext.removeCurrentMode();
     super.dispose();
   }
 }

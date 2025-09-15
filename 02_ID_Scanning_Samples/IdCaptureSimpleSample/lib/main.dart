@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -56,12 +57,18 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
   _IdCaptureScreenState(this._context);
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          _isPermissionMessageVisible = !value;
-          if (value) {
-            _camera?.switchToDesiredState(FrameSourceState.on);
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      final isGranted = status.isGranted;
+      setState(() {
+        _isPermissionMessageVisible = !isGranted;
+      });
+
+      if (isGranted && _camera != null) {
+        _camera!.switchToDesiredState(FrameSourceState.on);
+      }
+    });
   }
 
   @override
@@ -69,6 +76,10 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
+    _setup();
+  }
+
+  void _setup() async {
     // Use the recommended camera settings for the IdCapture mode.
     _camera?.applySettings(IdCapture.recommendedCameraSettings);
 
@@ -89,7 +100,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     settings.scannerType = FullDocumentScanner();
 
     // Create new Id capture mode with the settings from above.
-    _idCapture = IdCapture.forContext(_context, settings)
+    _idCapture = IdCapture(settings)
       // Register self as a listener to get informed whenever a new id got recognized.
       ..addListener(this);
 
@@ -99,8 +110,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
 
     // Add a Id capture overlay to the data capture view to render the location of captured ids on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    var overlay = IdCaptureOverlay.withIdCaptureForView(_idCapture, _captureView);
-    overlay.idLayoutStyle = IdLayoutStyle.rounded;
+    var overlay = IdCaptureOverlay(_idCapture)..idLayoutStyle = IdLayoutStyle.rounded;
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
@@ -109,6 +119,12 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     }
     _camera?.switchToDesiredState(FrameSourceState.on);
     _idCapture.isEnabled = true;
+
+    // Set the id capture mode as the current mode of the data capture context.
+    await _context.setMode(_idCapture);
+
+    // Add the overlay to the data capture view.
+    await _captureView.addOverlay(overlay);
   }
 
   @override
@@ -120,31 +136,42 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     } else {
       child = _captureView;
     }
-    return WillPopScope(
-        child: Center(child: child),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        // Cleanup everything on back press because this is the only screen
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: child,
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _camera?.switchToDesiredState(FrameSourceState.off);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        if (_camera != null) {
+          _camera!.switchToDesiredState(FrameSourceState.off);
+        }
+        break;
     }
   }
 
-  @override
-  void dispose() {
+  void _cleanup() {
     WidgetsBinding.instance.removeObserver(this);
     _idCapture.removeListener(this);
     _idCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
-    super.dispose();
   }
 
   @override

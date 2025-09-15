@@ -59,21 +59,26 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
 
   Stream<String> get onIdRejected => _idRejectedController.stream;
 
-  void _createIdCapture() {
+  void _createIdCapture() async {
     var currentIdCapture = _idCapture;
     var currentOverlay = _overlay;
 
     if (currentIdCapture != null) {
       currentIdCapture.removeListener(this);
-      _dataCaptureContext.removeMode(currentIdCapture);
+      _dataCaptureContext.removeCurrentMode();
       if (currentOverlay != null) {
         _dataCaptureView.removeOverlay(currentOverlay);
       }
     }
 
-    var idCapture = IdCapture.forContext(_dataCaptureContext, _getSettingsForCurrentType());
+    var idCapture = IdCapture(_getSettingsForCurrentType());
     idCapture.addListener(this);
-    _overlay = IdCaptureOverlay.withIdCaptureForView(idCapture, _dataCaptureView);
+    // Set the id capture mode as the current mode of the data capture context.
+    await _dataCaptureContext.addMode(idCapture);
+
+    _overlay = IdCaptureOverlay(idCapture);
+    await _dataCaptureView.addOverlay(_overlay!);
+
     _idCapture = idCapture;
   }
 

@@ -12,7 +12,7 @@ class ViewfinderSettingsBloc extends Bloc {
   final SettingsRepository _settings = SettingsRepository();
 
   PickerItem get frameColor {
-    return availableFrameColors.firstWhere((element) => element.isSelected);
+    return availableFrameColors.where((element) => element.isSelected).firstOrNull ?? availableFrameColors.first;
   }
 
   set frameColor(PickerItem newColor) {
@@ -28,7 +28,7 @@ class ViewfinderSettingsBloc extends Bloc {
   }
 
   PickerItem get dotColor {
-    return availableDotColors.firstWhere((element) => element.isSelected);
+    return availableDotColors.where((element) => element.isSelected).firstOrNull ?? availableDotColors.first;
   }
 
   set dotColor(PickerItem newColor) {

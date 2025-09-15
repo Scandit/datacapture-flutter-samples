@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_selection.dart';
@@ -55,25 +56,30 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   _BarcodeSelectionScreenState(this._context);
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          _isPermissionMessageVisible = !value;
-          if (value) {
-            _camera?.switchToDesiredState(FrameSourceState.on);
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      final isGranted = status.isGranted;
+      setState(() {
+        _isPermissionMessageVisible = !isGranted;
+      });
+
+      if (isGranted && _camera != null) {
+        _camera!.switchToDesiredState(FrameSourceState.on);
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
+    _setup();
+  }
 
+  void _setup() async {
     // Use the recommended camera settings for the BarcodeSelection mode.
     _camera?.applySettings(BarcodeSelection.recommendedCameraSettings);
-
-    // Switch camera on to start streaming frames and enable the barcode selection mode.
-    // The camera is started asynchronously and will take some time to completely turn on.
-    _checkPermission();
 
     // The barcode selection process is configured through barcode selection settings
     // which are then applied to the barcode selection instance that manages barcode recognition.
@@ -93,27 +99,32 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
     });
 
     // Create new barcode selection mode with the settings created above.
-    _barcodeSelection = BarcodeSelection.forContext(_context, _selectionSettings);
+    _barcodeSelection = BarcodeSelection(_selectionSettings);
 
     // To visualize the on-going barcode capturing process on screen, setup a data capture view that renders the
     // camera preview. The view must be connected to the data capture context.
     _captureView = DataCaptureView.forContext(_context);
-
-    // Add a barcode selection overlay to the data capture view to render the location of captured barcodes on top of the video preview.
-    // This is optional, but recommended for better visual feedback.
-    var overlay = BarcodeSelectionBasicOverlay.withBarcodeSelectionForView(_barcodeSelection, _captureView);
-
-    _captureView.addOverlay(overlay);
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
     if (_camera != null) {
       _context.setFrameSource(_camera!);
     }
-    _camera?.switchToDesiredState(FrameSourceState.on);
     _barcodeSelection.isEnabled = true;
+
     // Register self as a listener to get informed whenever a new barcode got recognized.
     _barcodeSelection.addListener(this);
+
+    // Add the mode to the context
+    await _context.setMode(_barcodeSelection);
+
+    // Add a barcode selection overlay to the data capture view to render the location of captured barcodes on top of the video preview.
+    // This is optional, but recommended for better visual feedback.
+    _captureView.addOverlay(BarcodeSelectionBasicOverlay(_barcodeSelection));
+
+    // Switch camera on to start streaming frames and enable the barcode selection mode.
+    // The camera is started asynchronously and will take some time to completely turn on.
+    _checkPermission();
   }
 
   @override
@@ -125,53 +136,66 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
     } else {
       child = _captureView;
     }
-    return WillPopScope(
-        child: SafeArea(
-          child: Scaffold(
-            body: child,
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: _currentIndex,
-              items: [
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.qr_code),
-                  label: 'Tap to Select',
-                ),
-                BottomNavigationBarItem(
-                  icon: new Icon(Icons.qr_code),
-                  label: 'Aim to Select',
-                )
-              ],
-              onTap: (int index) {
-                setState(() {
-                  // Update selection type and apply new settings
-                  if (index == 0) {
-                    _selectionSettings.selectionType = BarcodeSelectionTapSelection();
-                  } else {
-                    _selectionSettings.selectionType = BarcodeSelectionAimerSelection();
-                  }
-                  _barcodeSelection.applySettings(_selectionSettings);
-                  _currentIndex = index;
-                });
-              },
-              selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-              unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
-              backgroundColor: Colors.black,
-              unselectedItemColor: Colors.white,
-            ),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        // Cleanup everything on back press because this is the only screen
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: child,
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.qr_code),
+                label: 'Tap to Select',
+              ),
+              BottomNavigationBarItem(
+                icon: new Icon(Icons.qr_code),
+                label: 'Aim to Select',
+              )
+            ],
+            onTap: (int index) {
+              setState(() {
+                // Update selection type and apply new settings
+                if (index == 0) {
+                  _selectionSettings.selectionType = BarcodeSelectionTapSelection();
+                } else {
+                  _selectionSettings.selectionType = BarcodeSelectionAimerSelection();
+                }
+                _barcodeSelection.applySettings(_selectionSettings);
+                _currentIndex = index;
+              });
+            },
+            selectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+            unselectedIconTheme: IconThemeData(opacity: 0.0, size: 0),
+            backgroundColor: Colors.black,
+            unselectedItemColor: Colors.white,
           ),
         ),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+      ),
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _camera?.switchToDesiredState(FrameSourceState.off);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        if (_camera != null) {
+          _camera!.switchToDesiredState(FrameSourceState.off);
+        }
+        break;
     }
   }
 
@@ -201,15 +225,11 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   Future<void> didUpdateSession(
       BarcodeSelection barcodeCapture, BarcodeSelectionSession session, Future<FrameData?> getFrameData()) async {}
 
-  @override
-  void dispose() {
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+  void _cleanup() {
+    WidgetsBinding.instance.removeObserver(this);
     _barcodeSelection.removeListener(this);
     _barcodeSelection.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
-    super.dispose();
   }
-
-  T? _ambiguate<T>(T? value) => value;
 }

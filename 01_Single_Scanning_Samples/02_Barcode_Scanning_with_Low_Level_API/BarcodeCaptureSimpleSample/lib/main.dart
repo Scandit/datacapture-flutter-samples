@@ -5,6 +5,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_capture.dart';
@@ -23,12 +24,7 @@ const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: BarcodeScannerScreen(),
-    );
+    return MaterialApp(theme: ThemeData(useMaterial3: true), home: BarcodeScannerScreen());
   }
 }
 
@@ -53,18 +49,24 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   _BarcodeScannerScreenState(this._context);
 
   void _checkPermission() {
-    Permission.camera.request().isGranted.then((value) => setState(() {
-          _isPermissionMessageVisible = !value;
-          if (value) {
-            _camera?.switchToDesiredState(FrameSourceState.on);
-          }
-        }));
+    Permission.camera.request().then((status) {
+      if (!mounted) return;
+
+      final isGranted = status.isGranted;
+      setState(() {
+        _isPermissionMessageVisible = !isGranted;
+      });
+
+      if (isGranted && _camera != null) {
+        _camera!.switchToDesiredState(FrameSourceState.on);
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _ambiguate(WidgetsBinding.instance)?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeCapture mode.
     _camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
@@ -88,7 +90,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
       Symbology.dataMatrix,
       Symbology.code39,
       Symbology.code128,
-      Symbology.interleavedTwoOfFive
+      Symbology.interleavedTwoOfFive,
     });
 
     // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit
@@ -100,7 +102,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
         [for (var i = 7; i <= 20; i++) i].toSet();
 
     // Create new barcode capture mode with the settings from above.
-    _barcodeCapture = BarcodeCapture.forContext(_context, captureSettings)
+    _barcodeCapture = BarcodeCapture(captureSettings)
       // Register self as a listener to get informed whenever a new barcode got recognized.
       ..addListener(this);
 
@@ -110,10 +112,11 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
 
     // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
     // the video preview. This is optional, but recommended for better visual feedback.
-    var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle(
-        _barcodeCapture, _captureView, BarcodeCaptureOverlayStyle.frame)
+    var overlay = BarcodeCaptureOverlay(_barcodeCapture)
       ..viewfinder = RectangularViewfinder.withStyleAndLineStyle(
-          RectangularViewfinderStyle.square, RectangularViewfinderLineStyle.light);
+        RectangularViewfinderStyle.square,
+        RectangularViewfinderLineStyle.light,
+      );
 
     // Adjust the overlay's barcode highlighting to match the new viewfinder styles and improve the visibility of feedback.
     // With 6.10 we will introduce this visual treatment as a new style for the overlay.
@@ -121,12 +124,14 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
 
     _captureView.addOverlay(overlay);
 
+    // Set the barcode capture mode as the current mode of the data capture context.
+    _context.setMode(_barcodeCapture);
+
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
     if (_camera != null) {
       _context.setFrameSource(_camera!);
     }
-    _camera?.switchToDesiredState(FrameSourceState.on);
     _barcodeCapture.isEnabled = true;
   }
 
@@ -134,31 +139,49 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
   Widget build(BuildContext context) {
     Widget child;
     if (_isPermissionMessageVisible) {
-      child = Text('No permission to access the camera!',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
+      child = Text(
+        'No permission to access the camera!',
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+      );
     } else {
       child = _captureView;
     }
-    return WillPopScope(
-        child: Center(child: child),
-        onWillPop: () {
-          dispose();
-          return Future.value(true);
-        });
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return;
+        }
+        // Cleanup everything on back press because this is the only screen
+        _cleanup();
+
+        // Exit the app since this is the only screen
+        SystemNavigator.pop();
+      },
+      child: child,
+    );
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkPermission();
-    } else if (state == AppLifecycleState.paused) {
-      _camera?.switchToDesiredState(FrameSourceState.off);
+    switch (state) {
+      case AppLifecycleState.resumed:
+        _checkPermission();
+        break;
+      default:
+        if (_camera != null) {
+          _camera!.switchToDesiredState(FrameSourceState.off);
+        }
+        break;
     }
   }
 
   @override
   Future<void> didScan(
-      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {
+    BarcodeCapture barcodeCapture,
+    BarcodeCaptureSession session,
+    Future<FrameData> getFrameData(),
+  ) async {
     _barcodeCapture.isEnabled = false;
     var code = session.newlyRecognizedBarcode;
     if (code == null) return;
@@ -166,35 +189,37 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     var data = (code.data == null || code.data?.isEmpty == true) ? code.rawData : code.data;
     var humanReadableSymbology = SymbologyDescription.forSymbology(code.symbology);
     showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              content: Text(
-                'Scanned: $data\n (${humanReadableSymbology.readableName})',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            content: Text(
+              'Scanned: $data\n (${humanReadableSymbology.readableName})',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
               ),
-              actions: [
-                TextButton(
-                    child: Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    })
-              ],
-            )).then((result) => _barcodeCapture.isEnabled = true);
+            ],
+          ),
+    ).then((result) => _barcodeCapture.isEnabled = true);
   }
 
   @override
   Future<void> didUpdateSession(
-      BarcodeCapture barcodeCapture, BarcodeCaptureSession session, Future<FrameData> getFrameData()) async {}
+    BarcodeCapture barcodeCapture,
+    BarcodeCaptureSession session,
+    Future<FrameData> getFrameData(),
+  ) async {}
 
-  @override
-  void dispose() {
-    _ambiguate(WidgetsBinding.instance)?.removeObserver(this);
+  void _cleanup() {
+    WidgetsBinding.instance.removeObserver(this);
     _barcodeCapture.removeListener(this);
     _barcodeCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
-    _context.removeAllModes();
-    super.dispose();
+    _context.removeCurrentMode();
   }
-
-  T? _ambiguate<T>(T? value) => value;
 }
