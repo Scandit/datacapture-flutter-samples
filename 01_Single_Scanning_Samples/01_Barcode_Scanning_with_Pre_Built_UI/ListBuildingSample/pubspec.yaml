@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    '>=7.6.0 <7.6.1'
+    '>=7.6.1 <7.6.2'
   permission_handler: 11.3.1
   intl: ^0.18.1
 
