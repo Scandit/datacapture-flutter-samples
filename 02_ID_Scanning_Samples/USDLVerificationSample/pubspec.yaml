@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_id:
-    '>=7.6.2 <7.6.3'
+    '>=7.6.3 <7.6.4'
   scandit_flutter_datacapture_id_aamva_barcode_verification:
-    '>=7.6.2 <7.6.3'
+    '>=7.6.3 <7.6.4'
   permission_handler: 11.3.1
   intl: ^0.19.0
 

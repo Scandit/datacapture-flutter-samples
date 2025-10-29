@@ -12,13 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_core:
-    '>=7.6.2 <7.6.3'
+    '>=7.6.3 <7.6.4'
   scandit_flutter_datacapture_barcode:
-    '>=7.6.2 <7.6.3'
+    '>=7.6.3 <7.6.4'
   scandit_flutter_datacapture_label:
-    '>=7.6.2 <7.6.3'
+    '>=7.6.3 <7.6.4'
   scandit_flutter_datacapture_label_text:
-    '>=7.6.2 <7.6.3'
+    '>=7.6.3 <7.6.4'
   permission_handler: 11.3.1
   flutter_bloc: ^8.1.6
 
