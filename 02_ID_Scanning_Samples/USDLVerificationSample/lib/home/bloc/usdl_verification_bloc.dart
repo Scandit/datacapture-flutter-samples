@@ -12,18 +12,19 @@ import 'package:intl/intl.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
+// Enter your Scandit License key here.
+// Your Scandit License key is available via your Scandit SDK web account.
 const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class USDLVerificationBloc extends Bloc implements IdCaptureListener {
   late IdCapture _idCapture;
 
-  // Create data capture context using your license key and set the camera as the frame source.
   final DataCaptureContext _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
 
   // Use the world-facing (back) camera.
   Camera? _camera = Camera.defaultCamera;
 
-  final CameraSettings _cameraSettings = IdCapture.recommendedCameraSettings;
+  final CameraSettings _cameraSettings = IdCapture.createRecommendedCameraSettings();
 
   late DataCaptureView _dataCaptureView;
 
@@ -36,10 +37,6 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
   Stream<String> get onIdRejected => _onIdRejectedEvent.stream;
 
   USDLVerificationBloc() {
-    _setup();
-  }
-
-  void _setup() async {
     _camera?.applySettings(_cameraSettings);
 
     if (_camera != null) _dataCaptureContext.setFrameSource(_camera!);
@@ -56,7 +53,7 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     settings.acceptedDocuments.addAll([
       DriverLicense(IdCaptureRegion.us),
     ]);
-    settings.scannerType = FullDocumentScanner();
+    settings.scanner = IdCaptureScanner(physicalDocumentScanner: FullDocumentScanner());
 
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture(settings)..addListener(this);
@@ -66,10 +63,10 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     var overlay = IdCaptureOverlay(_idCapture)..idLayoutStyle = IdLayoutStyle.square;
 
     // Set the id capture mode as the current mode of the data capture context.
-    await _dataCaptureContext.setMode(_idCapture);
+    _dataCaptureContext.setMode(_idCapture);
 
     // Add the overlay to the data capture view.
-    await _dataCaptureView.addOverlay(overlay);
+    _dataCaptureView.addOverlay(overlay);
   }
 
   DataCaptureView get dataCaptureView {

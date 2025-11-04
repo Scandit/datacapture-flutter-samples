@@ -11,10 +11,7 @@ import 'package:LabelCaptureSimpleSample/features/label_capture/data/datasources
 class LabelCaptureView extends StatefulWidget {
   final LabelCaptureDataSource dataSource;
 
-  const LabelCaptureView({
-    super.key,
-    required this.dataSource,
-  });
+  const LabelCaptureView({super.key, required this.dataSource});
 
   @override
   State<LabelCaptureView> createState() => _LabelCaptureViewState();
@@ -29,7 +26,7 @@ class _LabelCaptureViewState extends State<LabelCaptureView> {
     _initializeDataCaptureView();
   }
 
-  void _initializeDataCaptureView() async {
+  void _initializeDataCaptureView() {
     _dataCaptureView = DataCaptureView.forContext(widget.dataSource.dataCaptureContext);
 
     // Add torch control
@@ -39,8 +36,8 @@ class _LabelCaptureViewState extends State<LabelCaptureView> {
     final basicOverlay = widget.dataSource.buildLabelCaptureOverlay(context);
     final validationOverlay = widget.dataSource.buildValidationFlowOverlay(context);
 
-    await _dataCaptureView.addOverlay(basicOverlay);
-    await _dataCaptureView.addOverlay(validationOverlay);
+    _dataCaptureView.addOverlay(basicOverlay);
+    _dataCaptureView.addOverlay(validationOverlay);
   }
 
   @override

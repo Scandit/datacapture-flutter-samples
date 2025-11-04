@@ -55,16 +55,12 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _setup();
-  }
-
-  void _setup() async {
     // Use the recommended camera settings for the BarcodeBatch mode.
-    var cameraSettings = BarcodeBatch.recommendedCameraSettings;
+    var cameraSettings = BarcodeBatch.createRecommendedCameraSettings();
     // Adjust camera settings - set Ultra HD resolution.
     cameraSettings.preferredResolution = VideoResolution.uhd4k;
 
@@ -98,18 +94,15 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     // camera preview. The view must be connected to the data capture context.
     _captureView = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 
-    // Set the barcode batch mode as the current mode of the data capture context.
-    await DataCaptureContext.sharedInstance.setMode(_barcodeBatch);
-
     // Add a barcode batch overlay to the data capture view to render the tracked barcodes on top of the video
     // preview. This is optional, but recommended for better visual feedback.
     var _basicOverlay = BarcodeBatchBasicOverlay(_barcodeBatch, style: BarcodeBatchBasicOverlayStyle.dot);
-    await _captureView.addOverlay(_basicOverlay);
+    _captureView.addOverlay(_basicOverlay);
 
     // Add an advanced barcode batch overlay to the data capture view to render AR visualization on
     // top of the camera preview.
     _advancedOverlay = BarcodeBatchAdvancedOverlay(_barcodeBatch)..listener = this;
-    await _captureView.addOverlay(_advancedOverlay);
+    _captureView.addOverlay(_advancedOverlay);
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.
@@ -117,6 +110,9 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
       DataCaptureContext.sharedInstance.setFrameSource(_camera!);
     }
     _barcodeBatch.isEnabled = true;
+
+    // Set the barcode batch mode as the current mode of the data capture context.
+    DataCaptureContext.sharedInstance.setMode(_barcodeBatch);
   }
 
   @override

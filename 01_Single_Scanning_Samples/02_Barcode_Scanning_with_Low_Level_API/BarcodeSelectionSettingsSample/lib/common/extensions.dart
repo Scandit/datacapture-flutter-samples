@@ -27,6 +27,7 @@ extension VideoResolutionPrettyPrint on VideoResolution {
 
   String _name() {
     switch (this) {
+      // ignore: deprecated_member_use
       case VideoResolution.auto:
         return 'auto';
       case VideoResolution.hd:

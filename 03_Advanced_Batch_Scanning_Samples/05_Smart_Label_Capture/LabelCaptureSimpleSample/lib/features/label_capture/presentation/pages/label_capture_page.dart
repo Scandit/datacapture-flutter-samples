@@ -16,10 +16,7 @@ import 'package:LabelCaptureSimpleSample/features/label_capture/data/datasources
 class LabelCapturePage extends StatefulWidget {
   final LabelCaptureDataSource dataSource;
 
-  const LabelCapturePage({
-    super.key,
-    required this.dataSource,
-  });
+  const LabelCapturePage({super.key, required this.dataSource});
 
   @override
   State<LabelCapturePage> createState() => _LabelCapturePageState();
@@ -35,22 +32,15 @@ class _LabelCapturePageState extends State<LabelCapturePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Label Scan'),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-      ),
+      appBar: AppBar(title: const Text('Label Scan'), backgroundColor: Colors.black, foregroundColor: Colors.white),
       body: BlocConsumer<LabelCaptureBloc, LabelCaptureState>(
         listener: (context, state) {
           if (state is LabelCaptureResultCaptured) {
             _showResultDialog(context, state.result);
           } else if (state is LabelCaptureError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
           }
         },
         builder: (context, state) {
@@ -58,11 +48,7 @@ class _LabelCapturePageState extends State<LabelCapturePage> {
             return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Initializing camera...'),
-                ],
+                children: [CircularProgressIndicator(), SizedBox(height: 16), Text('Initializing camera...')],
               ),
             );
           } else if (state is LabelCaptureScanning ||

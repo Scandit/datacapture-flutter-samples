@@ -39,7 +39,7 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
     _camera = Camera.defaultCamera;
 
     // Use the recommended camera settings for the BarcodeCount mode.
-    _camera?.applySettings(BarcodeCount.recommendedCameraSettings);
+    _camera?.applySettings(BarcodeCount.createRecommendedCameraSettings());
 
     // Set the default camera as the frame source of the context. The camera is off by
     // default and must be turned on to start streaming frames to the data capture context for recognition.

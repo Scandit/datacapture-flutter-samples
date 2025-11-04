@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           ),
           appBarTheme: AppBarTheme(
               iconTheme: IconThemeData(color: Colors.white),
-              color: Colors.blue,
+              backgroundColor: Colors.blue,
               titleTextStyle: TextStyle(color: Colors.white)),
         ),
         initialRoute: BSRoutes.Home.routeName,

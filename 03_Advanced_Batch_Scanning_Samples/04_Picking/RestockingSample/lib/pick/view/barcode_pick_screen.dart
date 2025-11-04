@@ -13,7 +13,6 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 class BarcodePickScreen extends StatefulWidget {
   const BarcodePickScreen({super.key});
 
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _BarcodePickScreenState(BarcodePickBloc());
 }

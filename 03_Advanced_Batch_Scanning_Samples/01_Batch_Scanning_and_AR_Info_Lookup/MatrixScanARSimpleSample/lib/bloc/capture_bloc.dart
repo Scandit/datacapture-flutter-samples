@@ -36,7 +36,7 @@ class BarcodeArBloc extends Bloc implements BarcodeArListener, BarcodeArInfoAnno
   void init() {
     _barcodeArViewSettings = BarcodeArViewSettings();
 
-    _cameraSettings = BarcodeAr.recommendedCameraSettings;
+    _cameraSettings = BarcodeAr.createRecommendedCameraSettings();
 
     // The settings instance initially has all types of barcodes (symbologies) disabled.
     // For the purpose of this sample we enable a generous set of symbologies.

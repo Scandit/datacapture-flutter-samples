@@ -21,9 +21,10 @@ class ViewfinderSettingsBloc extends Bloc {
 
   List<PickerItem> get availableFrameColors {
     return [
+      PickerItem('Default', _settings.defaultFrameColor,
+          _settings.frameColor.toARGB32() == _settings.defaultFrameColor.toARGB32()),
       PickerItem(
-          'Default', _settings.defaultFrameColor, _settings.frameColor.value == _settings.defaultFrameColor.value),
-      PickerItem('Blue', _settings.scanditBlueColor, _settings.frameColor.value == _settings.scanditBlueColor.value),
+          'Blue', _settings.scanditBlueColor, _settings.frameColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
     ];
   }
 
@@ -37,8 +38,10 @@ class ViewfinderSettingsBloc extends Bloc {
 
   List<PickerItem> get availableDotColors {
     return [
-      PickerItem('Default', _settings.defaultDotColor, _settings.dotColor.value == _settings.defaultDotColor.value),
-      PickerItem('Blue', _settings.scanditBlueColor, _settings.dotColor.value == _settings.scanditBlueColor.value),
+      PickerItem(
+          'Default', _settings.defaultDotColor, _settings.dotColor.toARGB32() == _settings.defaultDotColor.toARGB32()),
+      PickerItem(
+          'Blue', _settings.scanditBlueColor, _settings.dotColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
     ];
   }
 }

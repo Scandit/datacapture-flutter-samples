@@ -15,7 +15,6 @@ class FindScanView extends StatefulWidget {
   // In the constructor, require the barcode to find.
   const FindScanView({super.key, required this.barcodeToFind});
 
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _FindScanScreenState(FindScanBloc(barcodeToFind));
 }

@@ -11,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
 class USDLVerificationScreen extends StatefulWidget {
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _USDLVerificationScreenState(USDLVerificationBloc());
 }

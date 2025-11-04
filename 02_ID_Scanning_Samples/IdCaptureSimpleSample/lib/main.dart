@@ -17,6 +17,8 @@ void main() async {
   runApp(MyApp());
 }
 
+// Enter your Scandit License key here.
+// Your Scandit License key is available via your Scandit SDK web account.
 const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class MyApp extends StatelessWidget {
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
-            color: Colors.black,
+            backgroundColor: Colors.black,
             titleTextStyle: TextStyle(color: Colors.white)),
       ),
       home: IdCaptureScreen(),
@@ -39,7 +41,6 @@ class MyApp extends StatelessWidget {
 }
 
 class IdCaptureScreen extends StatefulWidget {
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _IdCaptureScreenState(DataCaptureContext.forLicenseKey(licenseKey));
 }
@@ -76,12 +77,8 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    _setup();
-  }
-
-  void _setup() async {
     // Use the recommended camera settings for the IdCapture mode.
-    _camera?.applySettings(IdCapture.recommendedCameraSettings);
+    _camera?.applySettings(IdCapture.createRecommendedCameraSettings());
 
     // Switch camera on to start streaming frames and enable the id capture mode.
     // The camera is started asynchronously and will take some time to completely turn on.
@@ -97,7 +94,7 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
       new DriverLicense(IdCaptureRegion.any),
       new Passport(IdCaptureRegion.any),
     ]);
-    settings.scannerType = FullDocumentScanner();
+    settings.scanner = IdCaptureScanner(physicalDocumentScanner: FullDocumentScanner());
 
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture(settings)
@@ -121,10 +118,10 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     _idCapture.isEnabled = true;
 
     // Set the id capture mode as the current mode of the data capture context.
-    await _context.setMode(_idCapture);
+    _context.setMode(_idCapture);
 
     // Add the overlay to the data capture view.
-    await _captureView.addOverlay(overlay);
+    _captureView.addOverlay(overlay);
   }
 
   @override

@@ -41,6 +41,6 @@ class ResultBloc implements Bloc {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    // Not relevant for this sample
   }
 }

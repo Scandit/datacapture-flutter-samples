@@ -16,6 +16,8 @@ import 'package:IdCaptureExtendedSample/home/model/viz_captured_id_result.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
+// Enter your Scandit License key here.
+// Your Scandit License key is available via your Scandit SDK web account.
 const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class IdCaptureBloc extends Bloc implements IdCaptureListener {
@@ -27,7 +29,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   // Use the world-facing (back) camera.
   Camera? _camera = Camera.defaultCamera;
 
-  final CameraSettings _cameraSettings = IdCapture.recommendedCameraSettings;
+  final CameraSettings _cameraSettings = IdCapture.createRecommendedCameraSettings();
 
   late DataCaptureView _dataCaptureView;
 
@@ -40,7 +42,6 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   IdCaptureBloc() {
     _camera?.applySettings(_cameraSettings);
 
-    // Create data capture context using your license key and set the camera as the frame source.
     _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
     if (_camera != null) _dataCaptureContext.setFrameSource(_camera!);
 
@@ -59,7 +60,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
 
   Stream<String> get onIdRejected => _idRejectedController.stream;
 
-  void _createIdCapture() async {
+  void _createIdCapture() {
     var currentIdCapture = _idCapture;
     var currentOverlay = _overlay;
 
@@ -73,13 +74,13 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
 
     var idCapture = IdCapture(_getSettingsForCurrentType());
     idCapture.addListener(this);
-    // Set the id capture mode as the current mode of the data capture context.
-    await _dataCaptureContext.addMode(idCapture);
-
     _overlay = IdCaptureOverlay(idCapture);
-    await _dataCaptureView.addOverlay(_overlay!);
-
     _idCapture = idCapture;
+
+    // Set the id capture mode as the current mode of the data capture context.
+    _dataCaptureContext.setMode(idCapture);
+
+    _dataCaptureView.addOverlay(_overlay!);
   }
 
   // Extract data from barcodes present on various personal identification document types.
@@ -87,7 +88,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
     IdCaptureSettings settings = new IdCaptureSettings();
     settings.setShouldPassImageTypeToResult(IdImageType.face, true);
     settings.acceptedDocuments.addAll(_acceptedDocuments);
-    settings.scannerType = SingleSideScanner(true, false, false);
+    settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(true, false, false));
     return settings;
   }
 
@@ -95,7 +96,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   IdCaptureSettings _getMrzSettings() {
     IdCaptureSettings settings = new IdCaptureSettings();
     settings.acceptedDocuments.addAll(_acceptedDocuments);
-    settings.scannerType = SingleSideScanner(false, true, false);
+    settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(false, true, false));
     return settings;
   }
 
@@ -104,7 +105,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   IdCaptureSettings _getVizSettings() {
     IdCaptureSettings settings = new IdCaptureSettings();
     settings.acceptedDocuments.addAll(_acceptedDocuments);
-    settings.scannerType = new SingleSideScanner(false, false, true);
+    settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(false, false, true));
     settings.setShouldPassImageTypeToResult(IdImageType.face, true);
     settings.setShouldPassImageTypeToResult(IdImageType.croppedDocument, true);
     return settings;

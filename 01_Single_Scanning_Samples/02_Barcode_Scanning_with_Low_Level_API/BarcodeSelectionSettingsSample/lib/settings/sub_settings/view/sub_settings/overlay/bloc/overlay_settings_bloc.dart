@@ -40,19 +40,20 @@ class OverlaySettingsBloc extends Bloc {
   List<PickerItem> get availableFrozenBackgroundColors {
     return [
       PickerItem('Default', _settings.defaultFrozenBackgroundColor,
-          _settings.frozenBackgroundColor.value == _settings.defaultFrozenBackgroundColor.value),
+          _settings.frozenBackgroundColor.toARGB32() == _settings.defaultFrozenBackgroundColor.toARGB32()),
       PickerItem('Blue', _settings.scanditBlueColor,
-          _settings.frozenBackgroundColor.value == _settings.scanditBlueColor.value),
-      PickerItem('Transparent', Colors.transparent, _settings.frozenBackgroundColor.value == Colors.transparent.value),
+          _settings.frozenBackgroundColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
+      PickerItem('Transparent', Colors.transparent,
+          _settings.frozenBackgroundColor.toARGB32() == Colors.transparent.toARGB32()),
     ];
   }
 
   List<PickerItem> get availableTrackedBrushColors {
     return [
       PickerItem('Default', _settings.defaultTrackedBrush.fillColor,
-          _settings.trackedBrush.fillColor.value == _settings.defaultTrackedBrush.fillColor.value),
+          _settings.trackedBrush.fillColor.toARGB32() == _settings.defaultTrackedBrush.fillColor.toARGB32()),
       PickerItem('Blue', _settings.scanditBlueColor,
-          _settings.trackedBrush.fillColor.value == _settings.scanditBlueColor.value),
+          _settings.trackedBrush.fillColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
     ];
   }
 
@@ -72,9 +73,9 @@ class OverlaySettingsBloc extends Bloc {
   List<PickerItem> get availableAimedBrushColors {
     return [
       PickerItem('Default', _settings.defaultAimedBrush.fillColor,
-          _settings.aimedBrush.fillColor.value == _settings.defaultAimedBrush.fillColor.value),
-      PickerItem(
-          'Blue', _settings.scanditBlueColor, _settings.aimedBrush.fillColor.value == _settings.scanditBlueColor.value),
+          _settings.aimedBrush.fillColor.toARGB32() == _settings.defaultAimedBrush.fillColor.toARGB32()),
+      PickerItem('Blue', _settings.scanditBlueColor,
+          _settings.aimedBrush.fillColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
     ];
   }
 
@@ -94,9 +95,9 @@ class OverlaySettingsBloc extends Bloc {
   List<PickerItem> get availableSelectingBrushColors {
     return [
       PickerItem('Default', _settings.defaultSelectingBrush.fillColor,
-          _settings.selectingBrush.fillColor.value == _settings.defaultSelectingBrush.fillColor.value),
+          _settings.selectingBrush.fillColor.toARGB32() == _settings.defaultSelectingBrush.fillColor.toARGB32()),
       PickerItem('Blue', _settings.scanditBlueColor,
-          _settings.selectingBrush.fillColor.value == _settings.scanditBlueColor.value),
+          _settings.selectingBrush.fillColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
     ];
   }
 
@@ -116,9 +117,9 @@ class OverlaySettingsBloc extends Bloc {
   List<PickerItem> get availableSelectedBrushColors {
     return [
       PickerItem('Default', _settings.defaultSelectedBrush.fillColor,
-          _settings.selectedBrush.fillColor.value == _settings.defaultSelectedBrush.fillColor.value),
+          _settings.selectedBrush.fillColor.toARGB32() == _settings.defaultSelectedBrush.fillColor.toARGB32()),
       PickerItem('Blue', _settings.scanditBlueColor,
-          _settings.selectedBrush.fillColor.value == _settings.scanditBlueColor.value),
+          _settings.selectedBrush.fillColor.toARGB32() == _settings.scanditBlueColor.toARGB32()),
     ];
   }
 

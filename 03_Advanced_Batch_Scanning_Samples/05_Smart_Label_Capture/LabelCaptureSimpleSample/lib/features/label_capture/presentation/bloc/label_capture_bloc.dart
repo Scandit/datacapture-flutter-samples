@@ -114,7 +114,9 @@ class LabelCaptureBloc extends Bloc<LabelCaptureEvent, LabelCaptureState> {
   }
 
   Future<void> _onResultDialogDismissed(
-      LabelCaptureResultDialogDismissed event, Emitter<LabelCaptureState> emit) async {
+    LabelCaptureResultDialogDismissed event,
+    Emitter<LabelCaptureState> emit,
+  ) async {
     try {
       await _repository.resumeScanning();
       emit(const LabelCaptureScanning());
@@ -134,11 +136,9 @@ class LabelCaptureBloc extends Bloc<LabelCaptureEvent, LabelCaptureState> {
 
   void _listenToScanResults() {
     _scanResultsSubscription?.cancel();
-    _scanResultsSubscription = _getScanResults().listen(
-      (result) {
-        add(LabelCaptureResultReceived(result));
-      },
-    );
+    _scanResultsSubscription = _getScanResults().listen((result) {
+      add(LabelCaptureResultReceived(result));
+    });
   }
 
   @override

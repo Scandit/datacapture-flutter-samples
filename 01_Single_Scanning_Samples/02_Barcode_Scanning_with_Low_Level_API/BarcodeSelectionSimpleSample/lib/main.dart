@@ -34,7 +34,6 @@ class MyApp extends StatelessWidget {
 }
 
 class BarcodeSelectionScreen extends StatefulWidget {
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _BarcodeSelectionScreenState(DataCaptureContext.forLicenseKey(licenseKey));
 }
@@ -74,12 +73,13 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
     _setup();
   }
 
   void _setup() async {
     // Use the recommended camera settings for the BarcodeSelection mode.
-    _camera?.applySettings(BarcodeSelection.recommendedCameraSettings);
+    _camera?.applySettings(BarcodeSelection.createRecommendedCameraSettings());
 
     // The barcode selection process is configured through barcode selection settings
     // which are then applied to the barcode selection instance that manages barcode recognition.
@@ -120,7 +120,7 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
 
     // Add a barcode selection overlay to the data capture view to render the location of captured barcodes on top of the video preview.
     // This is optional, but recommended for better visual feedback.
-    _captureView.addOverlay(BarcodeSelectionBasicOverlay(_barcodeSelection));
+    await _captureView.addOverlay(BarcodeSelectionBasicOverlay(_barcodeSelection));
 
     // Switch camera on to start streaming frames and enable the barcode selection mode.
     // The camera is started asynchronously and will take some time to completely turn on.

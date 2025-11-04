@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
-            color: const Color(scanditBlue),
+            backgroundColor: const Color(scanditBlue),
             titleTextStyle: TextStyle(color: Colors.white)),
       ),
       initialRoute: '/',

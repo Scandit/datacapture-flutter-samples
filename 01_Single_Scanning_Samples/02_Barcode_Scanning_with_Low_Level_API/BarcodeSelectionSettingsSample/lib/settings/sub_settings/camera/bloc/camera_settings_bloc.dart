@@ -64,6 +64,7 @@ class CameraSettingsBloc extends Bloc {
   List<VideoResolution> get availableVideoResolutions {
     if (Platform.isAndroid) {
       // Auto (default) / HD / Full HD
+      // ignore: deprecated_member_use
       return [VideoResolution.auto, VideoResolution.hd, VideoResolution.fullHd];
     }
     return VideoResolution.values;

@@ -25,7 +25,6 @@ class SettingsRepository {
 
   SettingsRepository._internal();
 
-  // Create data capture context using your license key.
   late DataCaptureContext _dataCaptureContext;
 
   // Use the world-facing (back) camera.
@@ -35,7 +34,7 @@ class SettingsRepository {
   // which are then applied to the barcode selection instance that manages barcode selection.
   final BarcodeSelectionSettings _barcodeSelectionSettings = BarcodeSelectionSettings();
 
-  final CameraSettings _cameraSettings = BarcodeCapture.recommendedCameraSettings;
+  final CameraSettings _cameraSettings = BarcodeCapture.createRecommendedCameraSettings();
 
   late BarcodeSelection _barcodeSelection;
 
@@ -497,18 +496,17 @@ class SettingsRepository {
 
     _camera?.applySettings(_cameraSettings);
 
-    // Create data capture context using your license key and set the camera as the frame source.
     _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
     if (_camera != null) _dataCaptureContext.setFrameSource(_camera!);
+
+    // To visualize the on-going barcode selection process on screen, setup a data capture view that renders the
+    // camera preview. The view must be connected to the data capture context.
+    _dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
 
     _barcodeSelectionSettings.codeDuplicateFilter = Duration(milliseconds: 500);
 
     // Create new barcode selection mode with the initial settings
     _barcodeSelection = BarcodeSelection(_barcodeSelectionSettings);
-
-    // To visualize the on-going barcode selection process on screen, setup a data capture view that renders the
-    // camera preview. The view must be connected to the data capture context.
-    _dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
 
     // Set the barcode selection mode as the current mode of the data capture context.
     await dataCaptureContext.setMode(_barcodeSelection);

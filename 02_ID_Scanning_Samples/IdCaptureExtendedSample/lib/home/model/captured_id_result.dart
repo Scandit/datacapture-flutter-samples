@@ -14,7 +14,7 @@ class CapturedIdResult {
 
   List<ResultEntry> getResult() {
     return [
-      ResultEntry('Full Name', _capturedId.fullName),
+      ResultEntry('Full Name', parseStringValue(_capturedId.fullName)),
       ResultEntry('Date of Birth', parseDateValue(_capturedId.dateOfBirth)),
       ResultEntry('Date of Expiry', parseDateValue(_capturedId.dateOfExpiry)),
       ResultEntry('Document Number', parseStringValue(_capturedId.documentNumber)),

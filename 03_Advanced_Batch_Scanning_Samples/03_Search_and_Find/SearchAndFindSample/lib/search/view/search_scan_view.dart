@@ -14,7 +14,6 @@ import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_cor
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_capture.dart';
 
 class SearchScanView extends StatefulWidget {
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _SearchScanScreenState(SearchScanBloc());
 }
@@ -26,14 +25,15 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
 
   late DataCaptureView _dataCaptureView;
 
-  late BarcodeCaptureOverlay _overlay;
-
   @override
   void initState() {
     super.initState();
 
     _addAppStateListener();
+    _init();
+  }
 
+  void _init() async {
     _bloc.onBarcodeCaptured.listen((barcode) {
       _onBarcodeCaptured(barcode);
     });
@@ -44,23 +44,28 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     _dataCaptureView = DataCaptureView.forContext(_bloc.dataCaptureContext);
 
     // Setup the barcode capture session
-    _bloc.setupScanning();
+    await _bloc.setupScanning();
 
+    // Add overlay to the data capture view
+    await _initOverlay();
+
+    // Check camera permissions
+    _checkPermission();
+  }
+
+  Future<void> _initOverlay() async {
     // Add a barcode capture overlay to the data capture view to set a viewfinder UI.
-    _overlay = BarcodeCaptureOverlay(_bloc.barcodeCapture);
+    final overlay = BarcodeCaptureOverlay(_bloc.barcodeCapture);
 
     // We add the aim viewfinder to the overlay.
-    _overlay.viewfinder = new AimerViewfinder();
+    overlay.viewfinder = new AimerViewfinder();
 
     // Adjust the overlay's barcode highlighting to display a light green rectangle.
     var brush = new Brush(Color(0x8028D380), Colors.transparent, 0);
 
-    _overlay.brush = brush;
+    overlay.brush = brush;
 
-    _dataCaptureView.addOverlay(_overlay);
-
-    // Check camera permissions
-    _checkPermission();
+    await _dataCaptureView.addOverlay(overlay);
   }
 
   @override
@@ -150,7 +155,7 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     await _bloc.disposeCurrentScanning();
 
     // Remove overlay
-    await _dataCaptureView.removeOverlay(_overlay);
+    _dataCaptureView.removeAllOverlays();
 
     // remove app state listener
     _removeAppStateListener();
@@ -172,7 +177,7 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
     // resume scanning
     await _bloc.resumeScanning();
     // add overlay to set a viewfinder UI again
-    await _dataCaptureView.addOverlay(_overlay);
+    await _initOverlay();
 
     // add app state listener
     _addAppStateListener();

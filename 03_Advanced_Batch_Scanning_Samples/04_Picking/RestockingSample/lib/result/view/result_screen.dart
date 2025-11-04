@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});
 
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _ResultScreenState(ResultBloc());
 }

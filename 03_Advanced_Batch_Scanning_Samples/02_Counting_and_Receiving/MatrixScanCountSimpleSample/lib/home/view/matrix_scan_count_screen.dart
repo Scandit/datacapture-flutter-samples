@@ -20,7 +20,6 @@ class MatrixScanCountScreen extends StatefulWidget {
 
   MatrixScanCountScreen(this.title);
 
-  // Create data capture context using your license key.
   @override
   _MatrixScanCountScreenState createState() => _MatrixScanCountScreenState();
 }

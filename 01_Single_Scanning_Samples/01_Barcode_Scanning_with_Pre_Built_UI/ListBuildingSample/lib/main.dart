@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),
-            color: Colors.black,
+            backgroundColor: Colors.black,
             titleTextStyle: TextStyle(color: Colors.white)),
       ),
       home: HomeScreen("ListBuilding"),

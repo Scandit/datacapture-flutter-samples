@@ -47,35 +47,35 @@ class SearchScanBloc extends Bloc implements BarcodeCaptureListener {
     // Setting the code duplicate filter to one second means that the scanner won't report
     // the same code as recognized for one second once it's recognized.
     _settings.codeDuplicateFilter = Duration(seconds: 1);
-
-    // Create new barcode capture mode with the settings from above.
-    _barcodeCapture = BarcodeCapture(_settings);
   }
 
   Future<void> setupScanning() async {
     // Remove all modes added from the other screens
-    dataCaptureContext.removeAllModes();
+    await dataCaptureContext.removeAllModes();
+
+    // Create new barcode capture mode with the settings from above.
+    _barcodeCapture = BarcodeCapture(_settings);
 
     // listen for barcode capture events
     _barcodeCapture.addListener(this);
 
-    _dataCaptureManager.camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
+    _dataCaptureManager.camera?.applySettings(BarcodeCapture.createRecommendedCameraSettings());
 
     await dataCaptureContext.setMode(barcodeCapture);
 
     _barcodeCapture = barcodeCapture;
   }
 
-  Future<void> disposeCurrentScanning() async {
+  Future<void> disposeCurrentScanning() {
     _barcodeCapture.removeListener(this);
     _barcodeCapture.isEnabled = false;
-    await dataCaptureContext.removeMode(_barcodeCapture);
-    await _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off);
+    dataCaptureContext.removeCurrentMode();
+    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.off) ?? Future.value(null);
   }
 
-  Future<void> resumeScanning() async {
+  Future<void> resumeScanning() {
     enableCapture();
-    await _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.on);
+    return _dataCaptureManager.camera?.switchToDesiredState(FrameSourceState.on) ?? Future.value(null);
   }
 
   Future<void> pauseScanning() {

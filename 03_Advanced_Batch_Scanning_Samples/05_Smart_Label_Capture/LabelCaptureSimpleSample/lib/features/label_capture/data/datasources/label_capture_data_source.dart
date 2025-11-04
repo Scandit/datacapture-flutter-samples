@@ -42,7 +42,7 @@ class LabelCaptureDataSourceImpl implements LabelCaptureDataSource {
 
     // Create camera with label capture recommended settings
     _camera = Camera.defaultCamera!;
-    _camera.applySettings(LabelCapture.recommendedCameraSettings);
+    _camera.applySettings(LabelCapture.createRecommendedCameraSettings());
 
     await dataCaptureContext.setFrameSource(_camera);
 
@@ -50,7 +50,7 @@ class LabelCaptureDataSourceImpl implements LabelCaptureDataSource {
     _labelCapture = LabelCapture(_buildLabelCaptureSettings());
 
     // Set the label capture mode as the current mode of the data capture context.
-    await dataCaptureContext.setMode(_labelCapture);
+    dataCaptureContext.setMode(_labelCapture);
   }
 
   @override
@@ -95,20 +95,18 @@ class LabelCaptureDataSourceImpl implements LabelCaptureDataSource {
   LabelCaptureSettings _buildLabelCaptureSettings() {
     // Create a custom barcode field for the main barcode
     final customBarcode = CustomBarcodeBuilder()
-        .setSymbologies([
-          Symbology.ean13Upca,
-          Symbology.gs1DatabarExpanded,
-          Symbology.code128,
-        ])
+        .setSymbologies([Symbology.ean13Upca, Symbology.gs1DatabarExpanded, Symbology.code128])
         .isOptional(false)
         .build(Constants.fieldBarcode);
 
     // Create an expiry date text field with MDY format
     final expiryDateText = ExpiryDateTextBuilder()
-        .setLabelDateFormat(LabelDateFormat(
-          LabelDateComponentFormat.mdy,
-          false, // acceptPartialDates = false
-        ))
+        .setLabelDateFormat(
+          LabelDateFormat(
+            LabelDateComponentFormat.mdy,
+            false, // acceptPartialDates = false
+          ),
+        )
         .isOptional(true)
         .build(Constants.fieldExpiryDate);
 

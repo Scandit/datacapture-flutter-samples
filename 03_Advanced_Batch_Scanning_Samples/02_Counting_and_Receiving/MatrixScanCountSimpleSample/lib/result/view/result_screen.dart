@@ -16,7 +16,6 @@ class ResultScreen extends StatefulWidget {
 
   ResultScreen(this.title, this.bloc);
 
-  // Create data capture context using your license key.
   @override
   _ResultScreenState createState() => _ResultScreenState(bloc);
 }

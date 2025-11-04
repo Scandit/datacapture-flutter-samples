@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
 }
 
 class BarcodeScannerScreen extends StatefulWidget {
-  // Create data capture context using your license key.
   @override
   State<StatefulWidget> createState() => _BarcodeScannerScreenState(DataCaptureContext.forLicenseKey(licenseKey));
 }
@@ -69,7 +68,7 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     WidgetsBinding.instance.addObserver(this);
 
     // Use the recommended camera settings for the BarcodeCapture mode.
-    _camera?.applySettings(BarcodeCapture.recommendedCameraSettings);
+    _camera?.applySettings(BarcodeCapture.createRecommendedCameraSettings());
 
     // Switch camera on to start streaming frames and enable the barcode batch mode.
     // The camera is started asynchronously and will take some time to completely turn on.
@@ -190,21 +189,20 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     var humanReadableSymbology = SymbologyDescription.forSymbology(code.symbology);
     showDialog(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            content: Text(
-              'Scanned: $data\n (${humanReadableSymbology.readableName})',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            actions: [
-              TextButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                },
-              ),
-            ],
+      builder: (_) => AlertDialog(
+        content: Text(
+          'Scanned: $data\n (${humanReadableSymbology.readableName})',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        actions: [
+          TextButton(
+            child: Text("OK"),
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+            },
           ),
+        ],
+      ),
     ).then((result) => _barcodeCapture.isEnabled = true);
   }
 

@@ -18,7 +18,6 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDelegate {
-  // Create data capture context using your license key.
   final DataCaptureContext _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
 
   DataCaptureContext get dataCaptureContext {
