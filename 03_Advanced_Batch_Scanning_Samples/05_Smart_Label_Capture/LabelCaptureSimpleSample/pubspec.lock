@@ -137,28 +137,28 @@ packages:
       path: "../../../../scandit-flutter-datacapture-barcode"
       relative: true
     source: path
-    version: "8.0.0-beta.1-SNAPSHOT"
+    version: "8.1.0-beta.1-SNAPSHOT"
   scandit_flutter_datacapture_core:
     dependency: "direct main"
     description:
       path: "../../../../scandit-flutter-datacapture-core"
       relative: true
     source: path
-    version: "8.0.0-beta.1-SNAPSHOT"
+    version: "8.1.0-beta.1-SNAPSHOT"
   scandit_flutter_datacapture_label:
     dependency: "direct main"
     description:
       path: "../../../../scandit-flutter-datacapture-label"
       relative: true
     source: path
-    version: "8.0.0-beta.1-SNAPSHOT"
+    version: "8.1.0-beta.1-SNAPSHOT"
   scandit_flutter_datacapture_label_text:
     dependency: "direct main"
     description:
       path: "../../../../scandit-flutter-datacapture-label-text"
       relative: true
     source: path
-    version: "8.0.0-beta.1-SNAPSHOT"
+    version: "8.1.0-beta.1-SNAPSHOT"
   sky_engine:
     dependency: transitive
     description: flutter

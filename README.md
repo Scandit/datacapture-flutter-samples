@@ -6,8 +6,6 @@ This repository contains both simple and advanced samples that show you how use 
 
 **Barcode Capture Simple Sample (**[Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample))
 
-**Barcode Capture Settings Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSettingsSample))
-
 ## **Pre-Built Barcode Scanning Components**
 
 Scandit offers building blocks that can be integrated in just a few lines of code. The pre-built camera UI has been designed and user-tested to achieve superior process efficiency, ergonomics and usability.
@@ -18,7 +16,7 @@ MatrixScan Count is an out-of-the-box scan and count solution for counting and r
 
 ![MSCount.png](https://github.com/Scandit/.github/blob/main/images/MSCount.png)
 
-**MatrixScan Count Simple Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02%20-%20Counting%20%26%20Receiving/MatrixScanCountSimpleSample))
+**MatrixScan Count Simple Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountSimpleSample))
 
 ### Scan One of Many (Barcode Selection)
 
@@ -57,8 +55,6 @@ ID Scanning Samples demonstrate the features of the ID Capture API and demonstra
 ### Single Scanning (Barcode Capture)
 
 **Barcode Capture Simple Sample (**[Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample))
-
-**Barcode Capture Settings Sample** ([Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSettingsSample))
 
 ### MatrixScan AR Sam**ples**
 

@@ -58,7 +58,7 @@ class _FindScanScreenState extends State<FindScanView>
           await _barcodeFindView.stopSearching();
         }
       },
-      child: SafeArea(child: _barcodeFindView),
+      child: _barcodeFindView,
     );
   }
 

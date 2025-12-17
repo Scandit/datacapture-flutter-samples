@@ -7,7 +7,7 @@
 import 'dart:async';
 
 import 'package:ListBuildingSample/bloc/bloc_base.dart';
-import 'package:ListBuildingSample/home/model/scanned_item.dart';
+import 'package:ListBuildingSample/home/model/scanned_item.dart' as sample;
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -36,9 +36,9 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
     return _sparkScanViewSettings;
   }
 
-  late StreamController<ScannedItem> _streamController;
+  late StreamController<sample.ScannedItem> _streamController;
 
-  Stream<ScannedItem> get scannedItemsStream {
+  Stream<sample.ScannedItem> get scannedItemsStream {
     return _streamController.stream;
   }
 
@@ -105,8 +105,8 @@ class HomeBloc extends Bloc implements SparkScanListener, SparkScanFeedbackDeleg
 
       var humanReadableSymbology = SymbologyDescription.forSymbology(barcode.symbology);
 
-      _streamController
-          .add(new ScannedItem("Item $_scannedItems", "${humanReadableSymbology.readableName}: ${barcode.data}"));
+      _streamController.add(
+          new sample.ScannedItem("Item $_scannedItems", "${humanReadableSymbology.readableName}: ${barcode.data}"));
     }
   }
 
