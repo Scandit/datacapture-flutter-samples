@@ -107,22 +107,18 @@ class LabelCaptureDataSourceImpl implements LabelCaptureDataSource {
             false, // acceptPartialDates = false
           ),
         )
-        .isOptional(true)
+        .isOptional(false)
         .build(Constants.fieldExpiryDate);
 
-    // Create unit price text field
-    final unitPriceText = UnitPriceTextBuilder().isOptional(true).build(Constants.fieldUnitPrice);
-
-    // Create weight text field
-    final weightText = WeightTextBuilder().isOptional(true).build(Constants.fieldWeight);
+    // Create total price text field
+    final totalPriceText = TotalPriceTextBuilder().isOptional(true).build(Constants.fieldTotalPrice);
 
     // Build the label definition with all fields
     final labelDefinition = LabelDefinitionBuilder()
         .addCustomBarcode(customBarcode)
         .addExpiryDateText(expiryDateText)
-        .addUnitPriceText(unitPriceText)
-        .addWeightText(weightText)
-        .build(Constants.labelWeightPrice);
+        .addTotalPriceText(totalPriceText)
+        .build(Constants.labelRetailItem);
 
     // Create and return the label capture settings
     var settings = LabelCaptureSettings([labelDefinition]);
@@ -131,18 +127,21 @@ class LabelCaptureDataSourceImpl implements LabelCaptureDataSource {
     // For example, you can use the following label definition for Smart Devices box Scanning.
     // final labelDefinition = LabelDefinitionBuilder()
     //     .addCustomBarcode(
-    //       CustomBarcodeBuilder().setSymbology(Symbology.ean13Upca).isOptional(false).build('barcode'),
+    //       CustomBarcodeBuilder()
+    //         .setSymbologies([Symbology.ean13Upca, Symbology.code128, Symbology.code39, Symbology.interleavedTwoOfFive])
+    //         .isOptional(false)
+    //         .build('Barcode'),
     //     )
     //     .addImeiOneBarcode(
-    //       ImeiOneBarcodeBuilder().isOptional(true).build('imei_one'),
+    //       ImeiOneBarcodeBuilder().isOptional(false).build('IMEI1'),
     //     )
     //     .addImeiTwoBarcode(
-    //       ImeiTwoBarcodeBuilder().isOptional(true).build('imei_two'),
+    //       ImeiTwoBarcodeBuilder().isOptional(true).build('IMEI2'),
     //     )
     //     .addSerialNumberBarcode(
-    //       SerialNumberBarcodeBuilder().isOptional(true).build('serial'),
+    //       SerialNumberBarcodeBuilder().isOptional(true).build('Serial Number'),
     //     )
-    //     .build('imei_label');
+    //     .build('Smart Device');
     // return LabelCaptureSettings([labelDefinition]);
 
     return settings;
@@ -162,42 +161,10 @@ class _BasicOverlayListener implements LabelCaptureBasicOverlayListener {
 
   _BasicOverlayListener(this.context);
 
-  Color hexToColor(String hex) {
-    // Remove the hash if present
-    hex = hex.replaceAll('#', '');
-
-    // Add alpha channel if not present (make it fully opaque)
-    if (hex.length == 6) {
-      hex = 'FF$hex';
-    }
-
-    return Color(int.parse(hex, radix: 16));
-  }
-
-  static const upcBrushColor = Color(0xFF2EC1CE);
-  static const expiryDateBrushColor = Color(0xFFFA4446);
-  static const weightBrushColor = Color(0xFFFBC02C);
-  static const unitPriceBrushColor = Color(0xFF0A3390);
-
-  final upcBrush = Brush(upcBrushColor.withAlpha(128), upcBrushColor, 1.0);
-  final expiryDateBrush = Brush(expiryDateBrushColor.withAlpha(128), expiryDateBrushColor, 1.0);
-  final weightBrush = Brush(weightBrushColor.withAlpha(128), weightBrushColor, 1.0);
-  final unitPriceBrush = Brush(unitPriceBrushColor.withAlpha(128), unitPriceBrushColor, 1.0);
-
   @override
   Future<Brush?> brushForFieldOfLabel(LabelCaptureBasicOverlay overlay, LabelField field, CapturedLabel label) async {
-    switch (field.name) {
-      case Constants.fieldBarcode:
-        return upcBrush;
-      case Constants.fieldExpiryDate:
-        return expiryDateBrush;
-      case Constants.fieldWeight:
-        return weightBrush;
-      case Constants.fieldUnitPrice:
-        return unitPriceBrush;
-      default:
-        return null;
-    }
+    // Use default brush (standard blue)
+    return null;
   }
 
   @override

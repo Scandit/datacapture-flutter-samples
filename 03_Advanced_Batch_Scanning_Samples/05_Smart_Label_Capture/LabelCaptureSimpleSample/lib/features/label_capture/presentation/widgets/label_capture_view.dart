@@ -29,9 +29,6 @@ class _LabelCaptureViewState extends State<LabelCaptureView> {
   void _initializeDataCaptureView() {
     _dataCaptureView = DataCaptureView.forContext(widget.dataSource.dataCaptureContext);
 
-    // Add torch control
-    _dataCaptureView.addControl(TorchSwitchControl());
-
     // Add overlays
     final basicOverlay = widget.dataSource.buildLabelCaptureOverlay(context);
     final validationOverlay = widget.dataSource.buildValidationFlowOverlay(context);

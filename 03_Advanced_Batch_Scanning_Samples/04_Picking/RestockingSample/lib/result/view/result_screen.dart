@@ -70,9 +70,8 @@ class _ResultScreenState extends State<ResultScreen> {
                         side: BorderSide(width: 2, color: Colors.black),
                         shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero)),
                     onPressed: () {
-                      // Restart the app so we can start the process again
                       _bloc.clearPickedAndScanned();
-                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     },
                     child: Text('FINISH', style: TextStyle(color: Colors.black)))
               ],

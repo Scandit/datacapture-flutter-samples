@@ -86,12 +86,13 @@ class _BarcodePickScreenState extends State<BarcodePickScreen>
 
   @override
   void didTapFinishButton(BarcodePickView view) async {
-    _barcodePickView.stop();
-    await Navigator.push(
+    final finishCalled = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (context) => ResultScreen()),
     );
 
-    _barcodePickView.start();
+    if (finishCalled == true) {
+      _barcodePickView.reset();
+    }
   }
 }
