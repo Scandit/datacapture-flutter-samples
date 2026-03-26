@@ -8,7 +8,6 @@ import 'package:IdCaptureExtendedSample/home/bloc/id_capture_bloc.dart';
 import 'package:IdCaptureExtendedSample/home/model/Id_capture_mode.dart';
 import 'package:IdCaptureExtendedSample/route/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class IdCaptureView extends StatefulWidget {
@@ -84,16 +83,16 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Text(widget.title),
         actions: [],
       ),
-      body: SafeArea(child: _bloc.dataCaptureView),
+      body: Padding(
+        padding: EdgeInsets.only(bottom: kBottomNavigationBarHeight),
+        child: _bloc.dataCaptureView,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _bloc.currentModeIndex,
         items: [

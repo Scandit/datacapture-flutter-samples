@@ -1,7 +1,7 @@
 /*
  * This file is part of the Scandit Data Capture SDK
  *
- * Copyright (C) 2025- Scandit AG. All rights reserved.
+ * Copyright (C) 2026- Scandit AG. All rights reserved.
  */
 
 import 'package:flutter/material.dart';
@@ -9,47 +9,44 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_ar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'bloc/capture_bloc.dart';
+import 'highlights_bloc.dart';
+import '../../widgets/barcode_ar_scaffold.dart';
 
-class CaptureScreen extends StatefulWidget {
-  const CaptureScreen({super.key});
+class HighlightsScreen extends StatefulWidget {
+  const HighlightsScreen({super.key});
 
   @override
-  CaptureScreenState createState() => CaptureScreenState();
+  HighlightsScreenState createState() => HighlightsScreenState();
 }
 
-class CaptureScreenState extends State<CaptureScreen>
+class HighlightsScreenState extends State<HighlightsScreen>
     with WidgetsBindingObserver
-    implements BarcodeArHighlightProvider, BarcodeArAnnotationProvider {
-  final BarcodeArBloc bloc = BarcodeArBloc();
-
-  BarcodeArView? barcodeArView;
-
-  CaptureScreenState() : super();
+    implements BarcodeArHighlightProvider {
+  final HighlightsBloc _bloc = HighlightsBloc();
+  BarcodeArView? _barcodeArView;
 
   @override
   void initState() {
     super.initState();
-    bloc.init();
+    _bloc.init();
     WidgetsBinding.instance.addObserver(this);
     _checkPermission();
 
-    barcodeArView = BarcodeArView.forModeWithViewSettingsAndCameraSettings(
-      bloc.dataCaptureContext,
-      bloc.barcodeAr,
-      bloc.barcodeArViewSettings,
-      bloc.cameraSettings,
+    _barcodeArView = BarcodeArView.forModeWithViewSettingsAndCameraSettings(
+      _bloc.dataCaptureContext,
+      _bloc.barcodeAr,
+      _bloc.barcodeArViewSettings,
+      _bloc.cameraSettings,
     )
       ..highlightProvider = this
-      ..annotationProvider = this;
+      ..uiListener = _bloc;
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: barcodeArView,
-      ),
+    return BarcodeArScaffold(
+      title: 'Highlights',
+      barcodeArView: _barcodeArView!,
     );
   }
 
@@ -60,7 +57,7 @@ class CaptureScreenState extends State<CaptureScreen>
         _checkPermission();
         break;
       default:
-        bloc.stopCapturing();
+        _bloc.stopCapturing();
         break;
     }
   }
@@ -68,26 +65,20 @@ class CaptureScreenState extends State<CaptureScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    bloc.dispose();
+    _bloc.dispose();
     super.dispose();
   }
 
   @override
   Future<BarcodeArHighlight?> highlightForBarcode(Barcode barcode) {
-    return bloc.highlightForBarcode(barcode);
-  }
-
-  @override
-  Future<BarcodeArAnnotation?> annotationForBarcode(Barcode barcode) async {
-    return bloc.annotationForBarcode(barcode);
+    return _bloc.highlightForBarcode(barcode);
   }
 
   void _checkPermission() {
     Permission.camera.request().then((status) {
       if (!mounted) return;
-
       if (status.isGranted) {
-        bloc.startCapturing();
+        _bloc.startCapturing();
       }
     });
   }

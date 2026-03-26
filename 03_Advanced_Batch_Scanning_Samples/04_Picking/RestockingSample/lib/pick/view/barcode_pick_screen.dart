@@ -94,5 +94,6 @@ class _BarcodePickScreenState extends State<BarcodePickScreen>
     if (finishCalled == true) {
       _barcodePickView.reset();
     }
+    _barcodePickView.start();
   }
 }

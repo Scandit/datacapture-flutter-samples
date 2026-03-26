@@ -32,6 +32,7 @@ class _LabelCapturePageState extends State<LabelCapturePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('Label Scan'), backgroundColor: Colors.black, foregroundColor: Colors.white),
       body: BlocConsumer<LabelCaptureBloc, LabelCaptureState>(
         listener: (context, state) {

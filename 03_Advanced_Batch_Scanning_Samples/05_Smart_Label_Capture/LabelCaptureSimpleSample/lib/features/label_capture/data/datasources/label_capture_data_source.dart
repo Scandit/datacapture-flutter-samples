@@ -79,7 +79,10 @@ class LabelCaptureDataSourceImpl implements LabelCaptureDataSource {
 
   @override
   LabelCaptureBasicOverlay buildLabelCaptureOverlay(BuildContext context) {
-    return LabelCaptureBasicOverlay(_labelCapture)..listener = _BasicOverlayListener(context);
+    final overlay = LabelCaptureBasicOverlay(_labelCapture);
+    overlay.listener = _BasicOverlayListener(context);
+    overlay.labelBrush = Brush.transparent;
+    return overlay;
   }
 
   @override

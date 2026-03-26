@@ -5,7 +5,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
@@ -14,9 +13,7 @@ import 'home/view/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
-  // Lock orientation to portrait
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
-      .then((value) => runApp(MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -29,9 +26,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.white),
-            backgroundColor: Colors.black,
-            titleTextStyle: TextStyle(color: Colors.white)),
+          iconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: Colors.black,
+          titleTextStyle: TextStyle(color: Colors.white),
+        ),
       ),
       home: HomeScreen("ListBuilding"),
     );

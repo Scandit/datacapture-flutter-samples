@@ -18,27 +18,11 @@ class LabelCaptureView extends StatefulWidget {
 }
 
 class _LabelCaptureViewState extends State<LabelCaptureView> {
-  late DataCaptureView _dataCaptureView;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeDataCaptureView();
-  }
-
-  void _initializeDataCaptureView() {
-    _dataCaptureView = DataCaptureView.forContext(widget.dataSource.dataCaptureContext);
-
-    // Add overlays
-    final basicOverlay = widget.dataSource.buildLabelCaptureOverlay(context);
-    final validationOverlay = widget.dataSource.buildValidationFlowOverlay(context);
-
-    _dataCaptureView.addOverlay(basicOverlay);
-    _dataCaptureView.addOverlay(validationOverlay);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return _dataCaptureView;
+    return DataCaptureView(dataCaptureContext: widget.dataSource.dataCaptureContext, overlays: [
+      widget.dataSource.buildLabelCaptureOverlay(context),
+      widget.dataSource.buildValidationFlowOverlay(context)
+    ]);
   }
 }
