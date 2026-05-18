@@ -58,8 +58,9 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     // Create new Id capture mode with the settings from above.
     _idCapture = IdCapture(settings)..addListener(this);
 
-    // Add a Id capture overlay to the data capture view to render the location of captured ids on top of
-    // the video preview. This is optional, but recommended for better visual feedback.
+    // Add an ID Capture overlay to the data capture view to render the location of captured
+    // IDs on top of the video preview.
+    // This is optional, but recommended for better visual feedback.
     var overlay = IdCaptureOverlay(_idCapture)..idLayoutStyle = IdLayoutStyle.square;
 
     // Set the id capture mode as the current mode of the data capture context.

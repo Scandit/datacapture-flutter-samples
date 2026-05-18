@@ -105,8 +105,9 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     // camera preview. The view must be connected to the data capture context.
     _captureView = DataCaptureView.forContext(_context);
 
-    // Add a Id capture overlay to the data capture view to render the location of captured ids on top of
-    // the video preview. This is optional, but recommended for better visual feedback.
+    // Add an ID Capture overlay to the data capture view to render the location of captured
+    // IDs on top of the video preview.
+    // This is optional, but recommended for better visual feedback.
     var overlay = IdCaptureOverlay(_idCapture)..idLayoutStyle = IdLayoutStyle.rounded;
 
     // Set the default camera as the frame source of the context. The camera is off by

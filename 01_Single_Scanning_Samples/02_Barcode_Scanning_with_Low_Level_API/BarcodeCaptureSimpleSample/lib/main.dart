@@ -109,8 +109,10 @@ class _BarcodeScannerScreenState extends State<BarcodeScannerScreen>
     // camera preview. The view must be connected to the data capture context.
     _captureView = DataCaptureView.forContext(_context);
 
-    // Add a barcode capture overlay to the data capture view to render the location of captured barcodes on top of
-    // the video preview. This is optional, but recommended for better visual feedback.
+    // Add a Barcode Capture overlay to the data capture view to render the location of captured
+    // barcodes on top of the video preview. Viewfinders are visual components only, and as such
+    // will not restrict the scan area.
+    // This is optional, but recommended for better visual feedback.
     var overlay = BarcodeCaptureOverlay(_barcodeCapture)
       ..viewfinder = RectangularViewfinder.withStyleAndLineStyle(
         RectangularViewfinderStyle.square,
