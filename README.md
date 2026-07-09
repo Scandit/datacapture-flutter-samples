@@ -28,11 +28,9 @@ Consider Barcode Selection when **accuracy** is more important than **speed**.
 
   ![AimToSelect.png](https://github.com/Scandit/.github/blob/main/images/AimToSelect.png)
 
-
 - **Tap to select** is quicker when you need to select several barcodes, as when reordering from a catalog where barcodes are close together (yep, those are teeth).
 
   ![TapToSelect.png](https://github.com/Scandit/.github/blob/main/images/TapToSelect.png)
-
 
 **Barcode Selection Simple Sample (**[Flutter](https://github.com/Scandit/datacapture-flutter-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeSelectionSimpleSample))
 
@@ -76,7 +74,7 @@ Once you get the sample up and running, go find some barcodes to scan. Don’t f
 
 ## Trial Signup
 
-To add the Scandit Data Capture SDK to your app, sign up for your Scandit Developer Account  and get instant access to your license key: [https://ssl.scandit.com/dashboard/sign-up?p=test](https://ssl.scandit.com/dashboard/sign-up?p=test)
+To add the Scandit Data Capture SDK to your app, sign up for your Scandit Developer Account and get instant access to your license key: [https://ssl.scandit.com/dashboard/sign-up?p=test](https://ssl.scandit.com/dashboard/sign-up?p=test)
 
 ## Support
 

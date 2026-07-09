@@ -1,6 +1,6 @@
 # List Building with SparkScan
 
-This sample demonstrates the functionality of the SparkScan API.  It shows how to populate a list of scanned barcodes using the pre-built component for high speed scanning.
+This sample demonstrates the functionality of the SparkScan API. It shows how to populate a list of scanned barcodes using the pre-built component for high speed scanning.
 
 The SparkScan UI incorporates our best practices for usability and has been rigorously tested with target users in real-world scenarios.
 
@@ -9,7 +9,7 @@ The SparkScan UI incorporates our best practices for usability and has been rigo
 ## Installation
 
 - Clone this repo locally.
-- Sign in to your Developer Account at [ssl.scandit.com](http://ssl.scandit.com) and generate a license key.  If you do not have an account, sign up here: [https://ssl.scandit.com/dashboard/sign-up?p=test](https://ssl.scandit.com/dashboard/sign-up?p=test).
+- Sign in to your Developer Account at [ssl.scandit.com](http://ssl.scandit.com) and generate a license key. If you do not have an account, sign up here: [https://ssl.scandit.com/dashboard/sign-up?p=test](https://ssl.scandit.com/dashboard/sign-up?p=test).
 - Replace the license key in the sample where you see `-- ENTER YOUR SCANDIT LICENSE KEY HERE --`.
 - Build and run this sample on your mobile device.
 
@@ -21,7 +21,7 @@ SparkScan is a camera-based solution for high-speed single scanning and scan-int
 
 ## Documentation
 
-SparkScan is an API of the Scandit Data Capture SDK.  Our SDK is supported on most popular frameworks.
+SparkScan is an API of the Scandit Data Capture SDK. Our SDK is supported on most popular frameworks.
 
 Get started with SparkScan on [iOS](https://docs.scandit.com/data-capture-sdk/ios/high-speed-single-scanning.html), [Android](https://docs.scandit.com/data-capture-sdk/android/high-speed-single-scanning.html), [React Native](https://docs.scandit.com/data-capture-sdk/react-native/high-speed-single-scanning.html).
 
@@ -35,7 +35,7 @@ Once you get the sample up and running, go find some barcodes to scan. Don’t f
 
 ## Trial Signup
 
-To add SparkScan to your app, sign up for your Scandit Developer Account  and get instant access to your license key: [https://ssl.scandit.com/dashboard/sign-up?p=test](https://ssl.scandit.com/dashboard/sign-up?p=test)
+To add SparkScan to your app, sign up for your Scandit Developer Account and get instant access to your license key: [https://ssl.scandit.com/dashboard/sign-up?p=test](https://ssl.scandit.com/dashboard/sign-up?p=test)
 
 ## Support
 

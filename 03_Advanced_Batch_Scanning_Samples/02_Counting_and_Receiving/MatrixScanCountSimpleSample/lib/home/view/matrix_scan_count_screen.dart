@@ -41,23 +41,46 @@ class _MatrixScanCountScreenState extends State<MatrixScanCountScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
-          return;
-        }
-        // Cleanup everything on back press because this is the only screen
-        _cleanup();
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+      ),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return;
+          }
+          // Cleanup everything on back press because this is the only screen
+          _cleanup();
 
-        // Exit the app since this is the only screen
-        SystemNavigator.pop();
-      },
-      child: Scaffold(
-        body: BarcodeCountView.forContextWithModeAndStyle(
-            _bloc.dataCaptureContext, _bloc.barcodeCount, BarcodeCountViewStyle.icon)
-          ..uiListener = _bloc
-          ..listener = _bloc,
+          // Exit the app since this is the only screen
+          SystemNavigator.pop();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.black,
+          body: SafeArea(
+            bottom: false,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isPortrait = constraints.maxHeight >= constraints.maxWidth;
+                // BarcodeCount always uses a 4:3 camera. Constraining the view to 9:16 portrait
+                // (or 16:9 landscape) produces a container that fits the 4:3 preview plus the
+                // BarcodeCountView's bottom UI chrome strip, with no overlap between them.
+                return Align(
+                  alignment: isPortrait ? Alignment.bottomCenter : Alignment.center,
+                  child: AspectRatio(
+                    aspectRatio: isPortrait ? 9 / 16 : 16 / 9,
+                    child: BarcodeCountView.forContextWithModeAndStyle(
+                        _bloc.dataCaptureContext, _bloc.barcodeCount, BarcodeCountViewStyle.icon)
+                      ..uiListener = _bloc
+                      ..listener = _bloc,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

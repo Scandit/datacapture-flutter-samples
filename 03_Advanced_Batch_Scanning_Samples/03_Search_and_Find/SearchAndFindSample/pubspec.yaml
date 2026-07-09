@@ -6,13 +6,13 @@ publish_to: 'none'
 version: 1.0.0
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    '>=8.4.1 <8.4.2'
+    '>=8.5.0 <8.5.1'
   permission_handler: 12.0.1
 
 flutter:
@@ -22,4 +22,3 @@ flutter:
 
   assets:
     - assets/fastfind.png
-
