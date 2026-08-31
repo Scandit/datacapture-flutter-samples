@@ -6,9 +6,6 @@
 
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class DataCaptureManager {
   static final DataCaptureManager _singleton = DataCaptureManager._internal();
@@ -26,7 +23,7 @@ class DataCaptureManager {
   Camera? get camera => _camera;
 
   DataCaptureManager._internal() {
-    _captureContext = DataCaptureContext.forLicenseKey(licenseKey);
+    _captureContext = DataCaptureContext.sharedInstance;
 
     setCamera();
   }

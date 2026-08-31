@@ -11,15 +11,14 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_selection.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
+import 'sample_bootstrap.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
+  await ensureSampleDataCaptureContext();
   runApp(MyApp());
 }
-
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class MyApp extends StatelessWidget {
   @override
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
 
 class BarcodeSelectionScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _BarcodeSelectionScreenState(DataCaptureContext.forLicenseKey(licenseKey));
+  State<StatefulWidget> createState() => _BarcodeSelectionScreenState(DataCaptureContext.sharedInstance);
 }
 
 class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
@@ -231,5 +230,11 @@ class _BarcodeSelectionScreenState extends State<BarcodeSelectionScreen>
     _barcodeSelection.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
+  }
+
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
   }
 }

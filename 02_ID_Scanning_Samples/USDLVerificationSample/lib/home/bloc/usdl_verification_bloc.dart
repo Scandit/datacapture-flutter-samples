@@ -12,14 +12,11 @@ import 'package:intl/intl.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class USDLVerificationBloc extends Bloc implements IdCaptureListener {
   late IdCapture _idCapture;
 
-  final DataCaptureContext _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+  final DataCaptureContext _dataCaptureContext = DataCaptureContext.sharedInstance;
 
   // Use the world-facing (back) camera.
   Camera? _camera = Camera.defaultCamera;

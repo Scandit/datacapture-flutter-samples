@@ -11,9 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>RestockingSample</string>
-	<key>CBBundleDisplayName</key>
-	<string>Search and Find</string>
+	<string>Restocking</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

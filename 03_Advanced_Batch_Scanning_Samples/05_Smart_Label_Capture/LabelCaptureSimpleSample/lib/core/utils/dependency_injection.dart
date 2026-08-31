@@ -19,7 +19,12 @@ class DependencyContainer {
   late final StopScanning _stopScanning;
   late final GetScanResults _getScanResults;
 
+  bool _isInitialized = false;
+
   Future<void> initialize() async {
+    if (_isInitialized) return;
+    _isInitialized = true;
+
     // Data sources
     _dataSource = LabelCaptureDataSourceImpl();
     await _dataSource.initialize();

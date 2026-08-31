@@ -22,4 +22,4 @@ plugins {
     id "org.jetbrains.kotlin.android" version "2.1.21" apply false
 }
 
-include ":app"
+include ':app'

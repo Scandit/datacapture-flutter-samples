@@ -13,10 +13,12 @@ import 'result/bloc/result_bloc.dart';
 import 'result/model/result_screen_navigation_args.dart';
 import 'result/view/result_screen.dart';
 import 'route/sample_routes.dart';
+import 'sample_bootstrap.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
+  await ensureSampleDataCaptureContext();
   runApp(MyApp());
 }
 

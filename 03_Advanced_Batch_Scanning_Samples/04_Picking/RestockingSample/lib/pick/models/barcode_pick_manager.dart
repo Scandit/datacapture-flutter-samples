@@ -9,9 +9,6 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_pick.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class BarcodePickManager {
   static final BarcodePickManager _singleton = BarcodePickManager._internal();
@@ -27,7 +24,7 @@ class BarcodePickManager {
   ProductsManager _productsManager = ProductsManager();
 
   BarcodePickManager._internal() {
-    _captureContext = DataCaptureContext.forLicenseKey(licenseKey);
+    _captureContext = DataCaptureContext.sharedInstance;
   }
 
   BarcodePick createBarcodePick(BarcodePickAsyncMapperProductProviderCallback callback) {

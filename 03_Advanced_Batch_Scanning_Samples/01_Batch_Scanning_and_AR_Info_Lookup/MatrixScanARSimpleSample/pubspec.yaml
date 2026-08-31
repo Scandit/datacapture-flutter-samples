@@ -1,9 +1,9 @@
 name: MatrixScanARSimpleSample
-description: 'Very simple sample which shows how you can use MatrixScan AR to show product information with the Scandit Data Capture SDK.'
+description: Very simple sample which shows how you can use MatrixScan AR to show product information with the Scandit Data Capture SDK.
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -12,10 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    '>=8.5.3 <8.5.4'
+    '>=8.6.0 <8.6.1'
   scandit_flutter_datacapture_core:
-    '>=8.5.3 <8.5.4'
-  permission_handler: 12.0.1
+    '>=8.6.0 <8.6.1'
+  permission_handler: 12.0.3
 
 flutter:
   config:

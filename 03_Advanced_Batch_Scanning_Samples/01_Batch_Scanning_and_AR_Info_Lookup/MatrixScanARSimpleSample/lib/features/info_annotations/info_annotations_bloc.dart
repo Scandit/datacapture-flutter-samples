@@ -95,7 +95,7 @@ class InfoAnnotationsBloc extends Bloc implements BarcodeArListener, BarcodeArIn
     faraway.body = [farawayBody];
 
     // Create responsive annotation
-    return BarcodeArResponsiveAnnotation(barcode, closeup, faraway)..threshold = 0.05;
+    return BarcodeArResponsiveAnnotation.withAnnotationsByThreshold(barcode, {0.05: faraway, 1.0: closeup});
   }
 
   @override

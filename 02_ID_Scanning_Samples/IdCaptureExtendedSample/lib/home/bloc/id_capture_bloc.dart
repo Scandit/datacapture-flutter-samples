@@ -16,9 +16,6 @@ import 'package:IdCaptureExtendedSample/home/model/viz_captured_id_result.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class IdCaptureBloc extends Bloc implements IdCaptureListener {
   IdCapture? _idCapture;
@@ -42,7 +39,7 @@ class IdCaptureBloc extends Bloc implements IdCaptureListener {
   IdCaptureBloc() {
     _camera?.applySettings(_cameraSettings);
 
-    _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+    _dataCaptureContext = DataCaptureContext.sharedInstance;
     if (_camera != null) _dataCaptureContext.setFrameSource(_camera!);
 
     // To visualize the on-going id capturing process on screen, setup a data capture view that renders the

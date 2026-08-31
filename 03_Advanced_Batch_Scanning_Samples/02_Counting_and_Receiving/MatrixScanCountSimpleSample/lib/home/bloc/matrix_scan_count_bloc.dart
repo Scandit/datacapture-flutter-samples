@@ -14,10 +14,6 @@ import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_cor
 
 import '../model/navigation_handler.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
-
 class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountViewListener, BarcodeCountViewUiListener {
   late DataCaptureContext _dataCaptureContext;
   late BarcodeCount _barcodeCount;
@@ -33,7 +29,7 @@ class MatrixScanCountBloc implements Bloc, BarcodeCountListener, BarcodeCountVie
   }
 
   void _init() {
-    _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+    _dataCaptureContext = DataCaptureContext.sharedInstance;
 
     // Use the default camera and set it as the frame source of the context.
     _camera = Camera.defaultCamera;

@@ -12,9 +12,6 @@ import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_selection.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class SettingsRepository {
   static final SettingsRepository _singleton = SettingsRepository._internal()..init();
@@ -496,7 +493,7 @@ class SettingsRepository {
 
     _camera?.applySettings(_cameraSettings);
 
-    _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+    _dataCaptureContext = DataCaptureContext.sharedInstance;
     if (_camera != null) _dataCaptureContext.setFrameSource(_camera!);
 
     // To visualize the on-going barcode selection process on screen, setup a data capture view that renders the

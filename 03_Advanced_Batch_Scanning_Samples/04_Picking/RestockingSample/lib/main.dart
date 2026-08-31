@@ -8,9 +8,12 @@ import 'package:RestockingSample/pick/view/barcode_pick_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
+import 'sample_bootstrap.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
+  await ensureSampleDataCaptureContext();
   runApp(MyApp());
 }
 

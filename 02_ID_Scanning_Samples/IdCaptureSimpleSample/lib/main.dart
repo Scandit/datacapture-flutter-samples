@@ -11,15 +11,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
 
+import 'sample_bootstrap.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureId.initialize();
+  await ensureSampleDataCaptureContext();
   runApp(MyApp());
 }
-
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class MyApp extends StatelessWidget {
   @override
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
 
 class IdCaptureScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _IdCaptureScreenState(DataCaptureContext.forLicenseKey(licenseKey));
+  State<StatefulWidget> createState() => _IdCaptureScreenState(DataCaptureContext.sharedInstance);
 }
 
 class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingObserver implements IdCaptureListener {
@@ -170,6 +169,12 @@ class _IdCaptureScreenState extends State<IdCaptureScreen> with WidgetsBindingOb
     _idCapture.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
+  }
+
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
   }
 
   @override

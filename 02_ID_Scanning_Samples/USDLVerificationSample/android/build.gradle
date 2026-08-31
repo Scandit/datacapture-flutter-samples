@@ -1,6 +1,6 @@
 def custom_config_scripts = [
         "$project.projectDir.path/frameworks.gradle",
-        "$project.projectDir.path/../../../../../common/frameworks.gradle"
+        "${rootDir}/../../../../../../common/frameworks.gradle"
 ]
 
 allprojects {

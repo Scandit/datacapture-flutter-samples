@@ -17,12 +17,11 @@ import 'main.dart';
 
 class MatrixScanScreen extends StatefulWidget {
   final String title;
-  final String licenseKey;
 
-  MatrixScanScreen(this.title, this.licenseKey, {Key? key}) : super(key: key);
+  MatrixScanScreen(this.title, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MatrixScanScreenState(DataCaptureContext.forLicenseKey(licenseKey));
+  State<StatefulWidget> createState() => _MatrixScanScreenState(DataCaptureContext.sharedInstance);
 }
 
 class _MatrixScanScreenState extends State<MatrixScanScreen>
@@ -189,6 +188,12 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     _barcodeBatch.isEnabled = false;
     _camera?.switchToDesiredState(FrameSourceState.off);
     _context.removeAllModes();
+  }
+
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
   }
 
   void _showScanResults(BuildContext context) {

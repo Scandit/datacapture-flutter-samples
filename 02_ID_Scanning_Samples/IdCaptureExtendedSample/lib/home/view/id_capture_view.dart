@@ -10,6 +10,8 @@ import 'package:IdCaptureExtendedSample/route/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../sample_bootstrap.dart';
+
 class IdCaptureView extends StatefulWidget {
   final String title;
 
@@ -98,21 +100,21 @@ class _IdCaptureViewState extends State<IdCaptureView> with WidgetsBindingObserv
         items: [
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/images/ic_barcode.png',
+              sampleAssetPath('assets/images/ic_barcode.png'),
               scale: 1.5,
             ),
             label: IdCaptureMode.barcode.name,
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/images/ic_mrz.png',
+              sampleAssetPath('assets/images/ic_mrz.png'),
               scale: 1.5,
             ),
             label: IdCaptureMode.mrz.name,
           ),
           BottomNavigationBarItem(
             icon: Image.asset(
-              'assets/images/ic_viz.png',
+              sampleAssetPath('assets/images/ic_viz.png'),
               scale: 1.5,
             ),
             label: IdCaptureMode.viz.name,

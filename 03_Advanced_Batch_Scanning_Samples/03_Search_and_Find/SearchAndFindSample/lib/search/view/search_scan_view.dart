@@ -13,6 +13,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_capture.dart';
 
+import '../../sample_bootstrap.dart';
+
 class SearchScanView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SearchScanScreenState(SearchScanBloc());
@@ -133,7 +135,7 @@ class _SearchScanScreenState extends State<SearchScanView> with WidgetsBindingOb
           padding: EdgeInsets.all(20),
           child: new ListTile(
             trailing: GestureDetector(
-              child: Image(image: AssetImage('assets/fastfind.png')),
+              child: Image(image: AssetImage(sampleAssetPath('assets/fastfind.png'))),
               onTap: () {
                 _navigateToFindView(barcode);
               },

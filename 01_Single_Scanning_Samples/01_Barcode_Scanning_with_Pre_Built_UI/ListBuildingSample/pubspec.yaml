@@ -6,17 +6,18 @@ publish_to: 'none'
 version: 1.0.0
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    '>=8.5.3 <8.5.4'
-  permission_handler: 12.0.1
+    '>=8.6.0 <8.6.1'
+  permission_handler: 12.0.3
   intl: ^0.20.2
 
 flutter:
   config:
     enable-swift-package-manager: true
   uses-material-design: true
+

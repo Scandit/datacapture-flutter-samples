@@ -7,6 +7,8 @@
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_ar.dart';
 
+import '../sample_bootstrap.dart';
+
 class BarcodeArScaffold extends StatelessWidget {
   final String title;
   final BarcodeArView barcodeArView;
@@ -81,7 +83,7 @@ class BarcodeArScaffold extends StatelessWidget {
               ),
               child: Center(
                 child: Image.asset(
-                  'assets/ic_return.png',
+                  sampleAssetPath('assets/ic_return.png'),
                   width: 28,
                   height: 28,
                   fit: BoxFit.contain,

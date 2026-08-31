@@ -7,14 +7,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
 import 'package:LabelCaptureSimpleSample/core/utils/dependency_injection.dart';
 import 'package:LabelCaptureSimpleSample/features/label_capture/presentation/pages/label_capture_page.dart';
 
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
+import 'sample_bootstrap.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +20,7 @@ void main() async {
   await ScanditFlutterDataCaptureLabel.initialize();
 
   // Initialize the DataCaptureContext
-  DataCaptureContext.initialize(licenseKey);
+  await ensureSampleDataCaptureContext();
 
   // Initialize dependencies
   await dependencies.initialize();

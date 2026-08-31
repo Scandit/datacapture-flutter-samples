@@ -6,6 +6,8 @@
 
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
+import '../sample_bootstrap.dart';
+
 class DataCaptureContextManager {
   DataCaptureContextManager._privateConstructor();
 
@@ -20,12 +22,8 @@ class DataCaptureContextManager {
   final Camera _camera = Camera.defaultCamera!;
 
   Future<void> initialize() async {
-    // Enter your Scandit License key here.
-    // Your Scandit License key is available via your Scandit SDK web account.
-    const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
-
-    // Initialize the DataCaptureContext with the license key.
-    _dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+    await ensureSampleDataCaptureContext();
+    _dataCaptureContext = DataCaptureContext.sharedInstance;
 
     // Set the camera as the frame source.
     _dataCaptureContext.setFrameSource(_camera);

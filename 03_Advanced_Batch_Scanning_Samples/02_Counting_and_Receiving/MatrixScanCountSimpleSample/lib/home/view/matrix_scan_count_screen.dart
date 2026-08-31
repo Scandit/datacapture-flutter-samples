@@ -103,6 +103,12 @@ class _MatrixScanCountScreenState extends State<MatrixScanCountScreen>
   }
 
   @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
+  }
+
+  @override
   void navigateOnExitButtonTap(Map<String, ScanDetails> scannedItems) async {
     Navigator.pushNamed(
       context,

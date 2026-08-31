@@ -6,20 +6,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
-import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 import 'matrix_scan_screen.dart';
+import 'sample_bootstrap.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
-  await DataCaptureContext.initialize(licenseKey);
+  await ensureSampleDataCaptureContext();
   runApp(MyApp());
 }
-
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

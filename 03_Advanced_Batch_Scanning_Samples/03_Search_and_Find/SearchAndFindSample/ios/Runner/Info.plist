@@ -11,8 +11,6 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>SearchAndFindSample</string>
-	<key>CBBundleDisplayName</key>
 	<string>Search and Find</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>

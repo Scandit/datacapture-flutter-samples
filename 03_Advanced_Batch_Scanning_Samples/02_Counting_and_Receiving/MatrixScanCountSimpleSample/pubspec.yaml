@@ -1,9 +1,9 @@
 name: matrixscancountsimplesample
-description: A new Flutter project.
+description: Basic sample that uses the Barcode Count API.
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -12,10 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
-    '>=8.5.3 <8.5.4'
-  permission_handler: 12.0.1
+    '>=8.6.0 <8.6.1'
+  permission_handler: 12.0.3
 
 flutter:
   config:
     enable-swift-package-manager: true
   uses-material-design: true
+

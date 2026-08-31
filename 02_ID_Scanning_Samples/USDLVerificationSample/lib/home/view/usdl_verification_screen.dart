@@ -113,6 +113,12 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
     _bloc.dispose();
   }
 
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
+  }
+
   void _onCapturedIdEvent(CapturedId capturedId) async {
     _bloc.disableIdCapture();
 

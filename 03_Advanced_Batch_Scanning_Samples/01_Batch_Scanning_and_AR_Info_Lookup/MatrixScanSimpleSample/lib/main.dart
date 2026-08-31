@@ -9,15 +9,14 @@ import 'package:MatrixScanSimpleSample/scan_results_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
+import 'sample_bootstrap.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ScanditFlutterDataCaptureBarcode.initialize();
+  await ensureSampleDataCaptureContext();
   runApp(MyApp());
 }
-
-// Enter your Scandit License key here.
-// Your Scandit License key is available via your Scandit SDK web account.
-const String licenseKey = '-- ENTER YOUR SCANDIT LICENSE KEY HERE --';
 
 const int scanditBlue = 0xFF58B5C2;
 const Map<int, Color> scanditBlueShades = {
@@ -51,7 +50,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => MatrixScanScreen("MatrixScan Simple", licenseKey),
+        '/': (context) => MatrixScanScreen("MatrixScan Simple"),
         '/scanResults': (context) => ScanResultsScreen("Scan Results")
       },
     );

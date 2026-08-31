@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.scandit.flutter.usdlverificationsample"
         minSdk 24
         targetSdk 36

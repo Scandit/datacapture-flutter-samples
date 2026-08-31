@@ -248,4 +248,10 @@ class _MatrixScanScreenState extends State<MatrixScanScreen>
     _camera?.switchToDesiredState(FrameSourceState.off);
     DataCaptureContext.sharedInstance.removeCurrentMode();
   }
+
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
+  }
 }

@@ -1,24 +1,25 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'dev.flutter.flutter-gradle-plugin'
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
 }
 
 android {
-    namespace 'com.scandit.flutter.labelcapturesimplesample'
-    ndkVersion '27.0.12077973'
+    namespace "com.scandit.flutter.labelcapturesimplesample"
+    ndkVersion "27.0.12077973"
     compileSdk 36
 
-    lint {
+    lintOptions {
         disable 'InvalidPackage'
     }
 
     defaultConfig {
-        applicationId 'com.scandit.flutter.labelcapturesimplesample'
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "com.scandit.flutter.labelcapturesimplesample"
         minSdk 24
         targetSdk 36
         versionCode 1
-        versionName '1.0'
+        versionName "1.0"
 
         ndk {
             abiFilters 'arm64-v8a'

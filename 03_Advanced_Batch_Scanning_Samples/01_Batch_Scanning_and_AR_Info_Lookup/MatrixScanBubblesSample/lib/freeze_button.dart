@@ -6,6 +6,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'sample_bootstrap.dart';
+
 typedef void FreezeCallback(bool isFrozen);
 
 class FreezeButton extends StatefulWidget {
@@ -18,8 +20,8 @@ class FreezeButton extends StatefulWidget {
 }
 
 class _FreezeButtonState extends State<FreezeButton> {
-  final AssetImage _freezeButtonAsset = AssetImage("assets/images/freeze_enabled.png");
-  final AssetImage _unfreezeButtonAsset = AssetImage("assets/images/freeze_disabled.png");
+  final AssetImage _freezeButtonAsset = AssetImage(sampleAssetPath("assets/images/freeze_enabled.png"));
+  final AssetImage _unfreezeButtonAsset = AssetImage(sampleAssetPath("assets/images/freeze_disabled.png"));
 
   late AssetImage _buttonAsset;
   var _capturingFrozen = false;

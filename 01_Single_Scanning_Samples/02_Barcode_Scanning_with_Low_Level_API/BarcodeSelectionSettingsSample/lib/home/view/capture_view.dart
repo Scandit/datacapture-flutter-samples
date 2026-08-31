@@ -107,4 +107,10 @@ class _CaptureViewState extends BaseState<CaptureView> with WidgetsBindingObserv
     _bloc.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
+
+  @override
+  void dispose() {
+    _cleanup();
+    super.dispose();
+  }
 }
