@@ -4,7 +4,7 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'IdCaptureSimpleSample',
       theme: ThemeData(
-        useMaterial3: true,
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),

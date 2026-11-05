@@ -8,7 +8,7 @@ import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/common/extensions.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/common/double_with_unit/bloc/double_with_unit_bloc.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/common/double_with_unit/model/measure_unit_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class DoubleWithUnitView extends StatefulWidget {
   final DoubleWithUnitBloc bloc;

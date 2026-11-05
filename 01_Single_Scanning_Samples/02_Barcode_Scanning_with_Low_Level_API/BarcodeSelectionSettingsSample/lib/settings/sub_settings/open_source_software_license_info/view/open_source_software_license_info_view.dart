@@ -4,7 +4,7 @@
  * Copyright (C) 2024- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../bloc/open_source_software_license_info_bloc.dart';
 

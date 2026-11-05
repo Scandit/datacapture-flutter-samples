@@ -4,7 +4,7 @@
  * Copyright (C) 2023- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:matrixscancountsimplesample/home/bloc/matrix_scan_count_bloc.dart';
 import 'package:matrixscancountsimplesample/result/model/result_screen_navigation_args.dart';

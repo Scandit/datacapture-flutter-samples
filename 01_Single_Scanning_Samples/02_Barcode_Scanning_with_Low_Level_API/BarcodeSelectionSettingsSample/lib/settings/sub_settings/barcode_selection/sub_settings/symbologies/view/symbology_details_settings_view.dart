@@ -7,7 +7,7 @@
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/symbologies/bloc/symbology_details_settings_bloc.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/symbologies/model/extension_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 class SymbologyDetailsSettingsView extends StatefulWidget {

@@ -7,7 +7,7 @@
 import 'package:IdCaptureExtendedSample/home/bloc/id_capture_bloc.dart';
 import 'package:IdCaptureExtendedSample/home/model/Id_capture_mode.dart';
 import 'package:IdCaptureExtendedSample/route/routes.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../sample_bootstrap.dart';

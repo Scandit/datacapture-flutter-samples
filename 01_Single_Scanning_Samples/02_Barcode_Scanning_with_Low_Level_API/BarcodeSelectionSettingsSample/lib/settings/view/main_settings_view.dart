@@ -7,7 +7,7 @@
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/bloc/main_settings_bloc.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/model/setting_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class MainSettingsView extends StatefulWidget {
   final String title;

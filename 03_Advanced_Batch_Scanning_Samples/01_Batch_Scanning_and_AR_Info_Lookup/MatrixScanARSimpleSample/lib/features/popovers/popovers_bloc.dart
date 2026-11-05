@@ -4,7 +4,7 @@
  * Copyright (C) 2026- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_ar.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -18,6 +18,8 @@ class PopoversBloc extends Bloc implements BarcodeArListener, BarcodeArPopoverAn
 
   final Map<String, String> _barcodeStatus = {}; // 'wrong', 'accepted', 'rejected'
   final Map<String, BarcodeArCircleHighlight> _highlights = {};
+
+  VoidCallback? resetView;
 
   BarcodeAr get barcodeAr => _barcodeAr;
   DataCaptureContext get dataCaptureContext => _config.dataCaptureContext;
@@ -124,6 +126,10 @@ class PopoversBloc extends Bloc implements BarcodeArListener, BarcodeArPopoverAn
     if (highlight != null) {
       _updateHighlightForStatus(highlight, _barcodeStatus[barcodeData]);
     }
+
+    // Reset the AR view to clear cached annotations, so the popover is not
+    // shown again for barcodes that have already been accepted or rejected.
+    resetView?.call();
   }
 
   @override

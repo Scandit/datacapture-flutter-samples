@@ -7,7 +7,7 @@
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/common/extensions.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/camera/bloc/camera_settings_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 class CameraSettingsView extends StatefulWidget {

@@ -5,7 +5,7 @@
  */
 
 import 'package:SearchAndFindSample/search/view/search_scan_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 import 'sample_bootstrap.dart';
@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SearchAndFindSample',
       theme: ThemeData(
-        useMaterial3: true,
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
             iconTheme: IconThemeData(color: Colors.white),

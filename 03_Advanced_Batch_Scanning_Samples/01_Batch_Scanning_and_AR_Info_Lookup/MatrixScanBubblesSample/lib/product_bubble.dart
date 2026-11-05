@@ -4,7 +4,7 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'bubble_view_state.dart';
 
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_batch.dart';

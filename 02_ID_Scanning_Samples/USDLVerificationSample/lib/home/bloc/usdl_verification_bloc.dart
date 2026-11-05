@@ -7,7 +7,7 @@
 import 'dart:async';
 
 import 'package:USDLVerificationSample/bloc/bloc_base.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
@@ -44,7 +44,10 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
 
     // The Id capturing process is configured through id capture settings
     // and are then applied to the id capture instance that manages id recognition.
-    var settings = IdCaptureSettings()..rejectForgedAamvaBarcodes = true;
+    var settings = IdCaptureSettings()
+      ..rejectForgedAamvaBarcodes = true
+      // Reject inconsistent data between front and back side.
+      ..rejectInconsistentData = true;
 
     // We are interested in both front and back sides of US DL.
     settings.acceptedDocuments.addAll([
@@ -164,6 +167,8 @@ class USDLVerificationBloc extends Bloc implements IdCaptureListener {
     switch (reason) {
       case RejectionReason.forgedAamvaBarcode:
         return 'Document barcode is forged.';
+      case RejectionReason.inconsistentData:
+        return 'Document capture failed. Inconsistent data between front and back side.';
       case RejectionReason.notAcceptedDocumentType:
         return 'Document not supported. Try scanning another document';
       case RejectionReason.timeout:

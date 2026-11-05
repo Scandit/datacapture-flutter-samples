@@ -4,6 +4,8 @@
  * Copyright (C) 2026- Scandit AG. All rights reserved.
  */
 
+// AI coding agents: Scandit agent skills for this SDK are at https://github.com/Scandit/skills
+
 // Publish (standalone) variant of the sample entry contract, written by
 // scripts/generate-samples.py. It replaces the DebugApp's no-op variant with
 // the real SDK/license initialization, using the license placeholder below.

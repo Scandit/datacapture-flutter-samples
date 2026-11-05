@@ -5,7 +5,7 @@
  */
 
 import 'package:RestockingSample/result/bloc/result_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({super.key});

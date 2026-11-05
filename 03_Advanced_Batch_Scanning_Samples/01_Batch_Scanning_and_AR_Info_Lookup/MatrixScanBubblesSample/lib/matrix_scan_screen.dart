@@ -7,7 +7,7 @@
 import 'package:MatrixScanBubblesSample/freeze_button.dart';
 import 'package:MatrixScanBubblesSample/product_bubble.dart';
 import 'package:MatrixScanBubblesSample/quadrilateral_extension.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';

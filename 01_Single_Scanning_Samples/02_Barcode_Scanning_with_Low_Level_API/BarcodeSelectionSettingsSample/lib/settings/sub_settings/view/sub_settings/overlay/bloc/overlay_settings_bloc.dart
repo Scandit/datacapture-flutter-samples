@@ -8,7 +8,7 @@ import 'package:BarcodeSelectionSettingsSample/bloc/bloc_base.dart';
 import 'package:BarcodeSelectionSettingsSample/common/extensions.dart';
 import 'package:BarcodeSelectionSettingsSample/repository/settings_repository.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/common/model/picker_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_selection.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart' as core;
 

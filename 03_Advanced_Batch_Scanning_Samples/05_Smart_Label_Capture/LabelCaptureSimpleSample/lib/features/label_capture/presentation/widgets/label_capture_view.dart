@@ -4,7 +4,7 @@
  * Copyright (C) 2025- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:LabelCaptureSimpleSample/features/label_capture/data/datasources/label_capture_data_source.dart';
 

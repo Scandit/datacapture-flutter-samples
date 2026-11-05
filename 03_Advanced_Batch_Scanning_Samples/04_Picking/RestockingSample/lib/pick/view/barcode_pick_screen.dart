@@ -7,7 +7,7 @@
 import 'package:RestockingSample/pick/bloc/barcode_pick_bloc.dart';
 import 'package:RestockingSample/result/view/result_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_pick.dart';
 
 class BarcodePickScreen extends StatefulWidget {

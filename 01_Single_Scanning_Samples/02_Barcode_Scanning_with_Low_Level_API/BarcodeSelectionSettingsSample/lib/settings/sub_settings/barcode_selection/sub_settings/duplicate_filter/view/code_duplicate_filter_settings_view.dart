@@ -6,7 +6,7 @@
 
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/duplicate_filter/bloc/code_duplicate_filter_settings_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CodeDuplicateFilterSettingsView extends StatefulWidget {
   final String title;

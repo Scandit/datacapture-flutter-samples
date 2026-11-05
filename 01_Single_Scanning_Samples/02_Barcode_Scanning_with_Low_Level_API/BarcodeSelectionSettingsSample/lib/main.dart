@@ -21,7 +21,7 @@ import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_se
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_settings/viewfinder/view/viewfinder_settings_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/view/view_settings_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/view/main_settings_view.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 import 'sample_bootstrap.dart';
@@ -40,7 +40,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          useMaterial3: true,
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Colors.white,
           listTileTheme: ListTileThemeData(

@@ -1,5 +1,5 @@
 import 'package:BarcodeSelectionSettingsSample/settings/common/model/picker_item.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 abstract class BaseState<T extends StatefulWidget> extends State<T> {
   Widget getCard(double topMargin, List<Widget> children) {

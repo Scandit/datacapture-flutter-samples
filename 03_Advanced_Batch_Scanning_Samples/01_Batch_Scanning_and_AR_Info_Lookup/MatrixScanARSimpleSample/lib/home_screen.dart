@@ -4,7 +4,7 @@
  * Copyright (C) 2026- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'features/highlights/highlights_screen.dart';
 import 'features/info_annotations/info_annotations_screen.dart';
 import 'features/popovers/popovers_screen.dart';

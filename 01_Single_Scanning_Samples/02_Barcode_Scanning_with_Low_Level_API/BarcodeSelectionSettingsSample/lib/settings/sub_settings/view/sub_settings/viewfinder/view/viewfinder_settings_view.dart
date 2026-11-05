@@ -6,7 +6,7 @@
 
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_settings/viewfinder/bloc/viewfinder_settings_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ViewfinderSettingsView extends StatefulWidget {
   final String title;

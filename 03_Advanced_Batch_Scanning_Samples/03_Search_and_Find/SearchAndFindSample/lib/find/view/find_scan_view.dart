@@ -6,7 +6,7 @@
 
 import 'package:SearchAndFindSample/find/bloc/find_scan_bloc.dart';
 import 'package:SearchAndFindSample/find/models/barcode_to_find.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_find.dart';
 
 class FindScanView extends StatefulWidget {

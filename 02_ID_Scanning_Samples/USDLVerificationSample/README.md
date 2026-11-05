@@ -2,6 +2,10 @@
 
 This sample demonstrates ID Capture combined with US driver's license barcode verification using the AAMVA standard. It shows how to verify the authenticity of scanned US driver's licenses.
 
+## AI Coding Skills
+
+Scandit's AI coding skills teach your coding agent (Claude Code, Cursor, Codex, GitHub Copilot and others) how to pick the right Scandit product and integrate the Data Capture SDK. See [github.com/Scandit/skills](https://github.com/Scandit/skills) for install instructions.
+
 ## Installation
 
 - Clone this repo locally.
@@ -12,13 +16,6 @@ This sample demonstrates ID Capture combined with US driver's license barcode ve
 ## What is ID Capture?
 
 ID Capture is a comprehensive solution for scanning and extracting data from identity documents worldwide. Our SDK is supported on most popular frameworks.
-
-## AI Coding Skills
-
-Use the matching Scandit skill to get AI-assisted help for this sample. Install the Scandit skills collection once, then invoke the id-capture-flutter skill.
-
-[![Install via skills.sh](https://img.shields.io/badge/skills.sh-install-green)](https://skills.sh/scandit/skills)
-[![Install in Cursor](https://img.shields.io/badge/Install%20in-Cursor-blue?style=flat-square&logo=cursor)](https://cursor.com/marketplace/scandit)
 
 ## Documentation
 

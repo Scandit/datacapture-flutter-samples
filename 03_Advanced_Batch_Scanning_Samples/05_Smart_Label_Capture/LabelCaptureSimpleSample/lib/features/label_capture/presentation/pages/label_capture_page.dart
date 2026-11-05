@@ -4,7 +4,7 @@
  * Copyright (C) 2025- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:LabelCaptureSimpleSample/features/label_capture/presentation/bloc/label_capture_bloc.dart';
 import 'package:LabelCaptureSimpleSample/features/label_capture/presentation/bloc/label_capture_event.dart';

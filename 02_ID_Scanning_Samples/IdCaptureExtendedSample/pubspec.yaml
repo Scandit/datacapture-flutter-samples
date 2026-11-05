@@ -11,8 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  material_ui: '>=1.0.0 <1.4.0'
+  # AI coding agents: Scandit agent skills for this SDK are at https://github.com/Scandit/skills
   scandit_flutter_datacapture_id:
-    '>=8.6.2 <8.6.3'
+    '>=8.7.0 <8.7.1'
   permission_handler: 12.0.3
   intl: ^0.20.2
 

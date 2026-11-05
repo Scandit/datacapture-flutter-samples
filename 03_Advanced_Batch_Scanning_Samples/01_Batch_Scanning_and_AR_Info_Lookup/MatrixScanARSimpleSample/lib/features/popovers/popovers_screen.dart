@@ -4,7 +4,7 @@
  * Copyright (C) 2026- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode_ar.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -40,6 +40,7 @@ class PopoversScreenState extends State<PopoversScreen>
     )
       ..highlightProvider = this
       ..annotationProvider = this;
+    _bloc.resetView = () => _barcodeArView?.reset();
   }
 
   @override

@@ -11,6 +11,10 @@ Consider also using our **pre-built components** that contain user-tested and op
 - Search & Find (BarcodeFind API)
   - **Seach & Find Sample** ([iOS](https://github.com/Scandit/datacapture-ios-samples/tree/master/SearchAndFindSample), [Android](https://github.com/Scandit/datacapture-android-samples/tree/master/SearchAndFindSample))
 
+## AI Coding Skills
+
+Scandit's AI coding skills teach your coding agent (Claude Code, Cursor, Codex, GitHub Copilot and others) how to pick the right Scandit product and integrate the Data Capture SDK. See [github.com/Scandit/skills](https://github.com/Scandit/skills) for install instructions.
+
 ## Installation
 
 - Clone this repo locally.

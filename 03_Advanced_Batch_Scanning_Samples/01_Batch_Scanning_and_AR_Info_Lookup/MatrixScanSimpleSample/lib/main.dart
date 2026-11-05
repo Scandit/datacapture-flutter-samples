@@ -6,7 +6,7 @@
 
 import 'package:MatrixScanSimpleSample/matrix_scan_screen.dart';
 import 'package:MatrixScanSimpleSample/scan_results_screen.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
 import 'sample_bootstrap.dart';
@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        useMaterial3: true,
         buttonTheme: ButtonThemeData(buttonColor: const Color(scanditBlue), textTheme: ButtonTextTheme.primary),
         primarySwatch: MaterialColor(scanditBlue, scanditBlueShades),
         primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(color: Colors.white),

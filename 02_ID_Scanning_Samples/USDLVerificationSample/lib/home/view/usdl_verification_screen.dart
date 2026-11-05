@@ -5,10 +5,12 @@
  */
 
 import 'package:USDLVerificationSample/home/bloc/usdl_verification_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scandit_flutter_datacapture_id/scandit_flutter_datacapture_id.dart';
+
+import 'verification_dialogs.dart';
 
 class USDLVerificationScreen extends StatefulWidget {
   @override
@@ -19,6 +21,9 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
   final USDLVerificationBloc _bloc;
 
   bool _isPermissionMessageVisible = false;
+
+  // Dismisses the progress dialog shown while the verification checks run.
+  VoidCallback? _dismissVerificationDialog;
 
   _USDLVerificationScreenState(this._bloc);
 
@@ -47,24 +52,10 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
     });
 
     _bloc.onIdRejected.listen((rejectedReason) {
-      showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-                content: Text(
-                  rejectedReason,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                actions: [
-                  GestureDetector(
-                      child: Text('OK'),
-                      onTap: () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                      })
-                ],
-              )).then((value) => {
-            // Enable capture again, after the dialog is dismissed.
-            _bloc.enableIdCapture()
-          });
+      showIdRejectedDialog(context, rejectedReason, onDismissed: () {
+        // Enable capture again, after the dialog is dismissed.
+        _bloc.enableIdCapture();
+      });
     });
 
     // Switch camera on to start streaming frames and enable the id capture mode.
@@ -142,57 +133,20 @@ class _USDLVerificationScreenState extends State<USDLVerificationScreen> with Wi
       }
     }
 
-    Navigator.of(context).pop();
+    _dismissVerificationDialog?.call();
+    _dismissVerificationDialog = null;
 
     _showMessage(result);
   }
 
   void _showMessage(List<Text> results) {
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: results,
-              ),
-              actions: [
-                GestureDetector(
-                    child: Text('OK'),
-                    onTap: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    })
-              ],
-            )).then((value) => {
-          // Enable capture again, after the dialog is dismissed.
-          _bloc.enableIdCapture()
-        });
+    showVerificationResultDialog(context, results, onDismissed: () {
+      // Enable capture again, after the dialog is dismissed.
+      _bloc.enableIdCapture();
+    });
   }
 
   void _showVerificationDialog() {
-    showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
-        barrierDismissible: false,
-        context: context,
-        builder: (_) {
-          return Dialog(
-            // The background color
-            backgroundColor: Colors.white,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  // The loading indicator
-                  CircularProgressIndicator(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text('Running verification checks')
-                ],
-              ),
-            ),
-          );
-        });
+    _dismissVerificationDialog = showVerificationProgressDialog(context);
   }
 }

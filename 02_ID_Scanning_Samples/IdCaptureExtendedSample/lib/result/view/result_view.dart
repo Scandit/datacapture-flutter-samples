@@ -6,7 +6,7 @@
 
 import 'package:IdCaptureExtendedSample/home/model/captured_id_result.dart';
 import 'package:IdCaptureExtendedSample/result/bloc/result_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class ResultView extends StatelessWidget {
   final String title;

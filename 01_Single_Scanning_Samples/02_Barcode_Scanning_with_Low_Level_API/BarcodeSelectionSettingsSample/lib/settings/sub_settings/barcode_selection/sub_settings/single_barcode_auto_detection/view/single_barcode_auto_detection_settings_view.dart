@@ -6,7 +6,7 @@
 
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/single_barcode_auto_detection/bloc/single_barcode_auto_detection_settings_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SingleBarcodeAutoDetectionSettingsView extends StatefulWidget {
   final String title;

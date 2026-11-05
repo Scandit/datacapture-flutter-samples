@@ -7,7 +7,7 @@
 import 'package:BarcodeSelectionSettingsSample/base/base_state.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/common/double_with_unit/view/double_with_unit_view.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/view/sub_settings/point_of_interest/bloc/point_of_interest_settings_bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class PointOfInterestSettingsView extends StatefulWidget {
   final String title;

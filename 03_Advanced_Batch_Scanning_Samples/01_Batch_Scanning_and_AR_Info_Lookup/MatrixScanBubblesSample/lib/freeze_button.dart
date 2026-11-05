@@ -4,7 +4,7 @@
  * Copyright (C) 2021- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'sample_bootstrap.dart';
 

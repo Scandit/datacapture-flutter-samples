@@ -4,7 +4,7 @@
  * Copyright (C) 2023- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 abstract class ListItem {
   Widget? buildLeading(BuildContext context);

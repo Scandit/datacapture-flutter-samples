@@ -9,7 +9,7 @@ import 'package:BarcodeSelectionSettingsSample/common/extensions.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/selection_type/bloc/selection_type_settings_bloc.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/selection_type/model/aimer_selection_strategy.dart';
 import 'package:BarcodeSelectionSettingsSample/settings/sub_settings/barcode_selection/sub_settings/selection_type/model/selection_type.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SelectionTypeSettingsView extends StatefulWidget {
   final String title;

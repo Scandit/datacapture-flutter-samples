@@ -4,7 +4,7 @@
  * Copyright (C) 2023- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 
@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'ListBuildingSample',
       theme: ThemeData(
-        useMaterial3: true,
         primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
           iconTheme: IconThemeData(color: Colors.white),

@@ -6,6 +6,10 @@ The SparkScan UI incorporates our best practices for usability and has been rigo
 
 ![Screenshot 2023-06-14 at 16.28.23.png](https://github.com/Scandit/.github/blob/main/images/ListBuilding_with_SparkScan.png)
 
+## AI Coding Skills
+
+Scandit's AI coding skills teach your coding agent (Claude Code, Cursor, Codex, GitHub Copilot and others) how to pick the right Scandit product and integrate the Data Capture SDK. See [github.com/Scandit/skills](https://github.com/Scandit/skills) for install instructions.
+
 ## Installation
 
 - Clone this repo locally.

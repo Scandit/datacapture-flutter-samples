@@ -4,6 +4,10 @@ This sample demonstrates the MatrixScan AR (BarcodeAR) pre-built component. It s
 
 MatrixScan AR is a pre-built component available via the Barcode AR API of the Scandit Data Capture SDK with fully-customizable AR features for visually tracking and annotating multiple barcodes in real time.
 
+## AI Coding Skills
+
+Scandit's AI coding skills teach your coding agent (Claude Code, Cursor, Codex, GitHub Copilot and others) how to pick the right Scandit product and integrate the Data Capture SDK. See [github.com/Scandit/skills](https://github.com/Scandit/skills) for install instructions.
+
 ## Installation
 
 - Clone this repo locally.
@@ -14,13 +18,6 @@ MatrixScan AR is a pre-built component available via the Barcode AR API of the S
 ## What is MatrixScan AR?
 
 MatrixScan AR extends multi-code scanning with augmented reality overlays, allowing you to display customizable AR elements and metadata directly over detected barcodes in the camera view for enhanced user feedback and data visualization.
-
-## AI Coding Skills
-
-Use the matching Scandit skill to get AI-assisted help for this sample. Install the Scandit skills collection once, then invoke the matrixscan-ar-flutter skill.
-
-[![Install via skills.sh](https://img.shields.io/badge/skills.sh-install-green)](https://skills.sh/scandit/skills)
-[![Install in Cursor](https://img.shields.io/badge/Install%20in-Cursor-blue?style=flat-square&logo=cursor)](https://cursor.com/marketplace/scandit)
 
 ## Documentation
 

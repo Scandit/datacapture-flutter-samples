@@ -4,7 +4,7 @@
  * Copyright (C) 2025- Scandit AG. All rights reserved.
  */
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
       title: 'Label Capture Simple Sample',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: Colors.white),
